@@ -1,0 +1,37 @@
+{
+  "name": "@activity-tracker/repo",
+  "workspaces": [
+    "web"
+  ],
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ignore-path .gitignore",
+    "format": "prettier --write . --ignore-path .gitignore; npm run lint -- --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samtgarson/activity-tracker.git"
+  },
+  "author": "samtgarson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samtgarson/activity-tracker/issues"
+  },
+  "homepage": "https://github.com/samtgarson/activity-tracker#readme",
+  "devDependencies": {
+    "@samtgarson/eslint-config": "^2.8.1",
+    "eslint": "^8.18.0",
+    "prettier": "^2.7.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@samtgarson/eslint-config",
+      "@samtgarson/eslint-config/typescript",
+      "@samtgarson/eslint-config/react"
+    ]
+  },
+  "prettier": "@samtgarson/eslint-config/prettier"
+}
