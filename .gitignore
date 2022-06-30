@@ -9,3 +9,4 @@ node_modules
 /web/public/build
 /web/api/index.js
 /web/api/index.js.map
+/web/app/styles
