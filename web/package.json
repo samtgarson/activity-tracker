@@ -23,7 +23,8 @@
     "dev": "run-p dev:*",
     "dev:css": "npm run build:css -- --watch",
     "dev:remix": "remix dev --port 5000",
-    "prepare": "cd .. && husky install"
+    "prepare": "cd .. && husky install",
+    "vercel-build": "npx prisma migrate deploy && npm run build"
   },
   "dependencies": {
     "@prisma/client": "^4.0.0",
