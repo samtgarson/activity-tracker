@@ -1,14 +1,16 @@
 import { json, LoaderFunction } from '@remix-run/node'
 import { Form, useLoaderData } from '@remix-run/react'
-import React from 'react'
 import { authenticator } from '../services/auth.server'
+import { getSession } from '../services/session.server'
 
-type IndexProps = { loggedIn: boolean }
+type IndexProps = { loggedIn: boolean; error?: string }
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await authenticator.isAuthenticated(request)
+  const session = await getSession(request.headers.get('cookie'))
+  const error = session.get(authenticator.sessionErrorKey)
 
-  return json<IndexProps>({ loggedIn: !!user })
+  return json<IndexProps>({ loggedIn: !!user, error })
 }
 
 export default function Index() {

@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Provider {
+  google
+}
+
+model Account {
+  id     String     @id @default(dbgenerated("gen_random_uuid()"))
+  remoteId String
+  user   User    @relation(fields: [userId], references: [id])
+  userId String     @unique
+  provider Provider
+  accessToken String
+  createdAt DateTime @default(now())
+
+  @@unique(fields: [remoteId, provider])
+}
+
+model User {
+  id      String      @id @default(dbgenerated("gen_random_uuid()"))
+  email   String   @unique
+  displayName    String
+  familyName     String
+  givenName      String
+  picture       String?
+  account Account[]
+  createdAt DateTime @default(now())
+}
