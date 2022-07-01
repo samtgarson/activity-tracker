@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2019",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "esnext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "esnext"],
     "allowJs": true,
     "strict": true,
     "strictNullChecks": true,
@@ -17,22 +13,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "typeRoots": [
-      "node_modules/@types",
-      "types/stubs"
-    ],
+    "typeRoots": ["node_modules/@types", "types/stubs"],
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "exclude": ["node_modules"],
+  "include": ["**/*.ts", "**/*.tsx"]
 }
