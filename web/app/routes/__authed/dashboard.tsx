@@ -1,4 +1,4 @@
-import { CalendarsListFetcher } from '@/app/services/calendars/list/fetcher'
+import { CalendarListFetcher } from '@/app/services/calendars/list/fetcher'
 import { Calendar, ServiceResult } from '@/app/types'
 import { json, LoaderFunction } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
@@ -6,7 +6,7 @@ import { getUser, useAuth } from '../__authed'
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request)
-  const fetcher = new CalendarsListFetcher()
+  const fetcher = new CalendarListFetcher()
   const data = await fetcher.call(user, 'google')
 
   return json(data)

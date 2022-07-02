@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const calendarSchema = z.object({
+export const googleCalendarSchema = z.object({
   accessRole: z.enum(['owner', 'writer', 'reader']),
   backgroundColor: z.string(),
   foregroundColor: z.string(),
@@ -9,7 +9,9 @@ export const calendarSchema = z.object({
   summaryOverride: z.string().optional(),
   id: z.string()
 })
-export type Calendar = z.infer<typeof calendarSchema>
+export type GoogleCalendar = z.infer<typeof googleCalendarSchema>
 
-export const calendarListSchema = z.object({ items: z.array(calendarSchema) })
-export type CalendarList = z.infer<typeof calendarListSchema>
+export const googleCalendarListSchema = z.object({
+  items: z.array(googleCalendarSchema)
+})
+export type GoogleCalendarList = z.infer<typeof googleCalendarListSchema>

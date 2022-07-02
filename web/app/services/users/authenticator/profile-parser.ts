@@ -1,4 +1,4 @@
-import { Provider } from '@/app/types'
+import { Provider, ServiceResult } from '@/app/types'
 import { GoogleExtraParams, GoogleProfile } from 'remix-auth-google'
 import { OAuth2StrategyVerifyParams } from 'remix-auth-oauth2'
 import { AccountAttrs, UserAttrs } from '.'
@@ -9,16 +9,16 @@ export class ProfileParser {
   call(
     provider: 'google',
     profile: OAuth2StrategyVerifyParams<GoogleProfile, GoogleExtraParams>
-  ): ProfileParserResult
+  ): ServiceResult<ProfileParserResult>
   call(
     provider: Provider,
     profile: any // eslint-disable-line @typescript-eslint/no-explicit-any
-  ): ProfileParserResult {
+  ): ServiceResult<ProfileParserResult> {
     switch (provider) {
       case 'google':
-        return this.parseGoogle(profile)
+        return { data: this.parseGoogle(profile) }
       default:
-        throw new Error(`Unsupported provider: ${provider}`)
+        return { error: `Unsupported provider: ${provider}` }
     }
   }
 

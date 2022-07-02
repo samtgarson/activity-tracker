@@ -25,7 +25,12 @@ authenticator.use(
       scope: 'profile email https://www.googleapis.com/auth/calendar'
     },
     (res) => {
-      const [userAttrs, accountAttrs] = parser.call('google', res)
+      const parserResult = parser.call('google', res)
+      if (parserResult.error !== undefined) {
+        console.error(parserResult.error)
+        throw new Error(parserResult.error)
+      }
+      const [userAttrs, accountAttrs] = parserResult.data
 
       return userAuthenticator.call(userAttrs, accountAttrs)
     }

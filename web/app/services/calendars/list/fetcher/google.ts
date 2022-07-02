@@ -1,44 +1,58 @@
-import { CalendarList, calendarListSchema } from '@/app/contracts/google'
+import {
+  GoogleCalendarList,
+  googleCalendarListSchema
+} from '@/app/contracts/google'
 import { Calendar } from '@/app/types'
-import { errorMessage } from '@/app/utils/errors'
 import { CalendarFetcher } from './types'
 
-export class GoogleCalendarsListFetcher implements CalendarFetcher {
+export class GoogleCalendarListFetcher implements CalendarFetcher {
+  constructor(
+    private fetch = global.fetch,
+    private contract = googleCalendarListSchema
+  ) {}
+
   async call(accessToken: string) {
     try {
       const json = await this.makeRequest(accessToken)
+      if (!json) return { error: 'Could not fetch calendars from Google' }
+      const parsed = this.contract.safeParse(json)
 
-      const parsed = calendarListSchema.safeParse(json)
-
-      if (!parsed.success) return { error: parsed.error.toString() }
+      if (!parsed.success) {
+        return { error: 'Could not parse response from Google' }
+      }
 
       return { data: this.normalize(parsed.data) }
     } catch (e) {
-      return { error: errorMessage(e) }
+      console.error(e)
+      return { error: 'Something unexpected went wrong' }
     }
   }
 
   private async makeRequest(accessToken: string) {
-    const res = await fetch(
+    const res = await this.fetch(
       'https://www.googleapis.com/calendar/v3/users/me/calendarList',
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: 'application/json'
+          Authorization: `Bearer ${accessToken}`
         }
       }
     )
 
-    if (!res.ok) throw await res.text()
-    return res.json()
+    const json = await res.json()
+    if (!res.ok) {
+      console.error(json)
+      return null
+    }
+    return json
   }
 
-  private normalize(calendar: CalendarList): Calendar[] {
+  private normalize(calendar: GoogleCalendarList): Calendar[] {
     return calendar.items.map((item) => ({
       color: item.backgroundColor,
       id: item.id,
       description: item.description,
-      writeAccess: ['writer', 'owner'].includes(item.accessRole)
+      writeAccess: ['writer', 'owner'].includes(item.accessRole),
+      title: item.summaryOverride || item.summary
     }))
   }
 }

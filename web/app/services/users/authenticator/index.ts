@@ -4,8 +4,10 @@ import { Prisma, PrismaClient, User } from '@prisma/client'
 export type UserAttrs = Prisma.UserCreateInput
 export type AccountAttrs = Omit<Prisma.AccountCreateInput, 'user'>
 
+const defaultPrismaClient = new PrismaClient()
+
 export class UserAuthenticator {
-  constructor(private prisma: PrismaClient = new PrismaClient()) {}
+  constructor(private prisma: PrismaClient = defaultPrismaClient) {}
 
   async call(
     userAttrs: UserAttrs,
@@ -37,17 +39,17 @@ export class UserAuthenticator {
     })
   }
 
-  private async upsertAccount(user: User, attrs: AccountAttrs) {
-    const account = await this.findAccount(attrs)
+  private async upsertAccount(user: User, data: AccountAttrs) {
+    const account = await this.findAccount(data)
     if (account) {
       return this.prisma.account.update({
         where: { id: account.id },
-        data: { ...attrs }
+        data
       })
     }
     this.prisma.account.create({
       data: {
-        ...attrs,
+        ...data,
         user: { connect: { id: user.id } }
       }
     })

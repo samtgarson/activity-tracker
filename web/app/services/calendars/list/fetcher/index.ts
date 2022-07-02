@@ -1,10 +1,10 @@
 import { Calendar, Provider, ServiceResult, UserWithAccount } from '@/app/types'
-import { GoogleCalendarsListFetcher } from './google'
+import { GoogleCalendarListFetcher } from './google'
 import { CalendarFetcher } from './types'
 
-export class CalendarsListFetcher {
+export class CalendarListFetcher {
   constructor(
-    private google: CalendarFetcher = new GoogleCalendarsListFetcher()
+    private google: CalendarFetcher = new GoogleCalendarListFetcher()
   ) {}
 
   async call(
@@ -12,6 +12,7 @@ export class CalendarsListFetcher {
     provider: Provider
   ): Promise<ServiceResult<Calendar[]>> {
     const accessToken = this.getAccessToken(user, provider)
+    if (!accessToken) return { error: `No access token found for ${provider}` }
 
     switch (provider) {
       case 'google':
@@ -22,10 +23,7 @@ export class CalendarsListFetcher {
   }
 
   private getAccessToken(user: UserWithAccount, provider: Provider) {
-    const token = user.account.find(
-      (account) => account.provider === provider
-    )?.accessToken
-    if (!token) throw new Error(`No access token for ${provider}`)
-    return token
+    return user.account.find((account) => account.provider === provider)
+      ?.accessToken
   }
 }
