@@ -1,7 +1,7 @@
 import { json, LoaderFunction } from '@remix-run/node'
 import { Form, useLoaderData } from '@remix-run/react'
-import { authenticator } from '../services/auth.server'
-import { getSession } from '../services/session.server'
+import { authenticator } from '../services/auth/auth.server'
+import { getSession } from '../services/auth/session.server'
 
 type IndexProps = { loggedIn: boolean; error?: string }
 

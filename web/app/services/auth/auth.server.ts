@@ -1,11 +1,11 @@
 // app/services/auth.server.ts
+import { UserWithAccount } from '@/app/types'
 import { Authenticator } from 'remix-auth'
 import { GoogleStrategy } from 'remix-auth-google'
-import { UserWithAccount } from '../types'
-import { assertEnv } from '../utils/env'
+import { assertEnv } from '@/app/utils/env'
 import { sessionStorage } from './session.server'
-import { UserAuthenticator } from './users/authenticator'
-import { ProfileParser } from './users/authenticator/profile-parser'
+import { UserAuthenticator } from '@/app/services/users/authenticator'
+import { ProfileParser } from '@/app/services/users/authenticator/profile-parser'
 
 assertEnv(process.env.GOOGLE_CLIENT_ID)
 assertEnv(process.env.GOOGLE_CLIENT_SECRET)

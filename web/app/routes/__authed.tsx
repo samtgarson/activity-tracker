@@ -1,6 +1,6 @@
 import { json, LoaderFunction } from '@remix-run/node'
 import { Outlet, useLoaderData, useOutletContext } from '@remix-run/react'
-import { authenticator } from '../services/auth.server'
+import { authenticator } from '../services/auth/auth.server'
 import { UserWithAccount } from '../types'
 
 export const loader: LoaderFunction = async ({ request }) => {
