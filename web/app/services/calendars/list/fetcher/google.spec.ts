@@ -1,8 +1,13 @@
 import { googleCalendarFactory } from '@/test/factories/google'
+import { userFactory } from '@/test/factories/user'
 import { GoogleCalendarListFetcher } from './google'
 
-const accessToken = 'accessToken'
+const user = userFactory.build()
 const fetch = vi.fn()
+const accessToken = 'accessToken'
+const authClient = {
+  call: vi.fn(async () => accessToken)
+}
 
 const calendar1 = googleCalendarFactory.build()
 const calendar2 = googleCalendarFactory.build({
@@ -14,7 +19,7 @@ describe('GoogleCalendarListFetcher', () => {
   let fetcher: GoogleCalendarListFetcher
 
   beforeEach(() => {
-    fetcher = new GoogleCalendarListFetcher(fetch)
+    fetcher = new GoogleCalendarListFetcher(fetch, authClient)
     fetch.mockResolvedValue({
       ok: true,
       json: async () => ({ items: [calendar1, calendar2] })
@@ -22,7 +27,7 @@ describe('GoogleCalendarListFetcher', () => {
   })
 
   it('should call fetch with the correct url', async () => {
-    await fetcher.call(accessToken)
+    await fetcher.call(user)
     expect(fetch).toHaveBeenCalledWith(
       'https://www.googleapis.com/calendar/v3/users/me/calendarList',
       {
@@ -34,7 +39,7 @@ describe('GoogleCalendarListFetcher', () => {
   })
 
   it('should return the correct data', async () => {
-    const result = await fetcher.call(accessToken)
+    const result = await fetcher.call(user)
     expect(result).toEqual({
       data: [
         {
@@ -64,7 +69,7 @@ describe('GoogleCalendarListFetcher', () => {
     })
 
     it('should return error', async () => {
-      const res = await fetcher.call(accessToken)
+      const res = await fetcher.call(user)
       expect(res.error).toEqual('Could not parse response from Google')
     })
   })
@@ -79,7 +84,7 @@ describe('GoogleCalendarListFetcher', () => {
     })
 
     it('should return error', async () => {
-      const res = await fetcher.call(accessToken)
+      const res = await fetcher.call(user)
       expect(res.error).toEqual('Could not fetch calendars from Google')
     })
   })
@@ -90,7 +95,7 @@ describe('GoogleCalendarListFetcher', () => {
     })
 
     it('should return error', async () => {
-      const res = await fetcher.call(accessToken)
+      const res = await fetcher.call(user)
       expect(res.error).toEqual('Something unexpected went wrong')
     })
   })

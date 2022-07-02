@@ -2,20 +2,24 @@ import {
   GoogleCalendarList,
   googleCalendarListSchema
 } from '@/app/contracts/google'
-import { Calendar } from '@/app/types'
+import {
+  AccessTokenFetcher,
+  GoogleAccessTokenFetcher
+} from '@/app/services/auth/providers/google.server'
+import { Calendar, UserWithAccount } from '@/app/types'
 import { CalendarFetcher } from './types'
 
 export class GoogleCalendarListFetcher implements CalendarFetcher {
   constructor(
     private fetch = global.fetch,
-    private contract = googleCalendarListSchema
+    private authClient: AccessTokenFetcher = new GoogleAccessTokenFetcher()
   ) {}
 
-  async call(accessToken: string) {
+  async call(user: UserWithAccount) {
     try {
-      const json = await this.makeRequest(accessToken)
+      const json = await this.makeRequest(user)
       if (!json) return { error: 'Could not fetch calendars from Google' }
-      const parsed = this.contract.safeParse(json)
+      const parsed = googleCalendarListSchema.safeParse(json)
 
       if (!parsed.success) {
         return { error: 'Could not parse response from Google' }
@@ -28,12 +32,13 @@ export class GoogleCalendarListFetcher implements CalendarFetcher {
     }
   }
 
-  private async makeRequest(accessToken: string) {
+  private async makeRequest(user: UserWithAccount) {
+    const token = await this.authClient.call(user)
     const res = await this.fetch(
       'https://www.googleapis.com/calendar/v3/users/me/calendarList',
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${token}`
         }
       }
     )

@@ -27,6 +27,7 @@ export class ProfileParser {
   ): ProfileParserResult {
     const {
       accessToken,
+      refreshToken,
       profile: {
         id: remoteId,
         displayName,
@@ -38,7 +39,7 @@ export class ProfileParser {
 
     return [
       { displayName, givenName, familyName, email, picture },
-      { remoteId, accessToken, provider: 'google' }
+      { remoteId, accessToken, refreshToken, provider: 'google' }
     ]
   }
 }

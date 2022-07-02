@@ -1,13 +1,12 @@
 import { UserWithAccount } from '@/app/types'
+import { prismaClient } from '@/app/utils/prisma'
 import { Prisma, PrismaClient, User } from '@prisma/client'
 
 export type UserAttrs = Prisma.UserCreateInput
 export type AccountAttrs = Omit<Prisma.AccountCreateInput, 'user'>
 
-const defaultPrismaClient = new PrismaClient()
-
 export class UserAuthenticator {
-  constructor(private prisma: PrismaClient = defaultPrismaClient) {}
+  constructor(private prisma: PrismaClient = prismaClient) {}
 
   async call(
     userAttrs: UserAttrs,
@@ -47,7 +46,7 @@ export class UserAuthenticator {
         data
       })
     }
-    this.prisma.account.create({
+    return this.prisma.account.create({
       data: {
         ...data,
         user: { connect: { id: user.id } }

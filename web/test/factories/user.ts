@@ -5,6 +5,7 @@ export const accountFactory = Factory.define<Account>(({ sequence }) => ({
   provider: 'google',
   remoteId: `google-${sequence}`,
   accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
   id: `account-${sequence}`,
   userId: `user-${sequence}`,
   createdAt: new Date()
