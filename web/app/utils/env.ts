@@ -9,6 +9,7 @@ export function assertEnv(
 
 export const getEnv = (key: string): string => {
   const env = process.env[key]
+  if (process.env.NODE_ENV === 'test') return key
   assertEnv(env, key)
   return env
 }

@@ -24,7 +24,6 @@ describe('Profile Parser', () => {
           },
           {
             remoteId: profile.profile.id,
-            accessToken: profile.accessToken,
             refreshToken: profile.refreshToken,
             provider: 'google'
           }

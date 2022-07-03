@@ -26,7 +26,6 @@ export class ProfileParser {
     profile: OAuth2StrategyVerifyParams<GoogleProfile, GoogleExtraParams>
   ): ProfileParserResult {
     const {
-      accessToken,
       refreshToken,
       profile: {
         id: remoteId,
@@ -39,7 +38,7 @@ export class ProfileParser {
 
     return [
       { displayName, givenName, familyName, email, picture },
-      { remoteId, accessToken, refreshToken, provider: 'google' }
+      { remoteId, refreshToken, provider: 'google' }
     ]
   }
 }

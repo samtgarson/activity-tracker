@@ -24,17 +24,12 @@ export class GoogleAccessTokenFetcher implements AccessTokenFetcher {
     if (!account) throw new Error('User has no Google account')
 
     this.client.setCredentials({
-      access_token: account.accessToken,
       refresh_token: account.refreshToken
     })
 
     this.client.on('tokens', ({ access_token: accessToken }) => {
       if (!accessToken) return
       console.log('Received new access token')
-      prismaClient.account.update({
-        where: { id: account.id },
-        data: { accessToken }
-      })
     })
 
     const { token } = await this.client.getAccessToken()
