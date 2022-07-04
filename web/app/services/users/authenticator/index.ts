@@ -56,7 +56,10 @@ export class UserAuthenticator {
 
   private async createUser(userAttrs: UserAttrs, accountAttrs: AccountAttrs) {
     return this.prisma.user.create({
-      data: { ...userAttrs, account: { create: accountAttrs } },
+      data: {
+        ...userAttrs,
+        account: { create: { ...accountAttrs, active: true } }
+      },
       include: { account: true }
     })
   }

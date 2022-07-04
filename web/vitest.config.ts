@@ -8,7 +8,15 @@ export default defineConfig({
     setupFiles: ['./test/setup.ts'],
     coverage: {
       all: true,
-      src: ['./app']
+      src: ['./app'],
+      exclude: [
+        'test/**/*',
+        'app/entry.client.tsx',
+        'app/entry.server.tsx',
+        'app/root.tsx',
+        '**/*.d.ts',
+        '**/*.spec.{ts,tsx}'
+      ]
     }
   }
 })

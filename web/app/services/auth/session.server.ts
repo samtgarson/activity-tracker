@@ -1,7 +1,8 @@
 // app/services/session.server.ts
+import { getEnv } from '@/app/utils/env'
 import { createCookieSessionStorage } from '@remix-run/node'
 
-if (!process.env.SESSION_SECRET) throw new Error('SESSION_SECRET is not set')
+const secret = getEnv('SESSION_SECRET')
 
 export const sessionStorage = createCookieSessionStorage({
   cookie: {
@@ -9,7 +10,7 @@ export const sessionStorage = createCookieSessionStorage({
     sameSite: 'lax',
     path: '/',
     httpOnly: true,
-    secrets: [process.env.SESSION_SECRET],
+    secrets: [secret],
     secure: process.env.NODE_ENV === 'production'
   }
 })

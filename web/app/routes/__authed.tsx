@@ -1,26 +1,25 @@
-import { json, LoaderFunction } from '@remix-run/node'
-import { Outlet, useLoaderData, useOutletContext } from '@remix-run/react'
-import { authenticator } from '../services/auth/auth.server'
-import { UserWithAccount } from '../types'
+import { json, LoaderFunction, redirect } from '@remix-run/node'
+import { Link, Outlet, useLoaderData } from '@remix-run/react'
+import { getUser } from '../utils/auth.server'
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const user = await getUser(request)
-  return json({ user })
+export const loader = async (
+  { request }: Parameters<LoaderFunction>[0],
+  deps = { getUser, json, redirect }
+) => {
+  const user = await deps.getUser(request)
+  if (!user.activeAccount?.calendarId && !request.url.endsWith('/welcome')) {
+    return deps.redirect('/welcome')
+  }
+  return deps.json({ user })
 }
 
 export default function Authed() {
   const { user } = useLoaderData()
-  return <Outlet context={{ user }} />
-}
-
-// Helpers
-
-export const getUser = async (request: Request): Promise<UserWithAccount> => {
-  return authenticator.isAuthenticated(request, {
-    failureRedirect: '/'
-  })
-}
-
-export const useAuth = () => {
-  return useOutletContext<{ user: UserWithAccount }>()
+  return (
+    <div>
+      <h1>Welcome to Remix, {user?.givenName}</h1>
+      <Link to='/auth/logout'>Logout</Link>
+      <Outlet context={{ user }} />
+    </div>
+  )
 }

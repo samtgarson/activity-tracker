@@ -2,12 +2,13 @@ import {
   GoogleCalendarList,
   googleCalendarListSchema
 } from '@/app/contracts/google'
+import { User } from '@/app/models/user'
 import {
   AccessTokenFetcher,
   GoogleAccessTokenFetcher
 } from '@/app/services/auth/providers/google.server'
-import { Calendar, UserWithAccount } from '@/app/types'
-import { CalendarFetcher } from './types'
+import { Calendar } from '@/app/types'
+import { CalendarFetcher } from '.'
 
 export class GoogleCalendarListFetcher implements CalendarFetcher {
   constructor(
@@ -15,7 +16,7 @@ export class GoogleCalendarListFetcher implements CalendarFetcher {
     private authClient: AccessTokenFetcher = new GoogleAccessTokenFetcher()
   ) {}
 
-  async call(user: UserWithAccount) {
+  async call(user: User) {
     try {
       const json = await this.makeRequest(user)
       if (!json) return { error: 'Could not fetch calendars from Google' }
@@ -32,7 +33,7 @@ export class GoogleCalendarListFetcher implements CalendarFetcher {
     }
   }
 
-  private async makeRequest(user: UserWithAccount) {
+  private async makeRequest(user: User) {
     const token = await this.authClient.call(user)
     const res = await this.fetch(
       'https://www.googleapis.com/calendar/v3/users/me/calendarList',

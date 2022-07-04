@@ -1,5 +1,4 @@
 // app/services/auth.server.ts
-import { UserWithAccount } from '@/app/types'
 import { Authenticator } from 'remix-auth'
 import { GoogleStrategy } from 'remix-auth-google'
 import { sessionStorage } from './session.server'
@@ -14,7 +13,10 @@ import {
 const parser = new ProfileParser()
 const userAuthenticator = new UserAuthenticator()
 
-export const authenticator = new Authenticator<UserWithAccount>(sessionStorage)
+export type AuthenticatorResult = { userId: string }
+export const authenticator = new Authenticator<AuthenticatorResult>(
+  sessionStorage
+)
 
 authenticator.use(
   new GoogleStrategy(
@@ -25,7 +27,7 @@ authenticator.use(
       scope: 'profile email https://www.googleapis.com/auth/calendar',
       accessType: 'offline'
     },
-    (res) => {
+    async (res) => {
       const parserResult = parser.call('google', res)
       if (parserResult.error !== undefined) {
         console.error(parserResult.error)
@@ -33,7 +35,8 @@ authenticator.use(
       }
       const [userAttrs, accountAttrs] = parserResult.data
 
-      return userAuthenticator.call(userAttrs, accountAttrs)
+      const user = await userAuthenticator.call(userAttrs, accountAttrs)
+      return { userId: user.id }
     }
   )
 )

@@ -22,6 +22,8 @@ model Account {
   provider     Provider
   refreshToken String
   createdAt    DateTime @default(now())
+  calendarId   String?
+  active       Boolean  @default(false)
 
   @@unique(fields: [remoteId, provider])
 }

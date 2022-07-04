@@ -82,10 +82,10 @@ describe('UserAuthenticator', () => {
       prisma.user.create.mockResolvedValue(user)
     })
 
-    it('should create the user', async () => {
+    it('should create the user and an active account', async () => {
       await authenticator.call(user, account)
       expect(prisma.user.create).toHaveBeenCalledWith({
-        data: { ...user, account: { create: account } },
+        data: { ...user, account: { create: { ...account, active: true } } },
         include: { account: true }
       })
     })

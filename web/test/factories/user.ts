@@ -7,10 +7,23 @@ export const accountFactory = Factory.define<Account>(({ sequence }) => ({
   refreshToken: 'refreshToken',
   id: `account-${sequence}`,
   userId: `user-${sequence}`,
-  createdAt: new Date()
+  createdAt: new Date(),
+  active: false,
+  calendarId: null
 }))
 
-export const userFactory = Factory.define<UserWithAccount>(({ sequence }) => ({
+class UserFactory extends Factory<UserWithAccount> {
+  public active() {
+    return this.params({
+      account: accountFactory.buildList(1, {
+        active: true,
+        calendarId: 'activeCalendarId'
+      })
+    })
+  }
+}
+
+export const userFactory = UserFactory.define(({ sequence }) => ({
   id: `user-${sequence}`,
   email: `email-${sequence}@example.com`,
   displayName: `User${sequence} Surname`,

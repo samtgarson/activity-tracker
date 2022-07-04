@@ -1,7 +1,7 @@
 import type { Provider, User, Account } from '@prisma/client'
 
 export type UserWithAccount = User & { account: Account[] }
-export type { Provider, User, Account }
+export type { Provider, Account }
 
 type ServiceResultSuccess<T> = { data: T; error?: undefined }
 type ServiceResultError<T> = { error: string; data?: T }

@@ -1,8 +1,9 @@
-import { Calendar, Provider, ServiceResult, UserWithAccount } from '@/app/types'
+import { User } from '@/app/models/user'
+import { Calendar, Provider, ServiceResult } from '@/app/types'
 import { GoogleCalendarListFetcher } from './google'
 
 export interface CalendarFetcher {
-  call(user: UserWithAccount): Promise<ServiceResult<Calendar[]>>
+  call(user: User): Promise<ServiceResult<Calendar[]>>
 }
 
 export class CalendarListFetcher {
@@ -11,7 +12,7 @@ export class CalendarListFetcher {
   ) {}
 
   async call(
-    user: UserWithAccount,
+    user: User,
     provider: Provider
   ): Promise<ServiceResult<Calendar[]>> {
     switch (provider) {
