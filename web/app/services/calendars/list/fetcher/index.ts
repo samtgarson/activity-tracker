@@ -1,5 +1,6 @@
 import { User } from '@/app/models/user'
-import { Calendar, Provider, ServiceResult } from '@/app/types'
+import { Calendar, Provider } from '@/app/types'
+import { ServiceResult } from '@/app/utils/service'
 import { GoogleCalendarListFetcher } from './google'
 
 export interface CalendarFetcher {

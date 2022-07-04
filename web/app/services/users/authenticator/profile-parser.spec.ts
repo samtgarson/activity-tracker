@@ -14,6 +14,7 @@ describe('Profile Parser', () => {
       const result = parser.call('google', profile)
 
       expect(result).toEqual({
+        success: true,
         data: [
           {
             email: profile.profile.emails[0].value,

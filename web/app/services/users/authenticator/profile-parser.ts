@@ -1,4 +1,5 @@
 import { Provider, ServiceResult } from '@/app/types'
+import { Svc } from '@/app/utils/service'
 import { GoogleExtraParams, GoogleProfile } from 'remix-auth-google'
 import { OAuth2StrategyVerifyParams } from 'remix-auth-oauth2'
 import { AccountAttrs, UserAttrs } from '.'
@@ -16,9 +17,9 @@ export class ProfileParser {
   ): ServiceResult<ProfileParserResult> {
     switch (provider) {
       case 'google':
-        return { data: this.parseGoogle(profile) }
+        return Svc.success(this.parseGoogle(profile))
       default:
-        return { error: `Unsupported provider: ${provider}` }
+        return Svc.error(`Unsupported provider: ${provider}`)
     }
   }
 

@@ -1,8 +1,9 @@
+import { User } from '@/app/models/user'
 import { googleCalendarFactory } from '@/test/factories/google'
 import { userFactory } from '@/test/factories/user'
 import { GoogleCalendarListFetcher } from './google'
 
-const user = userFactory.build()
+const user = new User(userFactory.build())
 const fetch = vi.fn()
 const accessToken = 'accessToken'
 const authClient = {
@@ -41,6 +42,7 @@ describe('GoogleCalendarListFetcher', () => {
   it('should return the correct data', async () => {
     const result = await fetcher.call(user)
     expect(result).toEqual({
+      success: true,
       data: [
         {
           color: calendar1.backgroundColor,
@@ -70,7 +72,9 @@ describe('GoogleCalendarListFetcher', () => {
 
     it('should return error', async () => {
       const res = await fetcher.call(user)
-      expect(res.error).toEqual('Could not parse response from Google')
+      expect(!res.success && res.error).toEqual(
+        'Could not parse response from Google'
+      )
     })
   })
 
@@ -85,7 +89,9 @@ describe('GoogleCalendarListFetcher', () => {
 
     it('should return error', async () => {
       const res = await fetcher.call(user)
-      expect(res.error).toEqual('Could not fetch calendars from Google')
+      expect(!res.success && res.error).toEqual(
+        'Could not fetch calendars from Google'
+      )
     })
   })
 
@@ -96,7 +102,9 @@ describe('GoogleCalendarListFetcher', () => {
 
     it('should return error', async () => {
       const res = await fetcher.call(user)
-      expect(res.error).toEqual('Something unexpected went wrong')
+      expect(!res.success && res.error).toEqual(
+        'Something unexpected went wrong'
+      )
     })
   })
 })

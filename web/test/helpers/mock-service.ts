@@ -1,4 +1,4 @@
-export const createMockService = <R>(result: R) =>
+export const createMockService = <R>(success: boolean, result: R) =>
   vi.fn(() => ({
-    call: vi.fn(async () => ({ data: result, error: undefined }))
+    call: vi.fn(async () => ({ success, data: result, error: undefined }))
   }))

@@ -8,6 +8,7 @@ import {
   GoogleAccessTokenFetcher
 } from '@/app/services/auth/providers/google.server'
 import { Calendar } from '@/app/types'
+import { ServiceResult, Svc } from '@/app/utils/service'
 import { CalendarFetcher } from '.'
 
 export class GoogleCalendarListFetcher implements CalendarFetcher {
@@ -16,20 +17,20 @@ export class GoogleCalendarListFetcher implements CalendarFetcher {
     private authClient: AccessTokenFetcher = new GoogleAccessTokenFetcher()
   ) {}
 
-  async call(user: User) {
+  async call(user: User): Promise<ServiceResult<Calendar[]>> {
     try {
       const json = await this.makeRequest(user)
-      if (!json) return { error: 'Could not fetch calendars from Google' }
+      if (!json) return Svc.error('Could not fetch calendars from Google')
       const parsed = googleCalendarListSchema.safeParse(json)
 
       if (!parsed.success) {
-        return { error: 'Could not parse response from Google' }
+        return Svc.error('Could not parse response from Google')
       }
 
-      return { data: this.normalize(parsed.data) }
+      return Svc.success(this.normalize(parsed.data))
     } catch (e) {
       console.error(e)
-      return { error: 'Something unexpected went wrong' }
+      return Svc.error('Something unexpected went wrong')
     }
   }
 

@@ -20,7 +20,11 @@ describe('getUser', () => {
     const user = new User(userFactory.build())
 
     beforeEach(() => {
-      userFinderCall.mockResolvedValue({ data: user, error: undefined })
+      userFinderCall.mockResolvedValue({
+        success: true,
+        data: user,
+        error: undefined
+      })
     })
 
     it('authenticates the request', async () => {
@@ -44,7 +48,11 @@ describe('getUser', () => {
 
   describe('when the user does not exist', () => {
     beforeEach(() => {
-      userFinderCall.mockResolvedValue({ data: undefined, error: 'error' })
+      userFinderCall.mockResolvedValue({
+        success: false,
+        data: undefined,
+        error: 'error'
+      })
       redirect.mockReturnValue('redirected')
     })
 

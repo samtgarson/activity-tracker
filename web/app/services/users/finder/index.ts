@@ -1,6 +1,6 @@
 import { User } from '@/app/models/user'
-import { ServiceResult } from '@/app/types'
 import { prismaClient } from '@/app/utils/prisma'
+import { ServiceResult, Svc } from '@/app/utils/service'
 
 export class UserFinder {
   constructor(private prisma = prismaClient) {}
@@ -11,7 +11,7 @@ export class UserFinder {
       include: { account: true }
     })
 
-    if (user === null) return { error: 'Could not find user' }
-    return { data: new User(user) }
+    if (user === null) return Svc.error('Could not find user')
+    return Svc.success(new User(user))
   }
 }
