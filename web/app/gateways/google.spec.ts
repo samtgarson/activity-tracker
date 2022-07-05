@@ -104,4 +104,30 @@ describe('Google Gateway', () => {
       })
     })
   })
+
+  describe('events', () => {
+    const calendarId = 'calendarId'
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`
+    const params = {
+      from: new Date(),
+      to: new Date()
+    }
+
+    it('should call request with the correct params', async () => {
+      await gateway.events(user, calendarId, params)
+      expect(fetch).toHaveBeenCalledWith(expect.stringContaining(url), {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+    })
+
+    it('adds the correct query', async () => {
+      const expectedUrl = `${url}?maxAttendees=1&orderBy=startTime&singleEvents=true&timeMin=${params.from.toISOString()}&timeMax=${params.to.toISOString()}`
+      await gateway.events(user, calendarId, params)
+
+      const [actualUrl] = fetch.mock.calls[0]
+      expect(actualUrl).toBeSameUrl(expectedUrl)
+    })
+  })
 })

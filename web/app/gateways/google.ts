@@ -25,6 +25,22 @@ export class GoogleGateway {
     )
   }
 
+  async events(
+    user: User,
+    calendarId: string,
+    { from, to }: { from?: Date; to?: Date } = {}
+  ) {
+    const url = new URL(
+      `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`
+    )
+    url.searchParams.set('maxAttendees', '1')
+    url.searchParams.set('orderBy', 'startTime')
+    url.searchParams.set('singleEvents', 'true')
+    if (from) url.searchParams.set('timeMin', from.toISOString())
+    if (to) url.searchParams.set('timeMax', to.toISOString())
+    return this.request(user, url.toString())
+  }
+
   async request(user: User, url: string, options?: RequestInit) {
     try {
       const token = await this.authClient.call(user)
