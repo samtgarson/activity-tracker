@@ -1,14 +1,14 @@
-import { Provider, UserWithAccount } from '@/app/types'
-import { accountFactory, userFactory } from '@/test/factories/user'
+import { User } from '@/app/models/user'
+import { userFactory } from '@/test/factories/user'
 import { CalendarListFetcher } from '.'
 
 describe('CalendarListFetcher', () => {
   const googleFetcher = { call: vi.fn() }
-  let user: UserWithAccount
+  let user: User
   let fetcher: CalendarListFetcher
 
   beforeEach(() => {
-    user = userFactory.build()
+    user = new User(userFactory.build())
 
     fetcher = new CalendarListFetcher(googleFetcher)
   })

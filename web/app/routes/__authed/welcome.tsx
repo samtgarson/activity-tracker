@@ -3,7 +3,7 @@ import {
   validator
 } from '@/app/components/calendar-chooser-form'
 import { CalendarChooser } from '@/app/services/calendars/chooser'
-import { CalendarListFetcher } from '@/app/services/calendars/list/fetcher'
+import { CalendarListFetcher } from '@/app/services/calendars/list-fetcher'
 import { Calendar } from '@/app/types'
 import { getUser } from '@/app/utils/auth.server'
 import { ServiceResult } from '@/app/utils/service'

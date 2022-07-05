@@ -1,13 +1,14 @@
+import { GoogleGateway } from '@/app/gateways/google'
 import { User } from '@/app/models/user'
+import { Svc } from '@/app/utils/service'
 import { googleCalendarFactory } from '@/test/factories/google'
 import { userFactory } from '@/test/factories/user'
 import { GoogleCalendarListFetcher } from './google'
 
 const user = new User(userFactory.build())
-const fetch = vi.fn()
 const accessToken = 'accessToken'
-const authClient = {
-  call: vi.fn(async () => accessToken)
+const gateway = {
+  calendarList: vi.fn()
 }
 
 const calendar1 = googleCalendarFactory.build()
@@ -20,23 +21,15 @@ describe('GoogleCalendarListFetcher', () => {
   let fetcher: GoogleCalendarListFetcher
 
   beforeEach(() => {
-    fetcher = new GoogleCalendarListFetcher(fetch, authClient)
-    fetch.mockResolvedValue({
-      ok: true,
-      json: async () => ({ items: [calendar1, calendar2] })
-    })
+    fetcher = new GoogleCalendarListFetcher(gateway as unknown as GoogleGateway)
+    gateway.calendarList.mockResolvedValue(
+      Svc.success({ items: [calendar1, calendar2] })
+    )
   })
 
-  it('should call fetch with the correct url', async () => {
+  it('should call the gateway correctly', async () => {
     await fetcher.call(user)
-    expect(fetch).toHaveBeenCalledWith(
-      'https://www.googleapis.com/calendar/v3/users/me/calendarList',
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      }
-    )
+    expect(gateway.calendarList).toHaveBeenCalledWith(user)
   })
 
   it('should return the correct data', async () => {
@@ -64,10 +57,7 @@ describe('GoogleCalendarListFetcher', () => {
 
   describe('when response cannot be parsed', () => {
     beforeEach(() => {
-      fetch.mockResolvedValue({
-        ok: true,
-        json: async () => ({ items: [{ id: 'id' }] })
-      })
+      gateway.calendarList.mockResolvedValue(Svc.success({ item: [] }))
     })
 
     it('should return error', async () => {
@@ -78,26 +68,9 @@ describe('GoogleCalendarListFetcher', () => {
     })
   })
 
-  describe('when the response is not ok', () => {
-    beforeEach(() => {
-      fetch.mockResolvedValue({
-        ok: false,
-        json: async () => null,
-        text: async () => 'error'
-      })
-    })
-
-    it('should return error', async () => {
-      const res = await fetcher.call(user)
-      expect(!res.success && res.error).toEqual(
-        'Could not fetch calendars from Google'
-      )
-    })
-  })
-
   describe('when something unexpected goes wrong', () => {
     beforeEach(() => {
-      fetch.mockRejectedValue('error')
+      gateway.calendarList.mockRejectedValue('error')
     })
 
     it('should return error', async () => {

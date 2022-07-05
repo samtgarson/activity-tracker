@@ -3,13 +3,13 @@ import { Calendar, Provider } from '@/app/types'
 import { ServiceResult } from '@/app/utils/service'
 import { GoogleCalendarListFetcher } from './google'
 
-export interface CalendarFetcher {
+export interface ProviderCalendarListFetcher {
   call(user: User): Promise<ServiceResult<Calendar[]>>
 }
 
 export class CalendarListFetcher {
   constructor(
-    private google: CalendarFetcher = new GoogleCalendarListFetcher()
+    private google: ProviderCalendarListFetcher = new GoogleCalendarListFetcher()
   ) {}
 
   async call(
