@@ -1,41 +1,23 @@
-import { CalendarFetcher } from '@/app/services/calendars/fetcher'
-import { EventListFetcher } from '@/app/services/events/list-fetcher'
-import { Calendar, CalendarEvent } from '@/app/types'
+import { DashboardFetcher } from '@/app/services/fetchers/dashboard-fetcher'
 import { getUser } from '@/app/utils/auth.server'
-import { ServiceResult } from '@/app/utils/service'
+import { ResultType } from '@/app/utils/service'
 import { json, LoaderFunction, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 
-type DashboardProps = ServiceResult<{
-  calendar: Calendar
-  events: CalendarEvent[]
-}>
-
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request)
-  const account = user.activeAccount
-  if (!account?.calendarId) return redirect('/welcome')
+  const fetcher = new DashboardFetcher()
+  const result = await fetcher.call(user)
 
-  const calendarFetcher = new CalendarFetcher()
-  const eventFetcher = new EventListFetcher()
-  const [calendar, events] = await Promise.all([
-    calendarFetcher.call(user, account.provider, account.calendarId),
-    eventFetcher.call(user, account.provider, account.calendarId)
-  ])
-
-  if (!calendar.success) return json(calendar)
-  if (!events.success) return json(events)
-
-  return json<DashboardProps>({
-    success: true,
-    data: { calendar: calendar.data, events: events.data }
-  })
+  if (!result.success && result.code === 'no_calendar')
+    return redirect('/welcome')
+  return json(result)
 }
 
 export default function Dashboard() {
-  const res = useLoaderData<DashboardProps>()
+  const res = useLoaderData<ResultType<DashboardFetcher>>()
 
-  if (!res.success) return <p>{res.error}</p>
+  if (!res.success) return <p>{res.code}</p>
 
   const {
     data: { calendar, events }

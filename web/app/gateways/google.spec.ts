@@ -27,12 +27,12 @@ describe('Google Gateway', () => {
     }
 
     it('should get a fresh token', async () => {
-      await gateway.request(user, url, params)
+      await gateway.call(user, url, params)
       expect(tokenFetcher.call).toHaveBeenCalledWith(user)
     })
 
     it('should call fetch with the correct params', async () => {
-      await gateway.request(user, url, params)
+      await gateway.call(user, url, params)
       expect(fetch).toHaveBeenCalledWith(url, {
         headers: {
           ...params.headers,
@@ -45,7 +45,7 @@ describe('Google Gateway', () => {
       const response = { ok: true, json: vi.fn(async () => 'response') }
       fetch.mockResolvedValue(response)
 
-      const result = await gateway.request(user, url, params)
+      const result = await gateway.call(user, url, params)
 
       expect(result).toEqual({ success: true, data: 'response' })
     })
@@ -55,24 +55,27 @@ describe('Google Gateway', () => {
         const response = { ok: false, text: vi.fn(async () => 'response') }
         fetch.mockResolvedValue(response)
 
-        const result = await gateway.request(user, url, params)
+        const result = await gateway.call(user, url, params)
 
         expect(result).toEqual({
           success: false,
-          error: `Request to ${url} failed`
+          code: 'request_failed',
+          data: response
         })
       })
     })
 
     describe('when something goes wrong', () => {
       it('should return an error', async () => {
-        fetch.mockRejectedValue(new Error('Something went wrong'))
+        const error = new Error('Something went wrong')
+        fetch.mockRejectedValue(error)
 
-        const result = await gateway.request(user, url, params)
+        const result = await gateway.call(user, url, params)
 
         expect(result).toEqual({
           success: false,
-          error: 'Something unexpected went wrong'
+          code: 'server_error',
+          data: error
         })
       })
     })
@@ -83,7 +86,7 @@ describe('Google Gateway', () => {
     const url = `https://www.googleapis.com/calendar/v3/users/me/calendarList/${calendarId}`
 
     it('should call request with the correct params', async () => {
-      await gateway.calendar(user, calendarId)
+      await gateway.getCalendar(user, calendarId)
       expect(fetch).toHaveBeenCalledWith(url, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -96,7 +99,7 @@ describe('Google Gateway', () => {
     const url = 'https://www.googleapis.com/calendar/v3/users/me/calendarList'
 
     it('should call request with the correct params', async () => {
-      await gateway.calendarList(user)
+      await gateway.getCalendarList(user)
       expect(fetch).toHaveBeenCalledWith(url, {
         headers: {
           Authorization: `Bearer ${token}`

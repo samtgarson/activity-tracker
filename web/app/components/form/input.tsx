@@ -6,8 +6,14 @@ export type InputProps = ComponentProps<'input'> & {
   children: ReactNode
 }
 
-export const Input: FC<InputProps> = ({ name, ...props }) => {
-  const { getInputProps } = useField(name)
+export const Input: FC<InputProps> = ({ name, children, ...props }) => {
+  const { getInputProps, error } = useField(name)
 
-  return <input {...getInputProps(props)} />
+  return (
+    <label>
+      {children}
+      <input {...getInputProps({ ...props })} />
+      {error && <p className='text-red-500'>{error}</p>}
+    </label>
+  )
 }

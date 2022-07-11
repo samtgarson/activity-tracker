@@ -1,19 +1,19 @@
 import { User } from '@/app/models/user'
 import { Calendar } from '@/app/types'
 import { userFactory } from '@/test/factories/user'
-import { CalendarFetcher } from '.'
-import { GoogleCalendarFetcher } from './google'
+import { CalendarCreator } from '.'
+import { GoogleCalendarCreator } from './google'
 
-describe('CalendarFetcher', () => {
-  const googleFetcher = { call: vi.fn() } as unknown as GoogleCalendarFetcher
+describe('CalendarCreator', () => {
+  const googleFetcher = { call: vi.fn() } as unknown as GoogleCalendarCreator
   const calendarId = 'calendarId'
   let user: User
-  let fetcher: CalendarFetcher
+  let fetcher: CalendarCreator
 
   beforeEach(() => {
     user = new User(userFactory.build())
 
-    fetcher = new CalendarFetcher(googleFetcher)
+    fetcher = new CalendarCreator(googleFetcher)
   })
 
   describe('google', () => {

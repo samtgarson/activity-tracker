@@ -3,25 +3,56 @@ import {
   AccessTokenFetcher,
   GoogleAccessTokenFetcher
 } from '@/app/services/auth/providers/google.server'
-import { Svc } from '@/app/utils/service'
+import { Service } from '../utils/service'
+import { GatewayErrors } from './types'
 
-export class GoogleGateway {
+export class GoogleGateway extends Service<unknown, GatewayErrors> {
   constructor(
     private fetch = global.fetch,
     private authClient: AccessTokenFetcher = new GoogleAccessTokenFetcher()
-  ) {}
+  ) {
+    super()
+  }
 
-  async calendarList(user: User) {
-    return this.request(
+  async getCalendarList(user: User) {
+    return this.call(
       user,
       'https://www.googleapis.com/calendar/v3/users/me/calendarList'
     )
   }
 
-  async calendar(user: User, calendarId: string) {
-    return this.request(
+  async getCalendar(user: User, calendarId: string) {
+    return this.call(
       user,
       `https://www.googleapis.com/calendar/v3/users/me/calendarList/${calendarId}`
+    )
+  }
+
+  async createCalendar(user: User, title: string) {
+    return await this.call(
+      user,
+      'https://www.googleapis.com/calendar/v3/calendars',
+      { method: 'POST', body: JSON.stringify({ summary: title }) }
+    )
+  }
+
+  async addCalendarToList(
+    user: User,
+    calendarId: string,
+    foregroundColor: string,
+    backgroundColor: string
+  ) {
+    const data = {
+      id: calendarId,
+      selected: true,
+      backgroundColor,
+      foregroundColor
+    }
+
+    return await this.call(
+      user,
+      'https://www.googleapis.com/calendar/v3/users/me/calendarList?colorRgbFormat=true',
+      { method: 'POST', body: JSON.stringify(data) }
     )
   }
 
@@ -38,10 +69,10 @@ export class GoogleGateway {
     url.searchParams.set('singleEvents', 'true')
     if (from) url.searchParams.set('timeMin', from.toISOString())
     if (to) url.searchParams.set('timeMax', to.toISOString())
-    return this.request(user, url.toString())
+    return this.call(user, url.toString())
   }
 
-  async request(user: User, url: string, options?: RequestInit) {
+  async call(user: User, url: string, options?: RequestInit) {
     try {
       const token = await this.authClient.call(user)
       const res = await this.fetch(url, {
@@ -53,15 +84,14 @@ export class GoogleGateway {
       })
 
       if (!res.ok) {
-        console.error(await res.text())
-        return Svc.error(`Request to ${url} failed`)
+        return this.failure('request_failed', res)
       }
 
       const json = await res.json()
-      return Svc.success(json)
+      return this.success(json)
     } catch (e) {
       console.error(e)
-      return Svc.error('Something unexpected went wrong')
+      return this.failure('server_error', e)
     }
   }
 }

@@ -2,27 +2,32 @@ import { GoogleGateway } from '@/app/gateways/google'
 import { User } from '@/app/models/user'
 import { googleCalendarFactory } from '@/test/factories/google'
 import { userFactory } from '@/test/factories/user'
-import { GoogleCalendarFetcher } from './google'
+import { GoogleCalendarCreator } from './google'
 
 const user = new User(userFactory.build())
 const calendarId = 'calendarId'
 const gateway = {
-  getCalendar: vi.fn()
+  createCalendar: vi.fn(),
+  addCalendarToList: vi.fn()
 }
 
 const calendar = googleCalendarFactory.build()
 
 describe('GoogleCalendarFetcher', () => {
-  let fetcher: GoogleCalendarFetcher
+  let fetcher: GoogleCalendarCreator
 
   beforeEach(() => {
-    fetcher = new GoogleCalendarFetcher(gateway as unknown as GoogleGateway)
-    gateway.getCalendar.mockResolvedValue({ success: true, data: calendar })
+    fetcher = new GoogleCalendarCreator(gateway as unknown as GoogleGateway)
+    gateway.createCalendar.mockResolvedValue({ success: true, data: calendar })
+    gateway.addCalendarToList.mockResolvedValue({
+      success: true,
+      data: calendar
+    })
   })
 
   it('should call the gateway correctly', async () => {
     await fetcher.call(user, calendarId)
-    expect(gateway.getCalendar).toHaveBeenCalledWith(user, calendarId)
+    expect(gateway.createCalendar).toHaveBeenCalledWith(user, calendarId)
   })
 
   it('should return the correct data', async () => {
@@ -41,7 +46,10 @@ describe('GoogleCalendarFetcher', () => {
 
   describe('when response cannot be parsed', () => {
     beforeEach(() => {
-      gateway.getCalendar.mockResolvedValue({ success: true, data: { foo: 1 } })
+      gateway.createCalendar.mockResolvedValue({
+        success: true,
+        data: { foo: 1 }
+      })
     })
 
     it('should return error', async () => {
@@ -52,7 +60,7 @@ describe('GoogleCalendarFetcher', () => {
 
   describe('when something unexpected goes wrong', () => {
     beforeEach(() => {
-      gateway.getCalendar.mockRejectedValue('error')
+      gateway.createCalendar.mockRejectedValue('error')
     })
 
     it('should return error', async () => {

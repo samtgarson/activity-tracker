@@ -1,30 +1,32 @@
-import { googleEventListSchema } from '@/app/contracts/google'
 import { GoogleGateway } from '@/app/gateways/google'
 import { User } from '@/app/models/user'
+import { googleEventListTransformer } from '@/app/transformers/google'
 import { CalendarEvent } from '@/app/types'
-import { ServiceResult, Svc } from '@/app/utils/service'
-import { ProviderEventListFetcher } from '.'
+import { Service } from '@/app/utils/service'
+import { EventListFetcherErrors } from '.'
 
-export class GoogleEventListFetcher implements ProviderEventListFetcher {
-  constructor(private gateway: GoogleGateway = new GoogleGateway()) {}
+export class GoogleEventListFetcher extends Service<
+  CalendarEvent[],
+  EventListFetcherErrors
+> {
+  constructor(private gateway: GoogleGateway = new GoogleGateway()) {
+    super()
+  }
 
-  async call(
-    user: User,
-    calendarId: string
-  ): Promise<ServiceResult<CalendarEvent[]>> {
+  async call(user: User, calendarId: string) {
     try {
       const res = await this.gateway.events(user, calendarId, this.dateFilters)
-      if (!res.success) return Svc.error('Could not fetch events from Google')
+      if (!res.success) return this.failure('api_failed')
 
-      const parsed = googleEventListSchema.safeParse(res.data)
+      const parsed = googleEventListTransformer.safeParse(res.data)
       if (!parsed.success) {
-        return Svc.error('Could not parse response from Google')
+        return this.failure('invalid_response')
       }
 
-      return Svc.success(parsed.data.items)
+      return this.success(parsed.data.items)
     } catch (e) {
       console.error(e)
-      return Svc.error('Something unexpected went wrong')
+      return this.failure('server_error')
     }
   }
 

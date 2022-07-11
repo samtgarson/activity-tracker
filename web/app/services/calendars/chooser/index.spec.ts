@@ -21,7 +21,7 @@ describe('CalendarChooser', () => {
     it('should fail', async () => {
       const result = await chooser.call(user, 'google', 'calendarId')
       expect(result.success).toBe(false)
-      expect(!result.success && result.error).toBe('No account for google')
+      expect(!result.success && result.code).toBe('missing_account')
     })
   })
 

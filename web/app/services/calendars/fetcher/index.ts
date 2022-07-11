@@ -1,22 +1,17 @@
 import { User } from '@/app/models/user'
-import { Calendar, Provider } from '@/app/types'
-import { ServiceResult } from '@/app/utils/service'
+import { Provider } from '@/app/types'
 import { GoogleCalendarFetcher } from './google'
 
-export interface ProviderCalendarFetcher {
-  call(user: User, calendarId: string): Promise<ServiceResult<Calendar>>
+export type CalendarFetcherErrors = {
+  server_error: undefined
+  request_failed: undefined
+  invalid_response: undefined
 }
 
 export class CalendarFetcher {
-  constructor(
-    private google: ProviderCalendarFetcher = new GoogleCalendarFetcher()
-  ) {}
+  constructor(private google = new GoogleCalendarFetcher()) {}
 
-  async call(
-    user: User,
-    provider: Provider,
-    calendarId: string
-  ): Promise<ServiceResult<Calendar>> {
+  async call(user: User, provider: Provider, calendarId: string) {
     switch (provider) {
       case 'google':
         return this.google.call(user, calendarId)

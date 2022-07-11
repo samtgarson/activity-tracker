@@ -1,12 +1,8 @@
-import {
-  CalendarChooserForm,
-  validator
-} from '@/app/components/calendar-chooser-form'
-import { CalendarChooser } from '@/app/services/calendars/chooser'
+import { CalendarChooserForm } from '@/app/components/calendar-chooser-form'
 import { CalendarListFetcher } from '@/app/services/calendars/list-fetcher'
-import { Calendar } from '@/app/types'
+import { CalendarChooserFormProcessor } from '@/app/services/forms/calendar-chooser-form-processor'
 import { getUser } from '@/app/utils/auth.server'
-import { ServiceResult } from '@/app/utils/service'
+import { ResultType } from '@/app/utils/service'
 import { ActionFunction, json, LoaderFunction, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { validationError } from 'remix-validated-form'
@@ -22,24 +18,25 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  const formResult = await validator.validate(await request.formData())
-
-  if (formResult.error) {
-    return validationError(formResult.error)
-  }
-
-  const { provider, calendarId } = formResult.data
-  const chooser = new CalendarChooser()
+  const formData = await request.formData()
   const user = await getUser(request)
 
-  await chooser.call(user, provider, calendarId)
+  const formModel = new CalendarChooserFormProcessor()
+  const result = await formModel.call(user, formData)
+
+  if (result.success) return redirect('/dashboard')
+  result
+  if (result.code === 'invalid_request' && result.data) {
+    return validationError(result.data)
+  }
+
   return redirect('/dashboard')
 }
 
 export default function Welcome() {
-  const res = useLoaderData<ServiceResult<Calendar[]>>()
+  const res = useLoaderData<ResultType<CalendarListFetcher>>()
 
-  if (!res.success) return <p>{res.error}</p>
+  if (!res.success) return <p>{res.code}</p>
 
   return (
     <div>

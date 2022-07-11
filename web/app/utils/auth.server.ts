@@ -12,7 +12,8 @@ export const getUser = async (
   const { userId } = await deps.authenticator.isAuthenticated(request, {
     failureRedirect: '/'
   })
-  const { data, error } = await deps.userFinder.call(userId)
-  if (error !== undefined) throw deps.redirect('/')
-  return data
+  const result = await deps.userFinder.call(userId)
+
+  if (result.success) return result.data
+  throw deps.redirect('/')
 }

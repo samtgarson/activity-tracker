@@ -28,11 +28,10 @@ authenticator.use(
       accessType: 'offline'
     },
     async (res) => {
-      const parserResult = parser.call('google', res)
-      if (parserResult.error !== undefined) {
-        console.error(parserResult.error)
-        throw new Error(parserResult.error)
-      }
+      const parserResult = await parser.call({
+        provider: 'google',
+        profile: res
+      })
       const [userAttrs, accountAttrs] = parserResult.data
 
       const user = await userAuthenticator.call(userAttrs, accountAttrs)

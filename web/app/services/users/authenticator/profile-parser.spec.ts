@@ -9,9 +9,9 @@ describe('Profile Parser', () => {
   })
 
   describe('for a google profile', () => {
-    it('should return the correct data', () => {
+    it('should return the correct data', async () => {
       const profile = googleProfileFactory.build()
-      const result = parser.call('google', profile)
+      const result = await parser.call({ provider: 'google', profile })
 
       expect(result).toEqual({
         success: true,

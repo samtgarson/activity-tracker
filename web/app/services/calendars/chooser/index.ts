@@ -1,22 +1,24 @@
 import { User } from '@/app/models/user'
 import { Account, Provider } from '@/app/types'
 import { prismaClient } from '@/app/utils/prisma'
-import { ServiceResult, Svc } from '@/app/utils/service'
+import { Service } from '@/app/utils/service'
 
-export class CalendarChooser {
-  constructor(private prisma = prismaClient) {}
+export type CalendarChooserErrors = {
+  missing_account: undefined
+}
 
-  async call(
-    user: User,
-    provider: Provider,
-    calendarId: string
-  ): Promise<ServiceResult> {
+export class CalendarChooser extends Service<null, CalendarChooserErrors> {
+  constructor(private prisma = prismaClient) {
+    super()
+  }
+
+  async call(user: User, provider: Provider, calendarId: string) {
     const account = user.accountFor(provider)
 
-    if (!account) return Svc.error(`No account for ${provider}`)
+    if (!account) return this.failure('missing_account')
     this.updateAccount(user, account, calendarId)
 
-    return Svc.success(null)
+    return this.success(null)
   }
 
   private async updateAccount(

@@ -1,30 +1,25 @@
-import { Provider, ServiceResult } from '@/app/types'
-import { Svc } from '@/app/utils/service'
+import { Service } from '@/app/utils/service'
 import { GoogleExtraParams, GoogleProfile } from 'remix-auth-google'
 import { OAuth2StrategyVerifyParams } from 'remix-auth-oauth2'
 import { AccountAttrs, UserAttrs } from '.'
 
 export type ProfileParserResult = [UserAttrs, AccountAttrs]
 
-export class ProfileParser {
-  call(
-    provider: 'google',
-    profile: OAuth2StrategyVerifyParams<GoogleProfile, GoogleExtraParams>
-  ): ServiceResult<ProfileParserResult>
-  call(
-    provider: Provider,
-    profile: any // eslint-disable-line @typescript-eslint/no-explicit-any
-  ): ServiceResult<ProfileParserResult> {
+type ProfileParserParams = {
+  provider: 'google'
+  profile: OAuth2StrategyVerifyParams<GoogleProfile, GoogleExtraParams>
+}
+
+export class ProfileParser extends Service<ProfileParserResult> {
+  async call({ provider, profile }: ProfileParserParams) {
     switch (provider) {
       case 'google':
-        return Svc.success(this.parseGoogle(profile))
-      default:
-        return Svc.error(`Unsupported provider: ${provider}`)
+        return this.success(this.parseGoogle(profile))
     }
   }
 
   private parseGoogle(
-    profile: OAuth2StrategyVerifyParams<GoogleProfile, GoogleExtraParams>
+    profile: ProfileParserParams['profile']
   ): ProfileParserResult {
     const {
       refreshToken,

@@ -1,9 +1,13 @@
 import { User } from '@/app/models/user'
+import { Calendar } from '@/app/types'
 import { userFactory } from '@/test/factories/user'
 import { CalendarListFetcher } from '.'
+import { GoogleCalendarListFetcher } from './google'
 
 describe('CalendarListFetcher', () => {
-  const googleFetcher = { call: vi.fn() }
+  const googleFetcher = {
+    call: vi.fn()
+  } as unknown as GoogleCalendarListFetcher
   let user: User
   let fetcher: CalendarListFetcher
 
@@ -20,10 +24,10 @@ describe('CalendarListFetcher', () => {
     })
 
     it('should return the correct data', async () => {
-      const data = [{ id: 1 }]
-      googleFetcher.call.mockResolvedValue({ data })
+      const data = [{ id: 1 }] as unknown as Calendar[]
+      vi.mocked(googleFetcher.call).mockResolvedValue({ success: true, data })
       const result = await fetcher.call(user, 'google')
-      expect(result).toEqual({ data })
+      expect(result).toEqual({ success: true, data })
     })
   })
 })

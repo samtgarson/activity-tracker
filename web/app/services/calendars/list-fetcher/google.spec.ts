@@ -1,14 +1,12 @@
 import { GoogleGateway } from '@/app/gateways/google'
 import { User } from '@/app/models/user'
-import { Svc } from '@/app/utils/service'
 import { googleCalendarFactory } from '@/test/factories/google'
 import { userFactory } from '@/test/factories/user'
 import { GoogleCalendarListFetcher } from './google'
 
 const user = new User(userFactory.build())
-const accessToken = 'accessToken'
 const gateway = {
-  calendarList: vi.fn()
+  getCalendarList: vi.fn()
 }
 
 const calendar1 = googleCalendarFactory.build()
@@ -22,14 +20,15 @@ describe('GoogleCalendarListFetcher', () => {
 
   beforeEach(() => {
     fetcher = new GoogleCalendarListFetcher(gateway as unknown as GoogleGateway)
-    gateway.calendarList.mockResolvedValue(
-      Svc.success({ items: [calendar1, calendar2] })
-    )
+    gateway.getCalendarList.mockResolvedValue({
+      success: true,
+      data: { items: [calendar1, calendar2] }
+    })
   })
 
   it('should call the gateway correctly', async () => {
     await fetcher.call(user)
-    expect(gateway.calendarList).toHaveBeenCalledWith(user)
+    expect(gateway.getCalendarList).toHaveBeenCalledWith(user)
   })
 
   it('should return the correct data', async () => {
@@ -57,27 +56,26 @@ describe('GoogleCalendarListFetcher', () => {
 
   describe('when response cannot be parsed', () => {
     beforeEach(() => {
-      gateway.calendarList.mockResolvedValue(Svc.success({ item: [] }))
+      gateway.getCalendarList.mockResolvedValue({
+        success: true,
+        data: { item: [] }
+      })
     })
 
     it('should return error', async () => {
       const res = await fetcher.call(user)
-      expect(!res.success && res.error).toEqual(
-        'Could not parse response from Google'
-      )
+      expect(!res.success && res.code).toEqual('invalid_response')
     })
   })
 
   describe('when something unexpected goes wrong', () => {
     beforeEach(() => {
-      gateway.calendarList.mockRejectedValue('error')
+      gateway.getCalendarList.mockRejectedValue('error')
     })
 
     it('should return error', async () => {
       const res = await fetcher.call(user)
-      expect(!res.success && res.error).toEqual(
-        'Something unexpected went wrong'
-      )
+      expect(!res.success && res.code).toEqual('server_error')
     })
   })
 })
