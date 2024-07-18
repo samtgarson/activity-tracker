@@ -1,0 +1,8 @@
+{
+  "name": "@activity-tracker/monorepo",
+  "private": true,
+  "author": "samtgarson",
+  "workspaces": [
+    "api"
+  ]
+}
