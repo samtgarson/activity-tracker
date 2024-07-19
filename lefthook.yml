@@ -1,0 +1,13 @@
+output:
+  - summary
+
+pre-commit:
+  piped: true
+  commands:
+    eslint:
+      run: npx eslint {staged_files} --fix
+      glob: "*.{js,ts,jsx,tsx}"
+      stage_fixed: true
+    prettier:
+      run: npx prettier --write {staged_files} --ignore-unknown
+      stage_fixed: true

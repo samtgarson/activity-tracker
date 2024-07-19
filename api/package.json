@@ -1,8 +1,7 @@
 {
   "name": "@activity-tracker/api",
   "scripts": {
-    "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy --minify src/index.ts"
+    "dev": "wrangler dev src/index.ts"
   },
   "dependencies": {
     "hono": "^4.5.0"
