@@ -8,7 +8,7 @@ export type ServiceResultError<Code, Data = undefined> = {
 }
 
 export type ServiceErrorMap = {
-  [key: string]: unknown | undefined
+  [key: string]: unknown
 }
 
 export abstract class Service<ReturnType = null, ErrorMap = undefined> {

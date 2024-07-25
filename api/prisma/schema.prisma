@@ -1,0 +1,41 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id           String   @id
+  remoteId     String   @map("remote_id")
+  user         User     @relation(fields: [userId], references: [id])
+  userId       String   @unique @map("user_id")
+  provider     String
+  accessToken  String?  @map("access_token")
+  expiresAt    Int?     @map("expires_at")
+  tokenType    String?  @map("token_type")
+  scope        String?
+  refreshToken String   @map("refresh_token")
+  createdAt    DateTime @default(now()) @map("created_at")
+  calendarId   String?  @map("calendar_id")
+  active       Boolean  @default(false)
+
+  @@unique(fields: [remoteId, provider])
+  @@map("accounts")
+}
+
+model User {
+  id          String    @id
+  email       String    @unique
+  displayName String    @map("display_name")
+  familyName  String    @map("family_name")
+  givenName   String    @map("given_name")
+  picture     String?
+  account     Account[]
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@map("users")
+}

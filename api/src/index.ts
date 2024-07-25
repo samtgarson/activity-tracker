@@ -1,7 +1,9 @@
-import { Hono } from "hono"
+import { AuthRouter } from "./routes/auth"
+import { newHono } from "./routes/util"
 
-const app = new Hono()
+const app = newHono()
 
-app.get("/", (c) => c.json({ message: "Hello, World!" }))
+app.get("/", (c) => c.json({ message: "beep boop" }))
+app.route("/auth", AuthRouter)
 
 export default app

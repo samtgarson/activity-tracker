@@ -9,9 +9,22 @@ export default tseslint.config(
   {
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     ignores: ["web_archive/*"],
+  },
+  {
+    rules: {
+      "@typescript-eslint/require-await": "off",
+      "@typescript-eslint/unbound-method": "off",
+    },
+  },
+  {
+    files: ["**/*.spec.ts"],
+    rules: {
+      "@typescript-eslint/no-unsafe-argument": "off",
+    },
   },
 )
