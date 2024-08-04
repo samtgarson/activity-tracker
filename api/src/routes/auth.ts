@@ -1,10 +1,12 @@
 import { zValidator } from "@hono/zod-validator"
+import { oAuthCallbackParamsSchema } from "src/gateways/contracts/oauth"
 import { Provider } from "src/models/types"
 import { AuthGetRedirect } from "src/services/auth/get-redirect"
+import { AuthHandleCallback } from "src/services/auth/handle-callback"
 import {
-  AuthHandleCallback,
-  oAuthCallbackSchema,
-} from "src/services/auth/handle-callback"
+  generateAccessToken,
+  generateRefreshToken,
+} from "src/services/auth/tokens"
 import { z } from "zod"
 import { newHono } from "./util"
 
@@ -17,8 +19,8 @@ const providerSchema = zValidator(
 
 AuthRouter.get("/login/:provider", providerSchema, async (c) => {
   const provider = c.req.valid("param").provider
-  const svc = new AuthGetRedirect(c)
-  const result = await svc.call(provider)
+  const svc = new AuthGetRedirect(c, provider)
+  const result = await svc.call()
 
   if (result.success) {
     return c.redirect(result.data)
@@ -30,17 +32,23 @@ AuthRouter.get("/login/:provider", providerSchema, async (c) => {
 AuthRouter.get(
   "/callback/:provider",
   providerSchema,
-  zValidator("query", oAuthCallbackSchema),
+  zValidator("query", oAuthCallbackParamsSchema),
   async (c) => {
     const provider = c.req.valid("param").provider
     const data = c.req.valid("query")
-    const svc = new AuthHandleCallback(c)
-    const result = await svc.call(provider, data)
+    const svc = new AuthHandleCallback(c, provider)
+    const result = await svc.call(data)
 
     if (!result.success) {
       return c.json({ error: result.code, data: result.data }, 500)
     }
 
-    return c.json({ ok: true })
+    const { user } = result.data
+    const [accessToken, refreshToken] = await Promise.all([
+      generateAccessToken(user, c.env.JWT_SECRET),
+      generateRefreshToken(),
+    ])
+
+    return c.json({ accessToken, refreshToken })
   },
 )

@@ -1,11 +1,8 @@
-import type { Account, User } from "@prisma/client"
+import type { User } from "@prisma/client"
 
 export enum Provider {
   Google = "google",
 }
-
-export type UserWithAccount = User & { account: Account[] }
-export type { Account }
 
 export type Calendar = {
   color: string
@@ -24,3 +21,8 @@ export type CalendarEvent = {
   transparent?: boolean
   url?: string
 }
+
+export type ProfileAttributes = Pick<
+  User,
+  "email" | "displayName" | "givenName" | "familyName" | "picture" | "id"
+>

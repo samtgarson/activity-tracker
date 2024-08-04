@@ -1,10 +1,14 @@
 import { mockContext } from "spec/util"
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
+import { z } from "zod"
 import { BaseGateway } from "./base-gateway"
 
+class TestGateway extends BaseGateway {}
 const fetch = vi.fn()
-const gateway = new BaseGateway(mockContext, fetch)
-const json = vi.fn(async () => "response")
+const gateway = new TestGateway(mockContext, fetch)
+const json = vi.fn(async () => ({ foo: "bar" }))
+const schema = z.object({ foo: z.string() })
+vi.spyOn(schema, "safeParse")
 
 describe("call", () => {
   describe("when request is successful", () => {
@@ -12,20 +16,31 @@ describe("call", () => {
       fetch.mockResolvedValue({ ok: true, json })
       const res = await gateway.call(new URL("http://localhost"), {
         method: "GET",
+        schema,
       })
 
       expect(json).toHaveBeenCalled()
-      expect(res).toEqual({ success: true, data: "response" })
+      expect(res).toEqual({ success: true, data: { foo: "bar" } })
     })
 
     it("should call with the correct params", async () => {
       fetch.mockResolvedValue({ ok: true, json })
       await gateway.call(new URL("http://localhost"), {
         method: "GET",
+        schema,
       })
 
       expect(fetch).toHaveBeenCalledWith(new URL("http://localhost"), {
         method: "GET",
+      })
+    })
+
+    describe("when options are not provided", () => {
+      it("should call with the correct params", async () => {
+        fetch.mockResolvedValue({ ok: true, json })
+        await gateway.call(new URL("http://localhost"), { schema })
+
+        expect(fetch).toHaveBeenCalledWith(new URL("http://localhost"), {})
       })
     })
 
@@ -35,6 +50,7 @@ describe("call", () => {
         await gateway.call(new URL("http://localhost"), {
           method: "POST",
           json: { key: "value" },
+          schema,
         })
 
         expect(fetch).toHaveBeenCalledWith(new URL("http://localhost"), {
@@ -47,10 +63,11 @@ describe("call", () => {
 
   describe("when request is not successful", () => {
     it("should return an error", async () => {
-      const response = { ok: false }
+      const response = { ok: false, text: vi.fn(async () => "error") }
       fetch.mockResolvedValue(response)
       const res = await gateway.call(new URL("http://localhost"), {
         method: "GET",
+        schema,
       })
 
       expect(res).toEqual({
@@ -66,12 +83,36 @@ describe("call", () => {
       fetch.mockRejectedValue(new Error("error"))
       const res = await gateway.call(new URL("http://localhost"), {
         method: "GET",
+        schema,
       })
 
       expect(res).toEqual({
         success: false,
         code: "server_error",
         data: new Error("error"),
+      })
+    })
+  })
+
+  describe("when response is invalid", () => {
+    beforeEach(() => {
+      vi.mocked(schema.safeParse).mockReturnValue({
+        success: false,
+        error: expect.anything(),
+      })
+    })
+
+    it("should return an error", async () => {
+      fetch.mockResolvedValue({ ok: true, json })
+      const res = await gateway.call(new URL("http://localhost"), {
+        method: "GET",
+        schema,
+      })
+
+      expect(res).toEqual({
+        success: false,
+        code: "invalid_response",
+        data: null,
       })
     })
   })

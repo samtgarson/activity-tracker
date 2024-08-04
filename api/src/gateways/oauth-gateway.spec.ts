@@ -1,16 +1,18 @@
 import { sign } from "hono/jwt"
 import { Provider } from "src/models/types"
-import { InputRequest } from "src/services/base"
+import { ServiceInput } from "src/services/base"
 import { describe, expect, it, vi } from "vitest"
+import { ZodSchema } from "zod"
 import { ConfigProvider, OAuthGateway } from "./oauth-gateway"
 
 vi.mock("hono/jwt", () => ({ sign: vi.fn(async () => "signed") }))
 
-const ctx: InputRequest = {
+const ctx: ServiceInput = {
   env: {
     GOOGLE_CLIENT_ID: "123",
     GOOGLE_CLIENT_SECRET: "456",
     JWT_SECRET: "789",
+    DB: "db" as unknown as D1Database,
   },
   url: new URL("http://localhost"),
 }
@@ -51,9 +53,9 @@ describe("createUrl", () => {
     expect(url.searchParams.get("state")).toBe("signed")
   })
 
-  describe("when redirect is not provided", () => {
+  describe("when redirect is provided", () => {
     it("should sign the correct state", async () => {
-      await gateway.createAuthUrl("http://redirect.com")
+      await gateway.createAuthUrl()
       expect(sign).toHaveBeenCalledWith(
         {
           origin: "activity-tracker",
@@ -93,6 +95,7 @@ describe("exchangeCode", () => {
           redirect_uri: "http://localhost/auth/callback/google",
           grant_type: "authorization_code",
         }),
+        schema: expect.any(ZodSchema),
       },
     )
   })
@@ -113,6 +116,7 @@ describe("refreshToken", () => {
           refresh_token: refreshToken,
           grant_type: "refresh_token",
         }),
+        schema: expect.any(ZodSchema),
       },
     )
   })

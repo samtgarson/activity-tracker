@@ -9,21 +9,21 @@ datasource db {
 }
 
 model Account {
-  id           String   @id
-  remoteId     String   @map("remote_id")
-  user         User     @relation(fields: [userId], references: [id])
-  userId       String   @unique @map("user_id")
+  id           String    @id
+  remoteId     String    @map("remote_id")
+  user         User      @relation(fields: [userId], references: [id])
+  userId       String    @unique @map("user_id")
   provider     String
-  accessToken  String?  @map("access_token")
-  expiresAt    Int?     @map("expires_at")
-  tokenType    String?  @map("token_type")
+  accessToken  String?   @map("access_token")
+  expiresAt    DateTime? @map("expires_at")
+  tokenType    String?   @map("token_type")
   scope        String?
-  refreshToken String   @map("refresh_token")
-  createdAt    DateTime @default(now()) @map("created_at")
-  calendarId   String?  @map("calendar_id")
-  active       Boolean  @default(false)
+  refreshToken String    @map("refresh_token")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  calendarId   String?   @map("calendar_id")
+  active       Boolean   @default(false)
 
-  @@unique(fields: [remoteId, provider])
+  @@unique(fields: [userId, provider])
   @@map("accounts")
 }
 
@@ -34,7 +34,7 @@ model User {
   familyName  String    @map("family_name")
   givenName   String    @map("given_name")
   picture     String?
-  account     Account[]
+  accounts    Account[]
   createdAt   DateTime  @default(now()) @map("created_at")
 
   @@map("users")

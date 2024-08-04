@@ -1,8 +1,9 @@
 import { sign } from "hono/jwt"
 import { Provider } from "src/models/types"
-import { InputRequest } from "src/services/base"
+import { ServiceInput } from "src/services/base"
 import { createUrl, mergeParams } from "src/services/util/url"
 import { BaseGateway } from "./base-gateway"
+import { createTokenSchema, refreshTokenSchema } from "./contracts/oauth"
 
 type OAuthGatewayConfig = {
   authUrl: string
@@ -13,17 +14,16 @@ type OAuthGatewayConfig = {
 }
 
 export type ConfigProvider = (
-  ctx: InputRequest,
+  ctx: ServiceInput,
   provider: Provider,
 ) => OAuthGatewayConfig
 
 export class OAuthGateway extends BaseGateway {
   constructor(
-    ctx: InputRequest,
+    ctx: ServiceInput,
     private provider: Provider,
-    fetch = global.fetch,
+    fetch = undefined,
     private configProvider: ConfigProvider = defaultConfigProvider,
-    // private authClient: AccessTokenFetcher = new GoogleAccessTokenFetcher()
   ) {
     super(ctx, fetch)
   }
@@ -49,6 +49,7 @@ export class OAuthGateway extends BaseGateway {
         redirect_uri: this.redirectUrl,
         grant_type: "authorization_code",
       }),
+      schema: createTokenSchema,
     })
   }
 
@@ -62,6 +63,7 @@ export class OAuthGateway extends BaseGateway {
         refresh_token: refreshToken,
         grant_type: "refresh_token",
       }),
+      schema: refreshTokenSchema,
     })
   }
 
@@ -81,7 +83,7 @@ export class OAuthGateway extends BaseGateway {
   }
 }
 
-const defaultConfigProvider = (ctx: InputRequest, provider: Provider) =>
+const defaultConfigProvider = (ctx: ServiceInput, provider: Provider) =>
   ({
     [Provider.Google]: {
       authUrl: "https://accounts.google.com/o/oauth2/v2/auth",
@@ -89,7 +91,8 @@ const defaultConfigProvider = (ctx: InputRequest, provider: Provider) =>
       clientId: ctx.env.GOOGLE_CLIENT_ID,
       clientSecret: ctx.env.GOOGLE_CLIENT_SECRET,
       authParams: {
-        scope: "https://www.googleapis.com/auth/userinfo.profile",
+        scope:
+          "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
         access_type: "offline",
       },
     },

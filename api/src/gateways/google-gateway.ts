@@ -1,11 +1,19 @@
 import { createUrl } from "src/services/util/url"
+import { z } from "zod"
 import { BaseGateway, GatewayOptions } from "./base-gateway"
+import {
+  googleCalendarListSchema,
+  googleCalendarSchema,
+  googleEventListSchema,
+  googleProfileSchema,
+} from "./contracts/google"
 
 export class GoogleGateway extends BaseGateway {
   async getProfile(token: string) {
     return this.callWithToken(
       token,
-      "https://people.googleapis.com/v1/people/me",
+      "https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses,photos",
+      googleProfileSchema,
     )
   }
 
@@ -13,6 +21,7 @@ export class GoogleGateway extends BaseGateway {
     return this.callWithToken(
       token,
       "https://www.googleapis.com/calendar/v3/users/me/calendarList",
+      googleCalendarListSchema,
     )
   }
 
@@ -20,6 +29,7 @@ export class GoogleGateway extends BaseGateway {
     return this.callWithToken(
       token,
       `https://www.googleapis.com/calendar/v3/users/me/calendarList/${calendarId}`,
+      googleCalendarSchema,
     )
   }
 
@@ -27,6 +37,7 @@ export class GoogleGateway extends BaseGateway {
     return await this.callWithToken(
       token,
       "https://www.googleapis.com/calendar/v3/calendars",
+      googleCalendarSchema,
       { method: "POST", json: { summary: title } },
     )
   }
@@ -47,6 +58,7 @@ export class GoogleGateway extends BaseGateway {
     return await this.callWithToken(
       token,
       "https://www.googleapis.com/calendar/v3/users/me/calendarList?colorRgbFormat=true",
+      googleCalendarListSchema,
       { method: "POST", json: data },
     )
   }
@@ -68,16 +80,18 @@ export class GoogleGateway extends BaseGateway {
       `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`,
       params,
     )
-    return this.callWithToken(token, url)
+    return this.callWithToken(token, url, googleEventListSchema)
   }
 
-  async callWithToken(
+  async callWithToken<Schema extends z.ZodTypeAny>(
     token: string,
     url: string | URL,
-    options?: GatewayOptions,
+    schema: Schema,
+    options?: Omit<GatewayOptions<Schema>, "schema">,
   ) {
     return this.call(url, {
       ...options,
+      schema,
       headers: { ...options?.headers, Authorization: `Bearer ${token}` },
     })
   }

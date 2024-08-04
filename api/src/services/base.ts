@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { PrismaDb, prisma } from "prisma/client"
 import { HonoContext } from "src/routes/util"
 import { Config } from "src/types/config"
 
@@ -19,15 +20,15 @@ type Context = {
   url: URL
 }
 
-export type InputRequest =
+export type ServiceInput =
   | (Pick<HonoContext, "env"> & {
-    req: Pick<Request, "url">
-  })
+      req: Pick<Request, "url">
+    })
   | Context
 
 export class HasRequestContext {
   protected ctx: Context
-  constructor(ctx: InputRequest) {
+  constructor(ctx: ServiceInput) {
     if (isContext(ctx)) {
       this.ctx = ctx
     } else {
@@ -39,18 +40,21 @@ export class HasRequestContext {
   }
 }
 
-export abstract class Service<
-  ReturnType = null,
-  ErrorMap = undefined,
-> extends HasRequestContext {
-  abstract call(
+export abstract class Service<ErrorMap = undefined> extends HasRequestContext {
+  db: PrismaDb
+
+  constructor(ctx: ServiceInput) {
+    super(ctx)
+    this.db = prisma(ctx.env.DB)
+  }
+
+  abstract call?(
     ...args: any[]
   ): Promise<
-    | ServiceResultSuccess<ReturnType>
-    | ServiceResultError<ErrorMap, keyof ErrorMap>
+    ServiceResultSuccess<any> | ServiceResultError<ErrorMap, keyof ErrorMap>
   >
 
-  protected success<T = ReturnType>(data: T): ServiceResultSuccess<T> {
+  protected success<T>(data: T): ServiceResultSuccess<T> {
     return { success: true as const, data: data }
   }
 
@@ -58,8 +62,8 @@ export abstract class Service<
     ...[code, data]: ErrorMap extends undefined
       ? []
       : Data extends undefined
-      ? [Code]
-      : [Code, Data]
+        ? [Code]
+        : [Code, Data]
   ): ServiceResultError<ErrorMap, Code> {
     return {
       success: false as const,
@@ -69,10 +73,10 @@ export abstract class Service<
   }
 }
 
-export type ResultType<T extends Service<any, any>> = Awaited<
-  ReturnType<T["call"]>
+export type ResultType<T extends Service<any>> = Awaited<
+  ReturnType<Exclude<T["call"], undefined>>
 >
 
 function isContext(ctx: unknown): ctx is Context {
-  return (ctx as Context).url !== undefined
+  return typeof ctx === "object" && !!ctx && "url" in ctx
 }

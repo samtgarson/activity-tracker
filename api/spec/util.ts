@@ -1,6 +1,6 @@
-import { InputRequest } from "src/services/base"
+import { ServiceInput } from "src/services/base"
 
-export const mockContext: InputRequest = {
+export const mockContext: ServiceInput = {
   env: {
     GOOGLE_CLIENT_ID: "123",
     GOOGLE_CLIENT_SECRET: "456",

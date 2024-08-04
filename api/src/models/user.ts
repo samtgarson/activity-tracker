@@ -1,27 +1,29 @@
-import { Account, Provider, UserWithAccount } from "./types"
+import { PrismaClient } from "@prisma/client"
+import { Provider } from "./types"
 
-export class User {
-  public id: string
-  public givenName: string
-  public familyName: string
-  public email: string
-  public account: Account[]
-
-  constructor({ id, givenName, familyName, email, account }: UserWithAccount) {
-    this.id = id
-    this.givenName = givenName
-    this.familyName = familyName
-    this.email = email
-    this.account = account
-  }
-
-  get activeAccount(): Account | undefined {
-    return this.account.find((account) => account.active)
-  }
-
-  accountFor(provider: Provider) {
-    return this.account.find(
-      (account) => (account.provider as Provider) === provider,
-    )
-  }
+export function userExtension(client: PrismaClient) {
+  return client.$extends({
+    name: "User Extension",
+    result: {
+      user: {
+        activeAccount: {
+          needs: { id: true },
+          async compute({ id }) {
+            return await client.account.findFirst({
+              where: { userId: id, active: true },
+            })
+          },
+        },
+        accountFor: {
+          needs: { id: true },
+          compute({ id }) {
+            return (provider: Provider) =>
+              client.account.findFirst({
+                where: { userId: id, provider },
+              })
+          },
+        },
+      },
+    },
+  })
 }

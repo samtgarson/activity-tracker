@@ -1,9 +1,5 @@
-export function createUrl(
-  base: string | [string, string],
-  ...params: Record<string, string>[]
-) {
-  const url =
-    typeof base === "string" ? new URL(base) : new URL(base[0], base[1])
+export function createUrl(base: string, ...params: Record<string, string>[]) {
+  const url = new URL(base)
   url.search = mergeParams(
     Object.fromEntries(url.searchParams.entries()),
     ...params,

@@ -1,84 +1,133 @@
 import { verify } from "hono/jwt"
-import { Provider } from "src/models/types"
+import { Prisma } from "prisma/client"
+import type { oAuthCallbackParamsSchema } from "src/gateways/contracts/oauth"
+import { OAuthToken, oAuthStateSchema } from "src/gateways/contracts/oauth"
+import { OAuthGateway } from "src/gateways/oauth-gateway"
+import { ProfileAttributes, Provider } from "src/models/types"
 import { z } from "zod"
-import { Service } from "../base"
-import { mergeParams } from "../util/url"
+import { Service, ServiceInput } from "../base"
+import { FetchProfile } from "./fetch-profile"
 
-export const oAuthCallbackSchema = z.object({
-  state: z.string(),
-  code: z.string(),
-})
+export type HandleCallbackDependencies = {
+  oauth: Pick<OAuthGateway, "exchangeCode">
+  fetchProfile: Pick<FetchProfile, "call">
+  verifyJwt: typeof verify
+}
 
-const stateSchema = z.object({
-  origin: z.literal("activity-tracker"),
-  redirect: z.string().optional(),
-})
+type AuthHandleCallbackErrorMap = {
+  new_account: null
+  code_exchange_failed: null
+  fetch_profile_failed: null
+}
 
-const responseSchema = z.object({
-  access_token: z.string(),
-  token_type: z.string(),
-  expires_in: z.number(),
-  refresh_token: z.string(),
-  scope: z.string(),
-})
-type OAuthResponse = z.infer<typeof responseSchema>
+export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
+  constructor(
+    ctx: ServiceInput,
+    private provider: Provider,
+    protected deps: HandleCallbackDependencies = {
+      oauth: new OAuthGateway(ctx, provider),
+      fetchProfile: new FetchProfile(ctx),
+      verifyJwt: verify,
+    },
+  ) {
+    super(ctx)
+  }
 
-export type OAuthCallbackSchema = z.infer<typeof oAuthCallbackSchema>
-
-export class AuthHandleCallback extends Service<{
-  redirect?: string
-  data: OAuthResponse
-}> {
-  async call(provider: Provider, { state, code }: OAuthCallbackSchema) {
+  async call({ state, code }: z.infer<typeof oAuthCallbackParamsSchema>) {
     const { redirect } = await this.validateState(state)
 
-    const { ok, data } = await this.exchangeCode(provider, code)
-    if (ok) return this.success({ redirect, data })
-    return this.failure()
+    const auth = await this.exchangeCode(code)
+    if (!auth.success) return this.failure("code_exchange_failed", null)
+
+    const profile = await this.fetchProfile(auth.data.accessToken)
+    if (!profile.success) return this.failure("fetch_profile_failed", null)
+
+    const user = await this.saveUser(auth.data, profile.data)
+    if (!user) return this.failure("new_account", null)
+    return this.success({ redirect, user })
   }
 
   private async validateState(state: string) {
-    const decoded = await verify(state, this.ctx.env.JWT_SECRET)
-    return stateSchema.parse(decoded)
+    const decoded = await this.deps.verifyJwt(state, this.ctx.env.JWT_SECRET)
+    return oAuthStateSchema.parse(decoded)
   }
 
-  private async exchangeCode(
-    provider: Provider,
-    code: string,
-  ): Promise<{ ok: true; data: OAuthResponse } | { ok: false; data?: never }> {
-    const { base, params } = this.authCodeParams(provider)
-    const res = await fetch(base, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: mergeParams(this.defaultParams(provider), params, { code }),
+  private async exchangeCode(code: string) {
+    return this.deps.oauth.exchangeCode(code)
+  }
+
+  private async fetchProfile(accessToken: string) {
+    return this.deps.fetchProfile.call(this.provider, accessToken)
+  }
+
+  private async saveUser(auth: OAuthToken, profile: ProfileAttributes) {
+    const user = await this.db.user.findUnique({
+      where: { email: profile.email },
     })
+    if (!user) return this.createNewUser(auth, profile)
+    const matchingAccount = await user.accountFor(this.provider)
+    if (!matchingAccount) return null
 
-    if (res.ok)
-      return { ok: true, data: responseSchema.parse(await res.json()) }
-
-    console.error(await res.text())
-    return { ok: false }
+    return this.updateUser(user.id, matchingAccount.id, profile, auth)
   }
 
-  private authCodeParams(provider: Provider) {
-    switch (provider) {
-      case Provider.Google:
-        return {
-          base: "https://oauth2.googleapis.com/token",
-          params: {
-            client_id: this.ctx.env.GOOGLE_CLIENT_ID,
-            client_secret: this.ctx.env.GOOGLE_CLIENT_SECRET,
+  private async createNewUser(auth: OAuthToken, profile: ProfileAttributes) {
+    return this.db.user.create({
+      data: {
+        ...this.userAttributes(profile),
+        id: crypto.randomUUID(),
+        accounts: {
+          create: {
+            ...this.accountAttributes(auth, profile.id),
+            id: crypto.randomUUID(),
+            active: true,
           },
-        }
-    }
+        },
+      },
+      include: { accounts: true },
+    })
   }
 
-  private defaultParams(provider: Provider) {
+  private async updateUser(
+    id: string,
+    accountId: string,
+    profile: ProfileAttributes,
+    auth: OAuthToken,
+  ) {
+    return this.db.user.update({
+      where: { id },
+      data: {
+        ...this.userAttributes(profile),
+        accounts: {
+          update: {
+            where: { id: accountId },
+            data: this.accountAttributes(auth, profile.id),
+          },
+        },
+      },
+      include: { accounts: true },
+    })
+  }
+
+  private userAttributes(profile: ProfileAttributes) {
     return {
-      redirect_uri: `${this.ctx.url.origin}/auth/callback/${provider}`,
-      grant_type: "authorization_code",
-    }
+      email: profile.email,
+      displayName: profile.displayName,
+      familyName: profile.familyName,
+      givenName: profile.givenName,
+      picture: profile.picture,
+    } satisfies Prisma.UserUpdateInput
+  }
+
+  private accountAttributes(auth: OAuthToken, remoteId: string) {
+    return {
+      provider: this.provider,
+      remoteId,
+      accessToken: auth.accessToken,
+      refreshToken: auth.refreshToken,
+      scope: auth.scope,
+      tokenType: auth.tokenType,
+      expiresAt: new Date(Date.now() + auth.expiresIn * 1000),
+    } satisfies Prisma.AccountUpdateInput
   }
 }
