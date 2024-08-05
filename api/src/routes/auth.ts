@@ -3,10 +3,7 @@ import { oAuthCallbackParamsSchema } from "src/gateways/contracts/oauth"
 import { Provider } from "src/models/types"
 import { AuthGetRedirect } from "src/services/auth/get-redirect"
 import { AuthHandleCallback } from "src/services/auth/handle-callback"
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from "src/services/auth/tokens"
+import { AuthRefreshAccessToken } from "src/services/auth/refresh-access-token"
 import { z } from "zod"
 import { newHono } from "./util"
 
@@ -43,12 +40,21 @@ AuthRouter.get(
       return c.json({ error: result.code, data: result.data }, 500)
     }
 
-    const { user } = result.data
-    const [accessToken, refreshToken] = await Promise.all([
-      generateAccessToken(user, c.env.JWT_SECRET),
-      generateRefreshToken(),
-    ])
+    return c.json(result.data)
+  },
+)
 
-    return c.json({ accessToken, refreshToken })
+AuthRouter.post(
+  "/refresh",
+  zValidator("json", z.object({ refreshToken: z.string() })),
+  async (c) => {
+    const svc = new AuthRefreshAccessToken(c)
+    const result = await svc.call(c.req.valid("json").refreshToken)
+
+    if (!result.success) {
+      return c.json({ error: result.code, data: result.data }, 500)
+    }
+
+    return c.json(result.data)
   },
 )

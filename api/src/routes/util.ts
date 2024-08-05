@@ -1,8 +1,10 @@
-import { Hono, Context } from "hono"
-import { Config } from "src/types/config"
+import { Context, Hono } from "hono"
+import { Config, Variables } from "src/types/config"
+
+type Ctx = { Bindings: Config; Variables: Variables }
 
 export function newHono() {
-  return new Hono<{ Bindings: Config }>()
+  return new Hono<Ctx>()
 }
 
-export type HonoContext = Context<{ Bindings: Config }>
+export type HonoContext = Context<Ctx>

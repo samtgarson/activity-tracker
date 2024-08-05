@@ -28,4 +28,5 @@ type Models = {
 }
 export type User = Models["user"]
 export type Account = Models["account"]
+export type RefreshToken = Models["refreshToken"]
 export type { Prisma }

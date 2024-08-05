@@ -25,3 +25,12 @@ export const oAuthStateSchema = z.object({
 })
 
 export type OAuthToken = z.infer<typeof createTokenSchema>
+
+export const accessTokenSchema = z.object({
+  sub: z.string().uuid(),
+  exp: z.number().transform((n) => new Date(n * 1000)),
+  email: z.string().email(),
+  givenName: z.string(),
+  familyName: z.string(),
+  picture: z.string().url().nullish(),
+})

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { PrismaDb, prisma } from "prisma/client"
+import { PrismaDb, User, prisma } from "prisma/client"
 import { HonoContext } from "src/routes/util"
 import { Config } from "src/types/config"
 
@@ -10,6 +10,9 @@ export type ServiceResultError<Map, Code extends keyof Map> = {
   code: Code | "server_error"
   data: Map[Code]
 }
+export type ServiceResult<T, Map = undefined> =
+  | ServiceResultSuccess<T>
+  | ServiceResultError<Map, keyof Map>
 
 export type ServiceErrorMap = {
   [key: string]: unknown
@@ -18,10 +21,11 @@ export type ServiceErrorMap = {
 type Context = {
   env: Config
   url: URL
+  user: User
 }
 
 export type ServiceInput =
-  | (Pick<HonoContext, "env"> & {
+  | (Pick<HonoContext, "env" | "var"> & {
       req: Pick<Request, "url">
     })
   | Context
@@ -35,6 +39,9 @@ export class HasRequestContext {
       this.ctx = {
         env: ctx.env,
         url: new URL(ctx.req.url),
+        get user() {
+          return ctx.var.user
+        },
       }
     }
   }

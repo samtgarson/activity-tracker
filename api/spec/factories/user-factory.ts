@@ -15,8 +15,8 @@ export function buildUser(attrs: Partial<User> = {}) {
     familyName,
     picture: faker.image.avatar(),
     createdAt: faker.date.recent(),
-    ...attrs,
     activeAccount: Promise.resolve(null),
     accountFor: mockAccountFor,
+    ...attrs,
   } satisfies User
 }

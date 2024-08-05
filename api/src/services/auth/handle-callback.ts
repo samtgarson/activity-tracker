@@ -1,5 +1,5 @@
 import { verify } from "hono/jwt"
-import { Prisma } from "prisma/client"
+import { Prisma, User } from "prisma/client"
 import type { oAuthCallbackParamsSchema } from "src/gateways/contracts/oauth"
 import { OAuthToken, oAuthStateSchema } from "src/gateways/contracts/oauth"
 import { OAuthGateway } from "src/gateways/oauth-gateway"
@@ -7,11 +7,14 @@ import { ProfileAttributes, Provider } from "src/models/types"
 import { z } from "zod"
 import { Service, ServiceInput } from "../base"
 import { FetchProfile } from "./fetch-profile"
+import { generateAccessToken, generateRefreshToken } from "./utils/tokens"
 
 export type HandleCallbackDependencies = {
   oauth: Pick<OAuthGateway, "exchangeCode">
   fetchProfile: Pick<FetchProfile, "call">
   verifyJwt: typeof verify
+  generateAccessToken: typeof generateAccessToken
+  generateRefreshToken: typeof generateRefreshToken
 }
 
 type AuthHandleCallbackErrorMap = {
@@ -28,6 +31,8 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
       oauth: new OAuthGateway(ctx, provider),
       fetchProfile: new FetchProfile(ctx),
       verifyJwt: verify,
+      generateAccessToken,
+      generateRefreshToken,
     },
   ) {
     super(ctx)
@@ -44,7 +49,9 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
 
     const user = await this.saveUser(auth.data, profile.data)
     if (!user) return this.failure("new_account", null)
-    return this.success({ redirect, user })
+
+    const { accessToken, refreshToken } = await this.generateTokens(user)
+    return this.success({ redirect, accessToken, refreshToken })
   }
 
   private async validateState(state: string) {
@@ -129,5 +136,24 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
       tokenType: auth.tokenType,
       expiresAt: new Date(Date.now() + auth.expiresIn * 1000),
     } satisfies Prisma.AccountUpdateInput
+  }
+
+  private async generateTokens(user: User) {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.deps.generateAccessToken(user, this.ctx.env.JWT_SECRET),
+      this.deps.generateRefreshToken(),
+    ])
+
+    await this.db.refreshToken.create({
+      data: {
+        ...refreshToken,
+        user: { connect: { id: user.id } },
+      },
+    })
+    await this.db.refreshToken.deleteMany({
+      where: { userId: user.id, token: { not: refreshToken.token } },
+    })
+
+    return { accessToken, refreshToken }
   }
 }

@@ -91,8 +91,7 @@ const defaultConfigProvider = (ctx: ServiceInput, provider: Provider) =>
       clientId: ctx.env.GOOGLE_CLIENT_ID,
       clientSecret: ctx.env.GOOGLE_CLIENT_SECRET,
       authParams: {
-        scope:
-          "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+        scope: "profile email https://www.googleapis.com/auth/calendar",
         access_type: "offline",
       },
     },

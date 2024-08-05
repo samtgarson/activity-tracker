@@ -1,6 +1,6 @@
 import { prismaMock } from "prisma/__mocks__/client"
-import { User } from "prisma/client"
 import { buildAccount } from "spec/factories/account-factory"
+import { buildRefreshToken } from "spec/factories/refresh-token-factory"
 import { buildUser } from "spec/factories/user-factory"
 import { mockContext } from "spec/util"
 import { Provider } from "src/models/types"
@@ -14,14 +14,21 @@ const deps: HandleCallbackDependencies = {
   oauth: { exchangeCode: vi.fn() },
   fetchProfile: { call: vi.fn() },
   verifyJwt: vi.fn(async () => ({ origin: "activity-tracker" })),
+  generateAccessToken: vi.fn(async () => "access-token"),
+  generateRefreshToken: vi.fn(() => ({
+    token: "refresh-token",
+    expiresAt: new Date(),
+  })),
 }
 const args = { state: "state", code: "code" }
+const user = buildUser()
 
 vi.mock("prisma/client")
 
 beforeEach(() => {
-  prismaMock.user.create.mockResolvedValue({ id: "id" } as User)
-  prismaMock.user.update.mockResolvedValue({ id: "id" } as User)
+  prismaMock.user.create.mockResolvedValue(user)
+  prismaMock.user.update.mockResolvedValue(user)
+  prismaMock.refreshToken.create.mockResolvedValue(buildRefreshToken())
   vi.spyOn(crypto, "randomUUID").mockReturnValue("random")
   vi.spyOn(Date, "now").mockReturnValue(0)
 })
@@ -64,7 +71,31 @@ describe("with Google provier", () => {
       it("returns the user", async () => {
         const res = await service.call(args)
         expect(res.success).toBeTruthy()
-        expect(res.data).toEqual({ redirect: undefined, user: { id: "id" } })
+        expect(res.data).toEqual({
+          redirect: undefined,
+          accessToken: "access-token",
+          refreshToken: { token: "refresh-token", expiresAt: expect.any(Date) },
+        })
+      })
+
+      it("generates tokens", async () => {
+        await service.call(args)
+        expect(deps.generateAccessToken).toHaveBeenCalledWith(
+          user,
+          mockContext.env.JWT_SECRET,
+        )
+        expect(deps.generateRefreshToken).toHaveBeenCalledWith()
+      })
+
+      it("creates a refresh token", async () => {
+        await service.call(args)
+        expect(prismaMock.refreshToken.create).toHaveBeenCalledWith({
+          data: {
+            token: "refresh-token",
+            expiresAt: expect.any(Date),
+            user: { connect: { id: user.id } },
+          },
+        })
       })
 
       it("creates a new user", async () => {
@@ -108,7 +139,7 @@ describe("with Google provier", () => {
         await service.call(args)
         expect(deps.fetchProfile.call).toHaveBeenCalledWith(
           Provider.Google,
-          "access",
+          authData.accessToken,
         )
       })
 
@@ -134,7 +165,7 @@ describe("with Google provier", () => {
           const account = buildAccount({ provider: Provider.Google })
 
           beforeEach(() => {
-            user.accountFor.mockResolvedValue(account)
+            vi.mocked(user.accountFor).mockResolvedValue(account)
           })
 
           it("queries the correct account", async () => {

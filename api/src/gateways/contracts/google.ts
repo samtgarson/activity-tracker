@@ -21,9 +21,11 @@ export const googleCalendarSchema = z
     }),
   )
 
-export const googleCalendarListSchema = z.object({
-  items: z.array(googleCalendarSchema),
-})
+export const googleCalendarListSchema = z
+  .object({
+    items: z.array(googleCalendarSchema),
+  })
+  .transform((data) => data.items)
 
 export const googleEventSchema = z
   .object({
@@ -52,9 +54,11 @@ export const googleEventSchema = z
     }),
   )
 
-export const googleEventListSchema = z.object({
-  items: z.array(googleEventSchema),
-})
+export const googleEventListSchema = z
+  .object({
+    items: z.array(googleEventSchema),
+  })
+  .transform((data) => data.items)
 
 const googlePeopleMetadataSchema = z.object({
   metadata: z.object({

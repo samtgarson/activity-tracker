@@ -1,5 +1,7 @@
-import { sign } from "hono/jwt"
+import { sign, verify } from "hono/jwt"
 import { User } from "prisma/client"
+import { accessTokenSchema } from "src/gateways/contracts/oauth"
+import { z } from "zod"
 
 export function generateRefreshToken() {
   const token = crypto.getRandomValues(new Uint8Array(32)).join("")
@@ -18,7 +20,11 @@ export async function generateAccessToken(
     givenName: user.givenName,
     familyName: user.familyName,
     picture: user.picture,
-  }
+  } satisfies z.input<typeof accessTokenSchema>
 
   return sign(payload, secret)
+}
+
+export async function decodeAccessToken(token: string, secret: string) {
+  return accessTokenSchema.parse(await verify(token, secret))
 }

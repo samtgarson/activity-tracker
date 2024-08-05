@@ -7,7 +7,3 @@ export function camelize<S extends z.ZodTypeAny>(schema: S) {
     .transform((res) => mapKeys(res, camel))
     .pipe(schema)
 }
-
-export const idObjectSchema = z.object({
-  id: z.string(),
-})

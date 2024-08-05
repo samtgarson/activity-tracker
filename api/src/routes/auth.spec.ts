@@ -1,8 +1,8 @@
-import { buildUser } from "spec/factories/user-factory"
 import { mockContext } from "spec/util"
 import { Provider } from "src/models/types"
 import { AuthGetRedirect } from "src/services/auth/get-redirect"
 import { AuthHandleCallback } from "src/services/auth/handle-callback"
+import { AuthRefreshAccessToken } from "src/services/auth/refresh-access-token"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { AuthRouter } from "./auth"
 
@@ -13,13 +13,11 @@ vi.mock("src/services/auth/tokens", async () => {
   }
 })
 
-vi.mock("src/services/auth/get-redirect", async () => {
-  return {
-    AuthGetRedirect: vi.fn().mockReturnValue({
-      call: vi.fn().mockReturnValue({ success: true, data: "google-auth-url" }),
-    }),
-  }
-})
+vi.mock("src/services/auth/get-redirect", async () => ({
+  AuthGetRedirect: vi.fn().mockReturnValue({
+    call: vi.fn().mockReturnValue({ success: true, data: "google-auth-url" }),
+  }),
+}))
 
 vi.mock("src/services/auth/handle-callback", async (importOriginal) => {
   const mod =
@@ -30,12 +28,22 @@ vi.mock("src/services/auth/handle-callback", async (importOriginal) => {
       call: vi.fn().mockReturnValue({
         success: true,
         data: {
-          user: buildUser(),
+          accessToken: "access-token",
+          refreshToken: "refresh-token",
         },
       }),
     }),
   }
 })
+
+vi.mock("src/services/auth/refresh-access-token", async () => ({
+  AuthRefreshAccessToken: vi.fn().mockReturnValue({
+    call: vi.fn().mockReturnValue({
+      success: true,
+      data: { accessToken: "access-token" },
+    }),
+  }),
+}))
 
 describe("GET /login/google", () => {
   describe("with valid provider", async () => {
@@ -124,6 +132,56 @@ describe("GET /callback/google", () => {
         expect(res.status).toBe(500)
         expect(await res.json()).toEqual({ error: "server_error", data: null })
       })
+    })
+  })
+})
+
+describe("POST /refresh", () => {
+  describe("when JSON body is invalid", () => {
+    it("returns a 400", async () => {
+      const res = await AuthRouter.request("/refresh", {
+        method: "POST",
+        body: JSON.stringify({ invalid: "body" }),
+      })
+      expect(res.status).toBe(400)
+    })
+  })
+
+  describe("when JSON body is valid", () => {
+    describe("when the service succeeds", () => {
+      it("returns a 200", async () => {
+        const res = await AuthRouter.request("/refresh", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refreshToken: "refresh" }),
+        })
+
+        expect(res.status).toBe(200)
+        expect(await res.json()).toEqual({ accessToken: "access-token" })
+      })
+    })
+  })
+
+  describe("when the service fails", () => {
+    beforeEach(() => {
+      vi.mocked(new AuthRefreshAccessToken(mockContext).call).mockResolvedValue(
+        {
+          success: false,
+          code: "server_error" as const,
+          data: null as never,
+        },
+      )
+    })
+
+    it("returns error", async () => {
+      const res = await AuthRouter.request("/refresh", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refreshToken: "refresh" }),
+      })
+
+      expect(res.status).toBe(500)
+      expect(await res.json()).toEqual({ error: "server_error", data: null })
     })
   })
 })
