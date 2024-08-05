@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
+// https://gist.github.com/alexanderson1993/0852a8162ebac591b62a79883a81e1a8
 import {
   intro,
   isCancel,
@@ -99,13 +100,17 @@ if (command === "create") {
     `npx wrangler d1 migrations create ${database} ${snake(`${migrationName}`)}`,
   )
   s.stop("Creating migration")
-  const migrationPath = result
-    .trim()
-    .split("\n")
-    .find((line) => line.endsWith(".sql"))
-  if (!migrationPath) {
+  const resultLines = result.trim().split("\n")
+  let pathIndex = resultLines.findIndex((line) => line.endsWith(".sql"))
+  if (pathIndex === -1) {
     log.error("Could not find migration path")
     process.exit(1)
+  }
+
+  let migrationPath = ""
+
+  while (pathIndex >= 0 && !migrationPath.startsWith("/")) {
+    migrationPath = resultLines[pathIndex--] + migrationPath
   }
   s.start("Generating migration diff from Prisma schema")
   await asyncExec(
