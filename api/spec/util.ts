@@ -7,7 +7,7 @@ import { buildUser } from "./factories/user-factory"
 
 const activeAccount = buildAccount()
 const user = buildUser({ activeAccount: Promise.resolve(activeAccount) })
-export const mockContext: ServiceContext = {
+export const mockContext = {
   env: {
     GOOGLE_CLIENT_ID: "123",
     GOOGLE_CLIENT_SECRET: "456",
@@ -17,7 +17,7 @@ export const mockContext: ServiceContext = {
   url: new URL("http://localhost"),
   user,
   activeAccount,
-}
+} satisfies ServiceContext
 
 const AuthedRouter = newHono()
 AuthedRouter.use(async (c, next) => {

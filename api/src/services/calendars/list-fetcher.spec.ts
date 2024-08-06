@@ -1,19 +1,17 @@
-import { buildAccount } from "spec/factories/account-factory"
 import { mockContext } from "spec/util"
 import { Calendar, Provider } from "src/models/types"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { CalendarListFetcher, CalendarListFetcherDeps } from "./list-fetcher"
+import { CalendarFetcher, CalendarFetcherDeps } from "./fetcher"
 
-describe("CalendarListFetcher", () => {
+describe("CalendarFetcher", () => {
   const deps = {
     google: {
-      getCalendarList: vi.fn(),
+      getCalendar: vi.fn(),
     },
-  } satisfies CalendarListFetcherDeps
-  const account = buildAccount({
-    provider: Provider.Google,
-  })
-  const fetcher = new CalendarListFetcher(mockContext, deps)
+  } satisfies CalendarFetcherDeps
+  const account = mockContext.activeAccount
+  const fetcher = new CalendarFetcher(mockContext, deps)
+  const calendarId = "123"
 
   describe("for google", () => {
     beforeEach(() => {
@@ -21,17 +19,18 @@ describe("CalendarListFetcher", () => {
     })
 
     it("should call google fetcher", async () => {
-      await fetcher.call(account)
-      expect(deps.google.getCalendarList).toHaveBeenCalledWith(
+      await fetcher.call(calendarId)
+      expect(deps.google.getCalendar).toHaveBeenCalledWith(
         account.accessToken,
+        calendarId,
       )
     })
 
     it("should return the correct data", async () => {
       const data = [{ id: 1 }] as unknown as Calendar[]
-      deps.google.getCalendarList.mockResolvedValue({ success: true, data })
+      deps.google.getCalendar.mockResolvedValue({ success: true, data })
 
-      const result = await fetcher.call(account)
+      const result = await fetcher.call(calendarId)
       expect(result).toEqual({ success: true, data })
     })
 
@@ -41,7 +40,7 @@ describe("CalendarListFetcher", () => {
       })
 
       it("should return an empty array", async () => {
-        const result = await fetcher.call(account)
+        const result = await fetcher.call(calendarId)
         expect(result).toEqual({ success: true, data: [] })
       })
     })
