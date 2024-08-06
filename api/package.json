@@ -2,7 +2,7 @@
   "name": "@activity-tracker/api",
   "scripts": {
     "dev": "wrangler dev src/index.ts",
-    "db:migrate": "npx tsx prisma/migrate.ts"
+    "db:migrate": "npx tsx prisma/scripts/migrate.ts"
   },
   "type": "module",
   "dependencies": {

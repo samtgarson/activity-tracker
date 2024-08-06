@@ -6,6 +6,11 @@ export default defineConfig({
   test: {
     clearMocks: true,
     include: ["api/src/**/*.spec.ts"],
+    globalSetup: "api/spec/global.ts",
+    setupFiles: ["api/spec/setup.ts"],
+    env: {
+      DATABASE_URL: "file:./test.db",
+    },
     coverage: {
       enabled: true,
       provider: "istanbul", // or 'v8'

@@ -27,7 +27,7 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
   constructor(
     ctx: ServiceInput,
     private provider: Provider,
-    protected deps: HandleCallbackDependencies = {
+    private deps: HandleCallbackDependencies = {
       oauth: new OAuthGateway(ctx, provider),
       fetchProfile: new FetchProfile(ctx),
       verifyJwt: verify,
@@ -130,11 +130,7 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
     return {
       provider: this.provider,
       remoteId,
-      accessToken: auth.accessToken,
-      refreshToken: auth.refreshToken,
-      scope: auth.scope,
-      tokenType: auth.tokenType,
-      expiresAt: new Date(Date.now() + auth.expiresIn * 1000),
+      ...auth,
     } satisfies Prisma.AccountUpdateInput
   }
 

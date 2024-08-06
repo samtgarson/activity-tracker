@@ -5,7 +5,10 @@ import { userExtension } from "src/models/user"
 
 const prismaClientSingleton = () => {
   return (db: D1Database) => {
-    const adapter = new PrismaD1(db)
+    const adapter =
+      typeof process !== "undefined" && process.env.TEST
+        ? null
+        : new PrismaD1(db)
     return userExtension(new PrismaClient({ adapter }))
   }
 }

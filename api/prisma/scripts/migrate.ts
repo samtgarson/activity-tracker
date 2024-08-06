@@ -9,26 +9,16 @@ import {
   spinner,
   text,
 } from "@clack/prompts"
-import { exec } from "node:child_process"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { snake } from "radash"
 import parseArgv from "tiny-parse-argv"
 import toml from "toml"
+import { asyncExec } from "utils"
 
 const args = parseArgv(process.argv.slice(2))
 const command = args._[0]
 const projectRoot = path.resolve()
-const asyncExec = (command: string) =>
-  new Promise<string>((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(new Error(stderr))
-      } else {
-        resolve(stdout)
-      }
-    })
-  })
 intro("D1 Prisma Migrate CLI")
 if (args.help || !command) {
   switch (command) {

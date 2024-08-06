@@ -1,3 +1,4 @@
+import { Prisma } from "prisma/client"
 import { z } from "zod"
 import { camelize } from "."
 
@@ -9,9 +10,9 @@ const oauthSchema = z.object({
   scope: z.string(),
 })
 
-export const createTokenSchema = camelize(oauthSchema)
+export const createTokenSchema = camelize(oauthSchema.transform(transformDate))
 export const refreshTokenSchema = camelize(
-  oauthSchema.omit({ refreshToken: true }),
+  oauthSchema.omit({ refreshToken: true }).transform(transformDate),
 )
 
 export const oAuthCallbackParamsSchema = z.object({
@@ -34,3 +35,16 @@ export const accessTokenSchema = z.object({
   familyName: z.string(),
   picture: z.string().url().nullish(),
 })
+
+function transformDate<Input>({
+  expiresIn,
+  ...data
+}: Input & { expiresIn: number }) {
+  return {
+    ...data,
+    expiresAt: new Date(Date.now() + expiresIn * 1000),
+  } satisfies Pick<
+    Prisma.AccountUpdateInput,
+    "accessToken" | "refreshToken" | "expiresAt" | "scope" | "tokenType"
+  >
+}

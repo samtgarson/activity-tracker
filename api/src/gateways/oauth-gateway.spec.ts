@@ -1,23 +1,13 @@
 import { sign } from "hono/jwt"
+import { mockContext } from "spec/util"
 import { Provider } from "src/models/types"
-import { ServiceInput } from "src/services/base"
 import { describe, expect, it, vi } from "vitest"
 import { ZodSchema } from "zod"
 import { ConfigProvider, OAuthGateway } from "./oauth-gateway"
 
 vi.mock("hono/jwt", () => ({ sign: vi.fn(async () => "signed") }))
 
-const ctx: ServiceInput = {
-  env: {
-    GOOGLE_CLIENT_ID: "123",
-    GOOGLE_CLIENT_SECRET: "456",
-    JWT_SECRET: "789",
-    DB: "db" as unknown as D1Database,
-  },
-  url: new URL("http://localhost"),
-}
-
-const fetch = vi.fn()
+const mockFetch = vi.fn()
 const config = {
   authUrl: "http://authurl.com",
   tokenUrl: "http://tokenurl.com",
@@ -30,7 +20,12 @@ const config = {
 }
 const configProvider = vi.fn<ConfigProvider>(() => config)
 
-const gateway = new OAuthGateway(ctx, Provider.Google, fetch, configProvider)
+const gateway = new OAuthGateway(
+  mockContext,
+  Provider.Google,
+  mockFetch,
+  configProvider,
+)
 const response = { ok: true }
 vi.spyOn(gateway, "call").mockImplementation(async function (
   this: OAuthGateway,
@@ -60,7 +55,7 @@ describe("createUrl", () => {
         {
           origin: "activity-tracker",
         },
-        ctx.env.JWT_SECRET,
+        mockContext.env.JWT_SECRET,
       )
     })
   })
@@ -73,7 +68,7 @@ describe("createUrl", () => {
           origin: "activity-tracker",
           redirect: "http://redirect.com",
         },
-        ctx.env.JWT_SECRET,
+        mockContext.env.JWT_SECRET,
       )
     })
   })

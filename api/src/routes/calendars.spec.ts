@@ -1,4 +1,5 @@
-import { mockContext } from "spec/util"
+import { mockContext, withAuth } from "spec/util"
+import { CalendarChooser } from "src/services/calendars/chooser"
 import { CalendarListFetcher } from "src/services/calendars/list-fetcher"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { CalendarsRouter } from "./calendars"
@@ -12,27 +13,91 @@ vi.mock("src/services/calendars/list-fetcher", async () => ({
   }),
 }))
 
+vi.mock("src/services/calendars/chooser", async () => ({
+  CalendarChooser: vi.fn().mockReturnValue({
+    call: vi.fn().mockReturnValue({
+      success: true,
+      data: null,
+    }),
+  }),
+}))
+
 describe("GET /calendars", () => {
-  describe("when service is successful", () => {
-    it("returns the list of calendars", async () => {
+  describe("when user has an active account", () => {
+    const router = withAuth(CalendarsRouter)
+
+    describe("when service is successful", () => {
+      it("returns the list of calendars", async () => {
+        const res = await router.request("/")
+
+        expect(res.status).toBe(200)
+        expect(await res.json()).toEqual([{ id: 1 }])
+      })
+    })
+
+    describe("when service fails", () => {
+      beforeEach(() => {
+        vi.mocked(new CalendarListFetcher(mockContext)).call.mockResolvedValue({
+          success: false,
+          code: "server_error",
+          data: null,
+        })
+      })
+
+      it("returns an error", async () => {
+        const res = await router.request("/")
+
+        expect(res.status).toBe(500)
+        expect(await res.json()).toEqual({ error: "server_error" })
+      })
+    })
+  })
+
+  describe("when user does not have an active account", () => {
+    it("returns an empty array", async () => {
       const res = await CalendarsRouter.request("/")
 
       expect(res.status).toBe(200)
-      expect(await res.json()).toEqual([{ id: 1 }])
+      expect(await res.json()).toEqual([])
+    })
+  })
+})
+
+describe("POST /calendars/:calendarId/choose", () => {
+  const id = "calendarId"
+
+  describe("when service is successful", () => {
+    it("returns success", async () => {
+      const res = await CalendarsRouter.request(`/${id}/choose`, {
+        method: "POST",
+      })
+
+      expect(res.status).toBe(200)
+      expect(await res.json()).toEqual({ success: true })
+    })
+
+    it("calls the service with the correct id", async () => {
+      await CalendarsRouter.request(`/${id}/choose`, {
+        method: "POST",
+      })
+
+      expect(new CalendarChooser(mockContext).call).toHaveBeenCalledWith(id)
     })
   })
 
   describe("when service fails", () => {
     beforeEach(() => {
-      vi.mocked(new CalendarListFetcher(mockContext)).call.mockResolvedValue({
+      vi.mocked(new CalendarChooser(mockContext)).call.mockResolvedValue({
         success: false,
         code: "server_error",
-        data: null,
+        data: undefined,
       })
     })
 
     it("returns an error", async () => {
-      const res = await CalendarsRouter.request("/")
+      const res = await CalendarsRouter.request(`/${id}/choose`, {
+        method: "POST",
+      })
 
       expect(res.status).toBe(500)
       expect(await res.json()).toEqual({ error: "server_error" })

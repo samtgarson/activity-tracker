@@ -38,7 +38,7 @@ describe("with Google provier", () => {
   const authData = {
     accessToken: "access",
     scope: "scope",
-    expiresIn: 3600,
+    expiresAt: new Date(),
     tokenType: "Bearer",
     refreshToken: "refresh",
   }
@@ -100,7 +100,6 @@ describe("with Google provier", () => {
 
       it("creates a new user", async () => {
         await service.call(args)
-        const { expiresIn, ...authDataWithoutExpires } = authData
 
         expect(prismaMock.user.create).toHaveBeenCalledWith({
           data: {
@@ -111,9 +110,8 @@ describe("with Google provier", () => {
                 id: "random",
                 provider: Provider.Google,
                 remoteId: profileData.id,
-                expiresAt: new Date(Date.now() + authData.expiresIn * 1000),
                 active: true,
-                ...authDataWithoutExpires,
+                ...authData,
               },
             },
           },
@@ -176,7 +174,6 @@ describe("with Google provier", () => {
           it("updates the user", async () => {
             await service.call(args)
             const { id, ...profileDataWithoutId } = profileData
-            const { expiresIn, ...authDataWithoutExpires } = authData
 
             expect(prismaMock.user.update).toHaveBeenCalledWith({
               where: { id: user.id },
@@ -188,10 +185,7 @@ describe("with Google provier", () => {
                     data: {
                       provider: Provider.Google,
                       remoteId: profileData.id,
-                      expiresAt: new Date(
-                        Date.now() + authData.expiresIn * 1000,
-                      ),
-                      ...authDataWithoutExpires,
+                      ...authData,
                     },
                   },
                 },

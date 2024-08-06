@@ -1,5 +1,5 @@
 import { D1Database } from "@cloudflare/workers-types"
-import { User } from "prisma/client"
+import { Account, User } from "prisma/client"
 
 export type Config = {
   GOOGLE_CLIENT_ID: string
@@ -10,4 +10,5 @@ export type Config = {
 
 export type Variables = {
   user: User
+  activeAccount?: Account
 }

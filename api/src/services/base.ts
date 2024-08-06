@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { PrismaDb, User, prisma } from "prisma/client"
+import { Account, PrismaDb, User, prisma } from "prisma/client"
 import { HonoContext } from "src/routes/util"
 import { Config } from "src/types/config"
 
@@ -14,24 +14,29 @@ export type ServiceResult<T, Map = undefined> =
   | ServiceResultSuccess<T>
   | ServiceResultError<Map, keyof Map>
 
+export type ResultType<T extends Service<any>> = Awaited<
+  ReturnType<Exclude<T["call"], undefined>>
+>
+
 export type ServiceErrorMap = {
   [key: string]: unknown
 }
 
-type Context = {
+export type ServiceContext = {
   env: Config
   url: URL
   user: User
+  activeAccount?: Account
 }
 
 export type ServiceInput =
   | (Pick<HonoContext, "env" | "var"> & {
       req: Pick<Request, "url">
     })
-  | Context
+  | ServiceContext
 
 export class HasRequestContext {
-  protected ctx: Context
+  protected ctx: ServiceContext
   constructor(ctx: ServiceInput) {
     if (isContext(ctx)) {
       this.ctx = ctx
@@ -41,6 +46,9 @@ export class HasRequestContext {
         url: new URL(ctx.req.url),
         get user() {
           return ctx.var.user
+        },
+        get activeAccount() {
+          return ctx.var.activeAccount
         },
       }
     }
@@ -78,12 +86,14 @@ export abstract class Service<ErrorMap = undefined> extends HasRequestContext {
       data: data as Data,
     }
   }
+
+  /* istanbul ignore next */
+  protected debug(...message: any[]) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    console.debug(`[${this.constructor.name}]`, ...message)
+  }
 }
 
-export type ResultType<T extends Service<any>> = Awaited<
-  ReturnType<Exclude<T["call"], undefined>>
->
-
-function isContext(ctx: unknown): ctx is Context {
+function isContext(ctx: unknown): ctx is ServiceContext {
   return typeof ctx === "object" && !!ctx && "url" in ctx
 }

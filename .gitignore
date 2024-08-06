@@ -33,3 +33,5 @@ lerna-debug.log*
 .DS_Store
 .cache
 coverage
+
+test.db

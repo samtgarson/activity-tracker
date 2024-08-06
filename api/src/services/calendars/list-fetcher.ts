@@ -1,10 +1,10 @@
-import { User } from "prisma/client"
+import { Account } from "prisma/client"
 import { GoogleGateway } from "src/gateways/google-gateway"
 import { GatewayErrors } from "src/gateways/types"
 import { Provider } from "src/models/types"
 import { Service, ServiceInput } from "src/services/base"
 
-export type CalendarListFetcherDeps = {
+export interface CalendarListFetcherDeps {
   google: Pick<GoogleGateway, "getCalendarList">
 }
 
@@ -16,8 +16,7 @@ export class CalendarListFetcher extends Service<GatewayErrors> {
     super(ctx)
   }
 
-  async call(user: User) {
-    const account = await user.activeAccount
+  async call(account: Account) {
     if (!account?.accessToken) return this.success([])
 
     switch (account.provider as Provider) {
