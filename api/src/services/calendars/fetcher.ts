@@ -19,7 +19,7 @@ export class CalendarFetcher extends Service<GatewayErrors> {
     const account = this.ctx.activeAccount
     if (!account?.accessToken) return this.success([])
 
-    switch (account.provider as Provider) {
+    switch (account.provider) {
       case Provider.Google:
         return this.deps.google.getCalendar(account.accessToken, calendarId)
     }

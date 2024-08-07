@@ -1,5 +1,6 @@
 import { zValidator } from "@hono/zod-validator"
 import { CalendarChooser } from "src/services/calendars/chooser"
+import { CalendarCreator } from "src/services/calendars/creator"
 import { CalendarFetcher } from "src/services/calendars/fetcher"
 import { CalendarListFetcher } from "src/services/calendars/list-fetcher"
 import { z } from "zod"
@@ -20,6 +21,22 @@ CalendarsRouter.get("/", async (c) => {
   return c.json(result.data)
 })
 
+CalendarsRouter.post(
+  "/",
+  zValidator("json", z.object({ title: z.string().min(1) })),
+  async function (c) {
+    const { title } = c.req.valid("json")
+    const svc = new CalendarCreator(c)
+    const result = await svc.call(title)
+
+    if (!result.success) {
+      return c.json({ error: result.code }, 500)
+    }
+
+    return c.json(result.data, 201)
+  },
+)
+
 CalendarsRouter.get(
   "/:calendarId",
   zValidator(
@@ -29,7 +46,7 @@ CalendarsRouter.get(
     }),
   ),
   async (c) => {
-    const id = c.req.param("calendarId")
+    const id = c.req.valid("param").calendarId
     const svc = new CalendarFetcher(c)
     const result = await svc.call(id)
 
@@ -50,7 +67,7 @@ CalendarsRouter.post(
     }),
   ),
   async (c) => {
-    const id = c.req.param("calendarId")
+    const id = c.req.valid("param").calendarId
     const svc = new CalendarChooser(c)
     const result = await svc.call(id)
 

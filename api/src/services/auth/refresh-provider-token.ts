@@ -1,7 +1,6 @@
 import { Account } from "prisma/client"
 import type { refreshTokenSchema } from "src/gateways/contracts/oauth"
 import { OAuthGateway } from "src/gateways/oauth-gateway"
-import { Provider } from "src/models/types"
 import { z } from "zod"
 import { Service, ServiceInput } from "../base"
 
@@ -20,7 +19,7 @@ export class RefreshProviderToken extends Service {
   async call(account: Account) {
     if (!account.expiresAt) return this.success(account)
     if (account.expiresAt > new Date()) return this.success(account)
-    const gateway = new this.deps.oauth(this.ctx, account.provider as Provider)
+    const gateway = new this.deps.oauth(this.ctx, account.provider)
 
     const refreshed = await gateway.refreshToken(account.refreshToken)
     if (!refreshed.success) return this.failure()

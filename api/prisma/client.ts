@@ -1,6 +1,7 @@
 import { D1Database } from "@cloudflare/workers-types"
 import { PrismaD1 } from "@prisma/adapter-d1"
 import { Prisma, PrismaClient } from "@prisma/client"
+import { Provider } from "src/models/types"
 import { userExtension } from "src/models/user"
 
 const prismaClientSingleton = () => {
@@ -24,12 +25,12 @@ export const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
 if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma
 
 type PrismaClientExt = ReturnType<typeof globalThis.prismaGlobal>
-type Models = {
-  [key in Prisma.TypeMap["meta"]["modelProps"]]: Awaited<
-    ReturnType<PrismaClientExt[key]["findFirstOrThrow"]>
-  >
+type Model<T extends Prisma.TypeMap["meta"]["modelProps"]> = Awaited<
+  ReturnType<PrismaClientExt[T]["findFirstOrThrow"]>
+>
+export type User = Model<"user">
+export interface Account extends Model<"account"> {
+  provider: Provider
 }
-export type User = Models["user"]
-export type Account = Models["account"]
-export type RefreshToken = Models["refreshToken"]
+export type RefreshToken = Model<"refreshToken">
 export type { Prisma }

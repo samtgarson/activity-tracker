@@ -1,5 +1,6 @@
+import { buildCalendar } from "spec/factories/calendar-factory"
 import { mockContext } from "spec/util"
-import { Calendar, Provider } from "src/models/types"
+import { Provider } from "src/models/types"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { CalendarListFetcher, CalendarListFetcherDeps } from "./list-fetcher"
 
@@ -24,7 +25,7 @@ describe("for google", () => {
   })
 
   it("should return the correct data", async () => {
-    const data = [{ id: 1 }] as unknown as Calendar[]
+    const data = [buildCalendar()]
     deps.google.getCalendarList.mockResolvedValue({ success: true, data })
 
     const result = await fetcher.call()

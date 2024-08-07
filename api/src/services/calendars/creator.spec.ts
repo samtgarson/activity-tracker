@@ -2,36 +2,36 @@ import { buildCalendar } from "spec/factories/calendar-factory"
 import { mockContext } from "spec/util"
 import { Provider } from "src/models/types"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { CalendarFetcher, CalendarFetcherDeps } from "./fetcher"
+import { CalendarCreator, CalendarCreatorDeps } from "./creator"
 
-describe("CalendarFetcher", () => {
+describe("CalendarCreator", () => {
   const deps = {
     google: {
-      getCalendar: vi.fn(),
+      createCalendar: vi.fn(),
     },
-  } satisfies CalendarFetcherDeps
+  } satisfies CalendarCreatorDeps
   const account = mockContext.activeAccount
-  const fetcher = new CalendarFetcher(mockContext, deps)
-  const calendarId = "123"
+  const fetcher = new CalendarCreator(mockContext, deps)
+  const calendarTitle = "title"
 
   describe("for google", () => {
     beforeEach(() => {
       vi.spyOn(account, "provider", "get").mockReturnValue(Provider.Google)
     })
 
-    it("should call google fetcher", async () => {
-      await fetcher.call(calendarId)
-      expect(deps.google.getCalendar).toHaveBeenCalledWith(
+    it("should call google creator", async () => {
+      await fetcher.call(calendarTitle)
+      expect(deps.google.createCalendar).toHaveBeenCalledWith(
         account.accessToken,
-        calendarId,
+        calendarTitle,
       )
     })
 
     it("should return the correct data", async () => {
       const data = [buildCalendar()]
-      deps.google.getCalendar.mockResolvedValue({ success: true, data })
+      deps.google.createCalendar.mockResolvedValue({ success: true, data })
 
-      const result = await fetcher.call(calendarId)
+      const result = await fetcher.call(calendarTitle)
       expect(result).toEqual({ success: true, data })
     })
 
@@ -41,8 +41,12 @@ describe("CalendarFetcher", () => {
       })
 
       it("should return an empty array", async () => {
-        const result = await fetcher.call(calendarId)
-        expect(result).toEqual({ success: true, data: [] })
+        const result = await fetcher.call(calendarTitle)
+        expect(result).toEqual({
+          success: false,
+          code: "auth_failed",
+          data: undefined,
+        })
       })
     })
   })
