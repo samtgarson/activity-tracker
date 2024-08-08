@@ -18,6 +18,7 @@ export type CalendarEvent = {
   description?: string
   start: Date
   end?: Date
+  allDay: boolean
   transparent?: boolean
   url?: string
 }

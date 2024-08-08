@@ -1,3 +1,4 @@
+import dayjs from "dayjs"
 import { mockContext } from "spec/util"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { ZodSchema } from "zod"
@@ -92,8 +93,8 @@ describe("getEvents", () => {
   const calendarId = "calendarId"
   const baseUrl = `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events`
   const params = {
-    from: new Date(),
-    to: new Date(),
+    from: dayjs(),
+    to: dayjs(),
   }
 
   it("should call request with the correct params", async () => {

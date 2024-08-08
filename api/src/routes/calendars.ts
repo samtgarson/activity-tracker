@@ -10,8 +10,6 @@ export const CalendarsRouter = newHono()
 
 CalendarsRouter.get("/", async (c) => {
   const svc = new CalendarListFetcher(c)
-  const account = c.var.activeAccount
-  if (!account) return c.json([])
   const result = await svc.call()
 
   if (!result.success) {

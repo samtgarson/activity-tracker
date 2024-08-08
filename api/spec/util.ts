@@ -5,7 +5,7 @@ import { ServiceContext } from "src/services/base"
 import { buildAccount } from "./factories/account-factory"
 import { buildUser } from "./factories/user-factory"
 
-const activeAccount = buildAccount()
+const activeAccount = { ...buildAccount(), calendarId: "123" }
 const user = buildUser({ activeAccount: Promise.resolve(activeAccount) })
 export const mockContext = {
   env: {

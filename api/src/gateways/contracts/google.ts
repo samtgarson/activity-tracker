@@ -1,9 +1,10 @@
 import { Calendar, CalendarEvent, ProfileAttributes } from "src/models/types"
 import { z } from "zod"
+import { flexibleDate } from "."
 
 export const googleCalendarSchema = z
   .object({
-    accessRole: z.enum(["owner", "writer", "reader"]),
+    accessRole: z.enum(["owner", "writer", "reader"]).optional(),
     backgroundColor: z.string(),
     foregroundColor: z.string(),
     description: z.string().optional(),
@@ -16,7 +17,9 @@ export const googleCalendarSchema = z
       color: data.backgroundColor,
       id: data.id,
       description: data.description,
-      writeAccess: ["writer", "owner"].includes(data.accessRole),
+      writeAccess: data.accessRole
+        ? ["writer", "owner"].includes(data.accessRole)
+        : false,
       title: data.summaryOverride || data.summary,
     }),
   )
@@ -27,6 +30,22 @@ export const googleCalendarListSchema = z
   })
   .transform((data) => data.items)
 
+const googleEventDateTimeSchema = z
+  .object({
+    date: flexibleDate,
+    dateTime: z.never().optional(),
+  })
+  .or(
+    z.object({
+      dateTime: flexibleDate,
+      date: z.never().optional(),
+    }),
+  )
+  .transform((data) => ({
+    dateTime: data.date || data.dateTime,
+    allDay: !!data.date,
+  }))
+
 export const googleEventSchema = z
   .object({
     id: z.string(),
@@ -34,12 +53,8 @@ export const googleEventSchema = z
     htmlLink: z.string(),
     summary: z.string(),
     description: z.string().optional(),
-    start: z.object({
-      dateTime: z.string(),
-    }),
-    end: z.object({
-      dateTime: z.string(),
-    }),
+    start: googleEventDateTimeSchema,
+    end: googleEventDateTimeSchema.optional(),
     transparency: z.enum(["opaque", "transparent"]).optional(),
   })
   .transform(
@@ -47,8 +62,9 @@ export const googleEventSchema = z
       id: data.id,
       title: data.summary,
       description: data.description,
-      start: new Date(data.start.dateTime),
-      end: data.end ? new Date(data.end.dateTime) : undefined,
+      start: data.start.dateTime,
+      end: data.end?.dateTime,
+      allDay: data.start.allDay,
       transparent: data.transparency === "transparent",
       url: data.htmlLink,
     }),

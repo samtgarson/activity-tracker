@@ -57,7 +57,11 @@ export abstract class BaseGateway extends Service<GatewayErrors> {
         return this.success(parsed.data as z.infer<Schema>)
       }
 
-      console.error(data, parsed.error.errors)
+      console.error(
+        url,
+        JSON.stringify(data, null, 2),
+        JSON.stringify(parsed.error.errors, null, 2),
+      )
       return this.failure("invalid_response", null)
     } catch (e) {
       console.error(e)

@@ -10,9 +10,13 @@ const oauthSchema = z.object({
   scope: z.string(),
 })
 
-export const createTokenSchema = camelize(oauthSchema.transform(transformDate))
+export const createTokenSchema = camelize(
+  oauthSchema.transform(transformExpiresInToExpiresAt),
+)
 export const refreshTokenSchema = camelize(
-  oauthSchema.omit({ refreshToken: true }).transform(transformDate),
+  oauthSchema
+    .omit({ refreshToken: true })
+    .transform(transformExpiresInToExpiresAt),
 )
 
 export const oAuthCallbackParamsSchema = z.object({
@@ -36,7 +40,7 @@ export const accessTokenSchema = z.object({
   picture: z.string().url().nullish(),
 })
 
-function transformDate<Input>({
+function transformExpiresInToExpiresAt<Input>({
   expiresIn,
   ...data
 }: Input & { expiresIn: number }) {

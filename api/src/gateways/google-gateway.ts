@@ -1,6 +1,8 @@
+import { Dayjs } from "dayjs"
 import { createUrl } from "src/services/util/url"
 import { z } from "zod"
 import { BaseGateway, GatewayOptions } from "./base-gateway"
+import { idObjectSchema } from "./contracts"
 import {
   googleCalendarListSchema,
   googleCalendarSchema,
@@ -37,7 +39,7 @@ export class GoogleGateway extends BaseGateway {
     return await this.callWithToken(
       token,
       "https://www.googleapis.com/calendar/v3/calendars",
-      googleCalendarSchema,
+      idObjectSchema,
       { method: "POST", json: { summary: title } },
     )
   }
@@ -58,7 +60,7 @@ export class GoogleGateway extends BaseGateway {
     return await this.callWithToken(
       token,
       "https://www.googleapis.com/calendar/v3/users/me/calendarList?colorRgbFormat=true",
-      googleCalendarListSchema,
+      googleCalendarSchema,
       { method: "POST", json: data },
     )
   }
@@ -66,7 +68,7 @@ export class GoogleGateway extends BaseGateway {
   async getEvents(
     token: string,
     calendarId: string,
-    { from, to }: { from?: Date; to?: Date } = {},
+    { from, to }: { from?: Dayjs; to?: Dayjs } = {},
   ) {
     const params: Record<string, string> = {
       maxAttendees: "1",

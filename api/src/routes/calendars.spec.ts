@@ -44,51 +44,40 @@ vi.mock("src/services/calendars/creator", async () => ({
 }))
 
 describe("GET /calendars", () => {
-  describe("when user has an active account", () => {
-    const router = withAuth(CalendarsRouter)
+  const router = withAuth(CalendarsRouter)
 
-    describe("when service is successful", () => {
-      const calendar = buildCalendar()
+  describe("when service is successful", () => {
+    const calendar = buildCalendar()
 
-      beforeEach(() => {
-        vi.mocked(new CalendarListFetcher(mockContext)).call.mockResolvedValue({
-          success: true,
-          data: [calendar],
-        })
-      })
-
-      it("returns the list of calendars", async () => {
-        const res = await router.request("/")
-
-        expect(res.status).toBe(200)
-        expect(await res.json()).toEqual([calendar])
+    beforeEach(() => {
+      vi.mocked(new CalendarListFetcher(mockContext)).call.mockResolvedValue({
+        success: true,
+        data: [calendar],
       })
     })
 
-    describe("when service fails", () => {
-      beforeEach(() => {
-        vi.mocked(new CalendarListFetcher(mockContext)).call.mockResolvedValue({
-          success: false,
-          code: "server_error",
-          data: null,
-        })
-      })
+    it("returns the list of calendars", async () => {
+      const res = await router.request("/")
 
-      it("returns an error", async () => {
-        const res = await router.request("/")
-
-        expect(res.status).toBe(500)
-        expect(await res.json()).toEqual({ error: "server_error" })
-      })
+      expect(res.status).toBe(200)
+      expect(await res.json()).toEqual([calendar])
     })
   })
 
-  describe("when user does not have an active account", () => {
-    it("returns an empty array", async () => {
-      const res = await CalendarsRouter.request("/")
+  describe("when service fails", () => {
+    beforeEach(() => {
+      vi.mocked(new CalendarListFetcher(mockContext)).call.mockResolvedValue({
+        success: false,
+        code: "server_error",
+        data: null,
+      })
+    })
 
-      expect(res.status).toBe(200)
-      expect(await res.json()).toEqual([])
+    it("returns an error", async () => {
+      const res = await router.request("/")
+
+      expect(res.status).toBe(500)
+      expect(await res.json()).toEqual({ error: "server_error" })
     })
   })
 })
