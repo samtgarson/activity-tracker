@@ -14,16 +14,20 @@ class TestService extends Service {
 
 const testService = new TestService({
   env: mockContext.env,
-  var: { jwtPayload: null, user: mockContext.user },
+  var: {
+    jwtPayload: null,
+    ctx: mockContext,
+  },
   req: { url: "https://google.com" },
 })
 
 describe("Service", () => {
   it("assigns the context", () => {
-    expect(testService.context).toEqual({
+    expect(testService.context).toMatchObject({
       env: mockContext.env,
       url: new URL("https://google.com"),
       user: mockContext.user,
+      accounts: mockContext.accounts,
     })
   })
 })

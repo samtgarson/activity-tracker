@@ -1,28 +1,27 @@
 import { D1Database } from "@cloudflare/workers-types"
 import { Hono } from "hono"
+import { buildAccount } from "spec/factories/account-factory"
+import { buildUser } from "spec/factories/user-factory"
 import { Ctx, newHono } from "src/routes/util"
 import { ServiceContext } from "src/services/base"
-import { buildAccount } from "./factories/account-factory"
-import { buildUser } from "./factories/user-factory"
 
-const activeAccount = { ...buildAccount(), calendarId: "123" }
-const user = buildUser({ activeAccount: Promise.resolve(activeAccount) })
-export const mockContext = {
-  env: {
+const account = { ...buildAccount(), calendarId: "123" }
+const user = buildUser()
+export const mockContext = new ServiceContext(
+  {
     GOOGLE_CLIENT_ID: "123",
     GOOGLE_CLIENT_SECRET: "456",
     JWT_SECRET: "789",
     DB: {} as unknown as D1Database,
   },
-  url: new URL("http://localhost"),
+  new URL("http://localhost"),
   user,
-  activeAccount,
-} satisfies ServiceContext
+  [account],
+)
 
 const AuthedRouter = newHono()
 AuthedRouter.use(async (c, next) => {
-  c.set("user", user)
-  c.set("activeAccount", activeAccount)
+  c.set("ctx", mockContext)
   return next()
 })
 

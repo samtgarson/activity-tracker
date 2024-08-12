@@ -41,7 +41,6 @@ describe("generateAccessToken", () => {
       {
         sub: user.id,
         exp: Math.floor(Date.now() / 1000) + 60 * 15,
-        email: user.email,
         givenName: user.givenName,
         familyName: user.familyName,
         picture: user.picture,
@@ -55,7 +54,6 @@ describe("decodeAccessToken", () => {
   describe("when JWT is valid", () => {
     const payload = {
       sub: crypto.randomUUID(),
-      email: "email@example.com",
       exp: Date.now(),
       givenName: "John",
       familyName: "Doe",

@@ -10,13 +10,12 @@ export function generateRefreshToken() {
 }
 
 export async function generateAccessToken(
-  user: Pick<User, "id" | "email" | "givenName" | "familyName" | "picture">,
+  user: Pick<User, "id" | "givenName" | "familyName" | "picture">,
   secret: string,
 ) {
   const payload = {
     sub: user.id,
     exp: Math.floor(Date.now() / 1000) + 60 * 15, // 15 minutes from now
-    email: user.email,
     givenName: user.givenName,
     familyName: user.familyName,
     picture: user.picture,

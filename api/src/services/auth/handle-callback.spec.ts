@@ -100,10 +100,11 @@ describe("with Google provier", () => {
 
       it("creates a new user", async () => {
         await service.call(args)
+        const { email, ...profileDataWithoutEmail } = profileData
 
         expect(prismaMock.user.create).toHaveBeenCalledWith({
           data: {
-            ...profileData,
+            ...profileDataWithoutEmail,
             id: "random",
             accounts: {
               create: {
@@ -111,6 +112,7 @@ describe("with Google provier", () => {
                 provider: Provider.Google,
                 remoteId: profileData.id,
                 active: true,
+                email,
                 ...authData,
               },
             },
@@ -144,11 +146,13 @@ describe("with Google provier", () => {
       describe("when a user already exists", () => {
         const user = buildUser()
 
-        beforeEach(() => {
-          prismaMock.user.findUnique.mockResolvedValue(user)
-        })
-
         describe("with an account that doesnt match", () => {
+          const account = buildAccount({ provider: "facebook" as Provider })
+
+          beforeEach(() => {
+            prismaMock.account.findUnique.mockResolvedValue(account)
+          })
+
           it("fails with new_account", async () => {
             const res = await service.call(args)
             expect(res).toEqual({
@@ -160,20 +164,26 @@ describe("with Google provier", () => {
         })
 
         describe("with an account that matches", () => {
-          const account = buildAccount({ provider: Provider.Google })
+          const account = {
+            user,
+            ...buildAccount({ provider: Provider.Google }),
+          }
 
           beforeEach(() => {
-            vi.mocked(user.accountFor).mockResolvedValue(account)
+            prismaMock.account.findUnique.mockResolvedValue(account)
           })
 
           it("queries the correct account", async () => {
             await service.call(args)
-            expect(user.accountFor).toHaveBeenCalledWith(Provider.Google)
+            expect(prismaMock.account.findUnique).toHaveBeenCalledWith({
+              where: { email: profileData.email },
+              include: { user: true },
+            })
           })
 
           it("updates the user", async () => {
             await service.call(args)
-            const { id, ...profileDataWithoutId } = profileData
+            const { id, email, ...profileDataWithoutId } = profileData
 
             expect(prismaMock.user.update).toHaveBeenCalledWith({
               where: { id: user.id },
@@ -185,6 +195,7 @@ describe("with Google provier", () => {
                     data: {
                       provider: Provider.Google,
                       remoteId: profileData.id,
+                      email,
                       ...authData,
                     },
                   },

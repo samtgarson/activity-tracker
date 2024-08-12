@@ -9,14 +9,11 @@ export function buildUser(attrs: Partial<User> = {}) {
 
   return {
     id: faker.string.uuid(),
-    email: faker.internet.email(),
     displayName: `${givenName} ${familyName}`,
     givenName,
     familyName,
     picture: faker.image.avatar(),
     createdAt: faker.date.recent(),
-    activeAccount: Promise.resolve(null),
-    accountFor: mockAccountFor,
     ...attrs,
   } satisfies User
 }

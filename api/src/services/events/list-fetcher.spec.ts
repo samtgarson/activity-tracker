@@ -1,4 +1,5 @@
 import dayjs from "dayjs"
+import { buildAccount } from "spec/factories/account-factory"
 import { buildCalendar } from "spec/factories/calendar-factory"
 import { mockContext } from "spec/util"
 import { Provider } from "src/models/types"
@@ -11,7 +12,7 @@ describe("EventListFetcher", () => {
       getEvents: vi.fn(),
     },
   } satisfies EventListFetcherDeps
-  const account = mockContext.activeAccount
+  const account = buildAccount()
   const fetcher = new EventListFetcher(mockContext, deps)
 
   describe("for google", () => {
@@ -21,7 +22,7 @@ describe("EventListFetcher", () => {
 
     describe("with no dates", () => {
       it("should call google fetcher with default dates", async () => {
-        await fetcher.call()
+        await fetcher.call(account)
         const expectedDefaultDates = {
           from: dayjs().startOf("day"),
           to: dayjs().endOf("day"),
@@ -41,7 +42,7 @@ describe("EventListFetcher", () => {
           to: dayjs().add(1, "day").endOf("day"),
         }
 
-        await fetcher.call(dates)
+        await fetcher.call(account, dates)
         expect(deps.google.getEvents).toHaveBeenCalledWith(
           account.accessToken,
           account.calendarId,
@@ -54,7 +55,7 @@ describe("EventListFetcher", () => {
       const data = [buildCalendar()]
       deps.google.getEvents.mockResolvedValue({ success: true, data })
 
-      const result = await fetcher.call()
+      const result = await fetcher.call(account)
       expect(result).toEqual({ success: true, data })
     })
 
@@ -64,7 +65,7 @@ describe("EventListFetcher", () => {
       })
 
       it("should return an empty array", async () => {
-        const result = await fetcher.call()
+        const result = await fetcher.call(account)
         expect(result).toEqual({ success: true, data: [] })
       })
     })

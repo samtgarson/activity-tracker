@@ -1,3 +1,4 @@
+import { Account, User } from "prisma/client"
 import { Service, ServiceInput } from "../base"
 import { decodeAccessToken } from "./utils/tokens"
 
@@ -18,9 +19,12 @@ export class AuthDecodeToken extends Service {
     if (!token) return this.failure()
     try {
       const { sub } = await this.deps.decode(token, this.ctx.env.JWT_SECRET)
-      const user = await this.db.user.findUniqueOrThrow({ where: { id: sub } })
+      const user = await this.db.user.findUniqueOrThrow({
+        where: { id: sub },
+        include: { accounts: true },
+      })
 
-      return this.success(user)
+      return this.success(user as User & { accounts: Account[] })
     } catch (e) {
       console.error(e)
       return this.failure()

@@ -1,3 +1,4 @@
+import { Account } from "prisma/client"
 import { GoogleGateway } from "src/gateways/google-gateway"
 import { GatewayErrors } from "src/gateways/types"
 import { Provider } from "src/models/types"
@@ -17,8 +18,7 @@ export class CalendarCreator extends Service<GatewayErrors> {
     super(ctx)
   }
 
-  async call(title: string) {
-    const account = this.ctx.activeAccount
+  async call(account: Account, title: string) {
     if (!account?.accessToken) return this.failure("auth_failed")
 
     const created = await this.createCalendar(

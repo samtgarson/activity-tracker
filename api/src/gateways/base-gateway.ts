@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Service,
-  ServiceInput,
-  ServiceResultError,
-  ServiceResultSuccess,
-} from "src/services/base"
+import { Service, ServiceInput } from "src/services/base"
+import { ServiceResultError, ServiceResultSuccess } from "src/services/types"
 import { z } from "zod"
 import { GatewayErrors } from "./types"
 

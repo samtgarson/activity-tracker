@@ -1,4 +1,5 @@
 import dayjs, { Dayjs } from "dayjs"
+import { Account } from "prisma/client"
 import { GoogleGateway } from "src/gateways/google-gateway"
 import { GatewayErrors } from "src/gateways/types"
 import { Provider } from "src/models/types"
@@ -16,8 +17,7 @@ export class EventListFetcher extends Service<GatewayErrors> {
     super(ctx)
   }
 
-  async call(filters?: { from?: Dayjs; to?: Dayjs }) {
-    const account = this.ctx.activeAccount
+  async call(account: Account, filters?: { from?: Dayjs; to?: Dayjs }) {
     if (!account?.accessToken || !account.calendarId) return this.success([])
 
     switch (account.provider) {

@@ -1,6 +1,5 @@
 import { faker } from "@faker-js/faker"
-import { User } from "@prisma/client"
-import { Account } from "prisma/client"
+import { Account, User } from "prisma/client"
 import { Provider } from "src/models/types"
 import { buildUser } from "./user-factory"
 
@@ -20,6 +19,7 @@ export function buildAccount(attrs: Partial<Account> = {}, user?: User) {
     accessToken: faker.string.alpha(32),
     refreshToken: faker.string.alpha(32),
     calendarId: faker.string.uuid(),
+    email: faker.internet.email(),
     ...attrs,
   } satisfies Account
 }

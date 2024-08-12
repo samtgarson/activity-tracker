@@ -1,6 +1,8 @@
 import dayjs from "dayjs"
 import { buildEvent } from "spec/factories/event-factory"
 import { mockContext, withAuth } from "spec/util"
+import { json } from "spec/util/matchers"
+import { serializeEvent } from "src/serializers/event-serializer"
 import { EventListFetcher } from "src/services/events/list-fetcher"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { EventsRouter } from "./events"
@@ -9,34 +11,36 @@ vi.mock("src/services/events/list-fetcher", async () => ({
   EventListFetcher: vi.fn().mockReturnValue({
     call: vi.fn().mockReturnValue({
       success: true,
-      data: [buildEvent()],
+      data: [],
     }),
   }),
 }))
+
+const account = mockContext.accounts[0]
 
 describe("GET /events", () => {
   const router = withAuth(EventsRouter)
 
   describe("when service is successful", () => {
-    const event = buildEvent()
+    const events = [
+      buildEvent({ start: dayjs().add(2, "day").toDate() }),
+      buildEvent({ start: dayjs().add(1, "day").toDate() }),
+    ]
 
     beforeEach(() => {
       vi.mocked(new EventListFetcher(mockContext)).call.mockResolvedValue({
         success: true,
-        data: [event],
+        data: events,
       })
     })
 
-    it("returns the list of calendars", async () => {
+    it("returns the list of events, sorted by start time", async () => {
       const res = await router.request("/")
 
       expect(res.status).toBe(200)
       expect(await res.json()).toEqual([
-        {
-          ...event,
-          start: event.start.toISOString(),
-          end: event.end.toISOString(),
-        },
+        json(serializeEvent(events[1], account)),
+        json(serializeEvent(events[0], account)),
       ])
     })
 
@@ -48,10 +52,13 @@ describe("GET /events", () => {
         const res = await router.request(`/?from=${from}&to=${to}`)
 
         expect(res.status).toBe(200)
-        expect(new EventListFetcher(mockContext).call).toHaveBeenCalledWith({
-          from: dayjs(from),
-          to: dayjs(to),
-        })
+        expect(new EventListFetcher(mockContext).call).toHaveBeenCalledWith(
+          account,
+          {
+            from: dayjs(from),
+            to: dayjs(to),
+          },
+        )
       })
     })
 
@@ -62,10 +69,13 @@ describe("GET /events", () => {
         const res = await router.request(`/?from=${from}`)
 
         expect(res.status).toBe(200)
-        expect(new EventListFetcher(mockContext).call).toHaveBeenCalledWith({
-          from: dayjs(from),
-          to: undefined,
-        })
+        expect(new EventListFetcher(mockContext).call).toHaveBeenCalledWith(
+          account,
+          {
+            from: dayjs(from),
+            to: undefined,
+          },
+        )
       })
     })
 

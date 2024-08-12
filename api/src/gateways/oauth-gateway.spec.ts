@@ -23,6 +23,7 @@ const configProvider = vi.fn<ConfigProvider>(() => config)
 const gateway = new OAuthGateway(
   mockContext,
   Provider.Google,
+  // @ts-expect-error TODO: figure out why this is bugging
   mockFetch,
   configProvider,
 )

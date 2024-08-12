@@ -28,6 +28,7 @@ export class GoogleGateway extends BaseGateway {
   }
 
   async getCalendar(token: string, calendarId: string) {
+    console.log({ calendarId })
     return this.callWithToken(
       token,
       `https://www.googleapis.com/calendar/v3/users/me/calendarList/${calendarId}`,

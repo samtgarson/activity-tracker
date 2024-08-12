@@ -68,14 +68,14 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
   }
 
   private async saveUser(auth: OAuthToken, profile: ProfileAttributes) {
-    const user = await this.db.user.findUnique({
+    const account = await this.db.account.findUnique({
       where: { email: profile.email },
+      include: { user: true },
     })
-    if (!user) return this.createNewUser(auth, profile)
-    const matchingAccount = await user.accountFor(this.provider)
-    if (!matchingAccount) return null
+    if (!account) return this.createNewUser(auth, profile)
+    if ((account.provider as Provider) !== this.provider) return null
 
-    return this.updateUser(user.id, matchingAccount.id, profile, auth)
+    return this.updateUser(account.user.id, account.id, profile, auth)
   }
 
   private async createNewUser(auth: OAuthToken, profile: ProfileAttributes) {
@@ -85,7 +85,7 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
         id: crypto.randomUUID(),
         accounts: {
           create: {
-            ...this.accountAttributes(auth, profile.id),
+            ...this.accountAttributes(auth, profile),
             id: crypto.randomUUID(),
             active: true,
           },
@@ -108,7 +108,7 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
         accounts: {
           update: {
             where: { id: accountId },
-            data: this.accountAttributes(auth, profile.id),
+            data: this.accountAttributes(auth, profile),
           },
         },
       },
@@ -118,7 +118,6 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
 
   private userAttributes(profile: ProfileAttributes) {
     return {
-      email: profile.email,
       displayName: profile.displayName,
       familyName: profile.familyName,
       givenName: profile.givenName,
@@ -126,10 +125,11 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
     } satisfies Prisma.UserUpdateInput
   }
 
-  private accountAttributes(auth: OAuthToken, remoteId: string) {
+  private accountAttributes(auth: OAuthToken, profile: ProfileAttributes) {
     return {
       provider: this.provider,
-      remoteId,
+      remoteId: profile.id,
+      email: profile.email,
       ...auth,
     } satisfies Prisma.AccountUpdateInput
   }

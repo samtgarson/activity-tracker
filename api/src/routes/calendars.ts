@@ -1,73 +1,99 @@
 import { zValidator } from "@hono/zod-validator"
+import { serializeCalendar } from "src/serializers/calendar-serializer"
 import { CalendarChooser } from "src/services/calendars/chooser"
 import { CalendarCreator } from "src/services/calendars/creator"
 import { CalendarFetcher } from "src/services/calendars/fetcher"
 import { CalendarListFetcher } from "src/services/calendars/list-fetcher"
+import { organize } from "src/services/util/organize"
 import { z } from "zod"
 import { newHono } from "./util"
 
 export const CalendarsRouter = newHono()
 
-CalendarsRouter.get("/", async (c) => {
-  const svc = new CalendarListFetcher(c)
-  const result = await svc.call()
+CalendarsRouter.get("/calendars", async (c) => {
+  const svc = new CalendarListFetcher(c.var.ctx)
+  const result = await organize(
+    c.var.ctx.accounts,
+    (acc) => svc.call(acc),
+    ({ email }) => email,
+  )
 
   if (!result.success) {
     return c.json({ error: result.code }, 500)
   }
 
-  return c.json(result.data)
+  const flattened = Object.entries(result.data).flatMap(([email, calendars]) =>
+    calendars.map((c) => serializeCalendar(c, { email })),
+  )
+  return c.json(flattened)
 })
 
 CalendarsRouter.post(
-  "/",
+  "/accounts/:accountId/calendars",
   zValidator("json", z.object({ title: z.string().min(1) })),
+  zValidator("param", z.object({ accountId: z.string().min(1) })),
   async function (c) {
     const { title } = c.req.valid("json")
+    const accountId = c.req.valid("param").accountId
+    const account = c.var.ctx.findAccount(accountId)
+    if (!account) return c.json({ error: "account_not_found" }, 404)
+
     const svc = new CalendarCreator(c)
-    const result = await svc.call(title)
+    const result = await svc.call(account, title)
 
     if (!result.success) {
       return c.json({ error: result.code }, 500)
     }
 
-    return c.json(result.data, 201)
+    return c.json(serializeCalendar(result.data, account), 201)
   },
 )
 
 CalendarsRouter.get(
-  "/:calendarId",
+  "/accounts/:accountId/calendars/:calendarId",
   zValidator(
     "param",
     z.object({
+      accountId: z.string().min(1),
       calendarId: z.string().min(1),
     }),
   ),
   async (c) => {
     const id = c.req.valid("param").calendarId
+    const account = c.var.ctx.findAccount(c.req.valid("param").accountId)
+    if (!account) return c.json({ error: "account_not_found" }, 404)
+
     const svc = new CalendarFetcher(c)
-    const result = await svc.call(id)
+    const result = await svc.call(account, id)
 
     if (!result.success) {
       return c.json({ error: result.code }, 500)
     }
 
-    return c.json(result.data)
+    if (!result.data) {
+      return c.json({ error: "calendar_not_found" }, 404)
+    }
+
+    return c.json(serializeCalendar(result.data, account))
   },
 )
 
 CalendarsRouter.post(
-  "/:calendarId/choose",
+  "/accounts/:accountId/calendars/:calendarId/choose",
   zValidator(
     "param",
     z.object({
       calendarId: z.string().min(1),
+      accountId: z.string().min(1),
     }),
   ),
   async (c) => {
     const id = c.req.valid("param").calendarId
+    const account = c.var.ctx.findAccount(c.req.valid("param").accountId)
+    if (!account) return c.json({ error: "account_not_found" }, 404)
+
     const svc = new CalendarChooser(c)
-    const result = await svc.call(id)
+    const result = await svc.call(account, id)
 
     if (!result.success) {
       return c.json({ error: result.code }, 500)

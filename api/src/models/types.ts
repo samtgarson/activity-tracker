@@ -23,7 +23,10 @@ export type CalendarEvent = {
   url?: string
 }
 
-export type ProfileAttributes = Pick<
-  User,
-  "email" | "displayName" | "givenName" | "familyName" | "picture" | "id"
->
+export interface ProfileAttributes
+  extends Pick<
+    User,
+    "displayName" | "givenName" | "familyName" | "picture" | "id"
+  > {
+  email: string
+}

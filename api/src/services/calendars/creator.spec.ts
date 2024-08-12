@@ -1,3 +1,4 @@
+import { buildAccount } from "spec/factories/account-factory"
 import { buildCalendar } from "spec/factories/calendar-factory"
 import { mockContext } from "spec/util"
 import { Provider } from "src/models/types"
@@ -11,7 +12,7 @@ describe("CalendarCreator", () => {
       addCalendarToList: vi.fn(),
     },
   }
-  const account = mockContext.activeAccount
+  const account = buildAccount()
   const fetcher = new CalendarCreator(mockContext, deps)
   const calendarTitle = "title"
 
@@ -21,7 +22,7 @@ describe("CalendarCreator", () => {
     })
 
     describe("when google creator succeeds", () => {
-      const data = buildCalendar()
+      const data = { id: "id" }
       beforeEach(() => {
         vi.mocked(deps.google.createCalendar).mockResolvedValue({
           success: true,
@@ -30,15 +31,17 @@ describe("CalendarCreator", () => {
       })
 
       describe("when google inserter succeeds", () => {
+        const calendar = buildCalendar()
+
         beforeEach(() => {
           vi.mocked(deps.google.addCalendarToList).mockResolvedValue({
             success: true,
-            data: [buildCalendar()],
+            data: calendar,
           })
         })
 
         it("should call google creator", async () => {
-          await fetcher.call(calendarTitle)
+          await fetcher.call(account, calendarTitle)
           expect(deps.google.createCalendar).toHaveBeenCalledWith(
             account.accessToken,
             calendarTitle,
@@ -46,7 +49,7 @@ describe("CalendarCreator", () => {
         })
 
         it("should call google inserter", async () => {
-          await fetcher.call(calendarTitle)
+          await fetcher.call(account, calendarTitle)
           expect(deps.google.addCalendarToList).toHaveBeenCalledWith(
             account.accessToken,
             data.id,
@@ -56,8 +59,8 @@ describe("CalendarCreator", () => {
         })
 
         it("should return the correct data", async () => {
-          const result = await fetcher.call(calendarTitle)
-          expect(result).toEqual({ success: true, data })
+          const result = await fetcher.call(account, calendarTitle)
+          expect(result).toEqual({ success: true, data: calendar })
         })
       })
 
@@ -71,7 +74,7 @@ describe("CalendarCreator", () => {
         })
 
         it("should return the correct data", async () => {
-          const result = await fetcher.call(calendarTitle)
+          const result = await fetcher.call(account, calendarTitle)
 
           expect(result).toEqual({
             success: false,
@@ -92,7 +95,7 @@ describe("CalendarCreator", () => {
       })
 
       it("should return the correct data", async () => {
-        const result = await fetcher.call(calendarTitle)
+        const result = await fetcher.call(account, calendarTitle)
 
         expect(result).toEqual({
           success: false,
@@ -102,7 +105,7 @@ describe("CalendarCreator", () => {
       })
 
       it("should not call google inserter", async () => {
-        await fetcher.call(calendarTitle)
+        await fetcher.call(account, calendarTitle)
         expect(deps.google.addCalendarToList).not.toHaveBeenCalled()
       })
     })
@@ -113,7 +116,7 @@ describe("CalendarCreator", () => {
       })
 
       it("should return an empty array", async () => {
-        const result = await fetcher.call(calendarTitle)
+        const result = await fetcher.call(account, calendarTitle)
         expect(result).toEqual({
           success: false,
           code: "auth_failed",

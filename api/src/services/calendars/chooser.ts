@@ -1,19 +1,17 @@
 import { Account, User } from "prisma/client"
 import { Service } from "../base"
 
-export type CalendarChooserErrors = {
-  missing_account: undefined
-}
-
-export class CalendarChooser extends Service<CalendarChooserErrors> {
-  async call(calendarId: string) {
+export class CalendarChooser extends Service {
+  async call(account: Account, calendarId: string) {
     const user = this.ctx.user
-    const account = this.ctx.activeAccount
+    try {
+      await this.updateAccount(user, account, calendarId)
 
-    if (!account) return this.failure("missing_account")
-    await this.updateAccount(user, account, calendarId)
-
-    return this.success(null)
+      return this.success(null)
+    } catch (error) {
+      console.error(error)
+      return this.failure()
+    }
   }
 
   private async updateAccount(

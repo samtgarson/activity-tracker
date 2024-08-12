@@ -25,7 +25,7 @@ export class RefreshProviderToken extends Service {
     if (!refreshed.success) return this.failure()
 
     const updatedAccount = await this.updateAccount(account.id, refreshed.data)
-    return this.success(updatedAccount)
+    return this.success(updatedAccount as Account)
   }
 
   private async updateAccount(

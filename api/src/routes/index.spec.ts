@@ -1,6 +1,8 @@
 import { buildAccount } from "spec/factories/account-factory"
 import { buildUser } from "spec/factories/user-factory"
 import { mockContext } from "spec/util"
+import { serializeAccount } from "src/serializers/account-serializer"
+import { serializeUser } from "src/serializers/user-serializer"
 import { AuthDecodeToken } from "src/services/auth/decode-token"
 import { RefreshProviderToken } from "src/services/auth/refresh-provider-token"
 import { beforeEach, describe, expect, it, vi } from "vitest"
@@ -63,13 +65,13 @@ describe("GET /me", () => {
   })
 
   describe("when user is authorized", () => {
-    const account = buildAccount()
-    const user = buildUser({ activeAccount: Promise.resolve(account) })
+    const accounts = [buildAccount(), buildAccount()]
+    const user = buildUser()
 
     beforeEach(() => {
       vi.mocked(new AuthDecodeToken(mockContext)).call.mockResolvedValue({
         success: true,
-        data: user,
+        data: { ...user, accounts },
       })
     })
 
@@ -77,18 +79,31 @@ describe("GET /me", () => {
       await app.request("/me")
       expect(
         vi.mocked(new RefreshProviderToken(mockContext)).call,
-      ).toHaveBeenCalledWith(account)
+      ).toHaveBeenCalledTimes(accounts.length)
+
+      accounts.forEach((account) => {
+        expect(
+          vi.mocked(new RefreshProviderToken(mockContext)).call,
+        ).toHaveBeenCalledWith(account)
+      })
     })
 
     describe("when the token cannot be refreshed", () => {
       beforeEach(() => {
         vi.mocked(
           new RefreshProviderToken(mockContext),
-        ).call.mockResolvedValueOnce({
-          success: false,
-          code: "server_error",
-          data: null as never,
-        })
+        ).call.mockImplementation(async (a) =>
+          a === accounts[1]
+            ? {
+                success: false,
+                code: "server_error",
+                data: null as never,
+              }
+            : {
+                success: true,
+                data: a,
+              },
+        )
       })
 
       it("should return an error", async () => {
@@ -104,19 +119,24 @@ describe("GET /me", () => {
       beforeEach(() => {
         vi.mocked(
           new RefreshProviderToken(mockContext),
-        ).call.mockResolvedValueOnce({ success: true, data: account })
+        ).call.mockImplementation(async (account) => ({
+          success: true,
+          data: account,
+        }))
       })
 
       it("should return the user and active account", async () => {
         const response = await app.request("/me")
-        const { accountFor, activeAccount, ...userJson } = user
 
         expect(response.status).toBe(200)
-        expect(await response.json()).toEqual({
-          ...userJson,
-          createdAt: user.createdAt.toISOString(),
-          activeProvider: account.provider,
-        })
+        expect(await response.json()).toEqual(
+          JSON.parse(
+            JSON.stringify({
+              ...serializeUser(user),
+              accounts: accounts.map(serializeAccount),
+            }),
+          ),
+        )
       })
     })
   })

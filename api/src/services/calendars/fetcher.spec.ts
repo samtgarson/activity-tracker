@@ -1,3 +1,4 @@
+import { buildAccount } from "spec/factories/account-factory"
 import { buildCalendar } from "spec/factories/calendar-factory"
 import { mockContext } from "spec/util"
 import { Provider } from "src/models/types"
@@ -9,7 +10,7 @@ const deps = {
     getCalendarList: vi.fn(),
   },
 } satisfies CalendarListFetcherDeps
-const account = mockContext.activeAccount
+const account = buildAccount()
 const fetcher = new CalendarListFetcher(mockContext, deps)
 
 describe("for google", () => {
@@ -18,7 +19,7 @@ describe("for google", () => {
   })
 
   it("should call google fetcher", async () => {
-    await fetcher.call()
+    await fetcher.call(account)
     expect(deps.google.getCalendarList).toHaveBeenCalledWith(
       account.accessToken,
     )
@@ -28,7 +29,7 @@ describe("for google", () => {
     const data = [buildCalendar()]
     deps.google.getCalendarList.mockResolvedValue({ success: true, data })
 
-    const result = await fetcher.call()
+    const result = await fetcher.call(account)
     expect(result).toEqual({ success: true, data })
   })
 
@@ -38,7 +39,7 @@ describe("for google", () => {
     })
 
     it("should return an empty array", async () => {
-      const result = await fetcher.call()
+      const result = await fetcher.call(account)
       expect(result).toEqual({ success: true, data: [] })
     })
   })

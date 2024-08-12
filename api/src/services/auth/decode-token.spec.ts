@@ -50,6 +50,7 @@ describe("when token is valid", () => {
 
     expect(prismaMock.user.findUniqueOrThrow).toHaveBeenCalledWith({
       where: { id: "1" },
+      include: { accounts: true },
     })
   })
 

@@ -8,7 +8,7 @@ export default defineConfig({
     fakeTimers: {
       toFake: ["Date"],
     },
-    include: ["api/src/**/*.spec.ts"],
+    include: ["api/**/*.spec.ts"],
     globalSetup: "api/spec/global.ts",
     setupFiles: ["api/spec/setup.ts"],
     env: {
