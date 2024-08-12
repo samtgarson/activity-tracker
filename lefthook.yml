@@ -5,9 +5,11 @@ pre-commit:
   piped: true
   commands:
     eslint:
+      root: api
       run: npx eslint {staged_files} --fix
       glob: "*.{js,ts,jsx,tsx}"
       stage_fixed: true
     prettier:
+      root: api
       run: npx prettier --write {staged_files} --ignore-unknown
       stage_fixed: true

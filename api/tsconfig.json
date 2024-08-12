@@ -1,9 +1,15 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "types": [
-      "@cloudflare/workers-types"
-    ],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "allowJs": true,
+    "lib": ["ESNext"],
+    "types": ["@cloudflare/workers-types"],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "baseUrl": "."

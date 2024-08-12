@@ -8,16 +8,16 @@ export default defineConfig({
     fakeTimers: {
       toFake: ["Date"],
     },
-    include: ["api/**/*.spec.ts"],
-    globalSetup: "api/spec/global.ts",
-    setupFiles: ["api/spec/setup.ts"],
+    include: ["**/*.spec.ts"],
+    globalSetup: "spec/global.ts",
+    setupFiles: ["spec/setup.ts"],
     env: {
       DATABASE_URL: "file:./test.db",
     },
     coverage: {
       enabled: true,
       provider: "istanbul", // or 'v8'
-      include: ["api/src/**/*.ts"],
+      include: ["src/**/*.ts"],
     },
   },
 })
