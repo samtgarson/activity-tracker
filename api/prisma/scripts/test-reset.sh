@@ -1,9 +1,16 @@
-#!/usr/bin/env zsh
+#!/bin/bash
 
-local root=$(dirname "${0:A:h}")
+# Get the root directory
+root=$(dirname "$(dirname "$(readlink -f "$0")")")
 echo "Root: $root"
-rm "$root/test.db"
-for file in $(ls "$root/migrations"); do
-  echo "Applying $file"
-  sqlite3 "$root/test.db" < "$root/migrations/$file"
+
+# Remove the existing test database
+rm -f "$root/test.db"
+
+# Loop through migration files and apply them
+for file in "$root"/migrations/*; do
+  if [ -f "$file" ]; then
+    echo "Applying $(basename "$file")"
+    sqlite3 "$root/test.db" < "$file"
+  fi
 done
