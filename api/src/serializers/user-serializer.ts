@@ -1,9 +1,8 @@
 import { User } from "prisma/client"
 import { pick } from "radash"
 
-export function serializeUser(account: User | null) {
-  if (!account) return null
-  return pick(account, [
+export function serializeUser(user: User) {
+  return pick(user, [
     "id",
     "createdAt",
     "givenName",

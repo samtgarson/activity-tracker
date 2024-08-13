@@ -13,6 +13,7 @@ export function buildEvent(attrs: Partial<CalendarEvent> = {}) {
     title: faker.lorem.words(2),
     description: faker.lorem.sentence(),
     allDay: faker.datatype.boolean(),
+    transparent: faker.datatype.boolean(),
     ...attrs,
   } satisfies CalendarEvent
 }

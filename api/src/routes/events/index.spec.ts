@@ -5,7 +5,7 @@ import { json } from "spec/util/matchers"
 import { serializeEvent } from "src/serializers/event-serializer"
 import { EventListFetcher } from "src/services/events/list-fetcher"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { EventsRouter } from "./events"
+import { EventsRouter } from "."
 
 vi.mock("src/services/events/list-fetcher", async () => ({
   EventListFetcher: vi.fn().mockReturnValue({
@@ -35,7 +35,7 @@ describe("GET /events", () => {
     })
 
     it("returns the list of events, sorted by start time", async () => {
-      const res = await router.request("/")
+      const res = await router.request("/events")
 
       expect(res.status).toBe(200)
       expect(await res.json()).toEqual([
@@ -49,7 +49,7 @@ describe("GET /events", () => {
       const to = "2021-01-02"
 
       it("calls the service with the correct arguments", async () => {
-        const res = await router.request(`/?from=${from}&to=${to}`)
+        const res = await router.request(`/events?from=${from}&to=${to}`)
 
         expect(res.status).toBe(200)
         expect(new EventListFetcher(mockContext).call).toHaveBeenCalledWith(
@@ -66,7 +66,7 @@ describe("GET /events", () => {
       const from = "2021-01-01"
 
       it("calls the service with the correct arguments", async () => {
-        const res = await router.request(`/?from=${from}`)
+        const res = await router.request(`/events?from=${from}`)
 
         expect(res.status).toBe(200)
         expect(new EventListFetcher(mockContext).call).toHaveBeenCalledWith(
@@ -81,13 +81,13 @@ describe("GET /events", () => {
 
     describe("when from or to are invalid", () => {
       it("returns an error", async () => {
-        const res = await router.request(`/?from=invalid`)
+        const res = await router.request(`/events?from=invalid`)
 
         expect(res.status).toBe(400)
       })
 
       it("returns an error", async () => {
-        const res = await router.request(`/?to=invalid`)
+        const res = await router.request(`/events?to=invalid`)
 
         expect(res.status).toBe(400)
       })
@@ -104,7 +104,7 @@ describe("GET /events", () => {
     })
 
     it("returns an error", async () => {
-      const res = await router.request("/")
+      const res = await router.request("/events")
 
       expect(res.status).toBe(500)
       expect(await res.json()).toEqual({ error: "server_error" })

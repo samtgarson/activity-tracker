@@ -6,7 +6,7 @@ import { CalendarCreator } from "src/services/calendars/creator"
 import { CalendarFetcher } from "src/services/calendars/fetcher"
 import { CalendarListFetcher } from "src/services/calendars/list-fetcher"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { CalendarsRouter } from "./calendars"
+import { CalendarsRouter } from "."
 
 vi.mock("src/services/calendars/list-fetcher", async () => ({
   CalendarListFetcher: vi.fn().mockReturnValue({
@@ -219,7 +219,7 @@ describe("POST /calendars/:calendarId/choose", () => {
         },
       )
 
-      expect(res.status).toBe(200)
+      expect(res.status).toBe(201)
       expect(await res.json()).toEqual({ success: true })
     })
 

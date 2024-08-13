@@ -23,9 +23,9 @@ export const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
 
 if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma
 
-type PrismaClientExt = ReturnType<typeof globalThis.prismaGlobal>
+type PrismaClientInstance = ReturnType<typeof globalThis.prismaGlobal>
 type Model<T extends Prisma.TypeMap["meta"]["modelProps"]> = Awaited<
-  ReturnType<PrismaClientExt[T]["findFirstOrThrow"]>
+  ReturnType<PrismaClientInstance[T]["findFirstOrThrow"]>
 >
 export type User = Model<"user">
 export interface Account extends PrismaAccount {

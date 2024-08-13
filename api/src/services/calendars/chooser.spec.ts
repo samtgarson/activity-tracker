@@ -15,26 +15,52 @@ describe("CalendarChooser", () => {
     chooser = new CalendarChooser(mockContext)
   })
 
-  it("should clear previous active accounts", async () => {
-    await chooser.call(account, "calendarId")
+  describe("when account can be found", () => {
+    beforeEach(() => {
+      prismaMock.account.updateMany.mockResolvedValueOnce({ count: 1 })
+    })
 
-    expect(prismaMock.account.updateMany).toHaveBeenCalledWith({
-      where: { userId: user.id },
-      data: { active: false },
+    it("should update the account", async () => {
+      await chooser.call(account, "calendarId")
+
+      expect(prismaMock.account.updateMany).toHaveBeenNthCalledWith(1, {
+        where: { id: account.id },
+        data: { calendarId: "calendarId", active: true },
+      })
+    })
+
+    it("should clear previous active accounts", async () => {
+      await chooser.call(account, "calendarId")
+
+      expect(prismaMock.account.updateMany).toHaveBeenNthCalledWith(2, {
+        where: { userId: user.id },
+        data: { active: false },
+      })
+    })
+
+    it("should succeed", async () => {
+      const result = await chooser.call(account, "calendarId")
+      expect(result.success).toBe(true)
     })
   })
 
-  it("should update the account", async () => {
-    await chooser.call(account, "calendarId")
-
-    expect(prismaMock.account.update).toHaveBeenCalledWith({
-      where: { id: account.id },
-      data: { calendarId: "calendarId", active: true },
+  describe("when account cannot be found", () => {
+    beforeEach(() => {
+      prismaMock.account.updateMany.mockResolvedValueOnce({ count: 0 })
     })
-  })
+    it("should update the account, but not clear previous accounts", async () => {
+      await chooser.call(account, "calendarId")
 
-  it("should succeed", async () => {
-    const result = await chooser.call(account, "calendarId")
-    expect(result.success).toBe(true)
+      expect(prismaMock.account.updateMany).toHaveBeenCalledTimes(1)
+      expect(prismaMock.account.updateMany).toHaveBeenNthCalledWith(1, {
+        where: { id: account.id },
+        data: { calendarId: "calendarId", active: true },
+      })
+    })
+
+    it("should fail", async () => {
+      const result = await chooser.call(account, "calendarId")
+      expect(result).toEqual({ success: false, code: "calendar_not_found" })
+    })
   })
 })

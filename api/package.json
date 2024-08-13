@@ -7,7 +7,8 @@
     "db:migrate": "npx tsx prisma/scripts/migrate.ts",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "test": "vitest"
+    "test": "vitest",
+    "generate-api": "tsx bin/generate-open-api.ts"
   },
   "type": "module",
   "prettier": {
@@ -17,6 +18,7 @@
     ]
   },
   "dependencies": {
+    "@hono/zod-openapi": "^0.15.3",
     "@hono/zod-validator": "^0.2.2",
     "@prisma/adapter-d1": "^5.17.0",
     "@prisma/client": "^5.17.0",
@@ -39,6 +41,7 @@
     "prisma": "^5.17.0",
     "tiny-parse-argv": "^2.5.1",
     "toml": "^3.0.0",
+    "tsx": "^4.17.0",
     "typescript-eslint": "^8.0.0-alpha.45",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^2.0.3",

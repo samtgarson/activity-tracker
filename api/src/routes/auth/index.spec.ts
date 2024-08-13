@@ -4,7 +4,7 @@ import { AuthGetRedirect } from "src/services/auth/get-redirect"
 import { AuthHandleCallback } from "src/services/auth/handle-callback"
 import { AuthRefreshAccessToken } from "src/services/auth/refresh-access-token"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { AuthRouter } from "./auth"
+import { AuthRouter } from "."
 
 vi.mock("src/services/auth/tokens", async () => {
   return {

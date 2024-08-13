@@ -5,7 +5,7 @@ import { AuthGetRedirect } from "src/services/auth/get-redirect"
 import { AuthHandleCallback } from "src/services/auth/handle-callback"
 import { AuthRefreshAccessToken } from "src/services/auth/refresh-access-token"
 import { z } from "zod"
-import { newHono } from "./util"
+import { newHono } from "../util"
 
 export const AuthRouter = newHono()
 
