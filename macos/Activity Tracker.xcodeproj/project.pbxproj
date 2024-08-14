@@ -12,9 +12,6 @@
 		897A23042C6BD43500DEA96A /* Activity_TrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897A23032C6BD43500DEA96A /* Activity_TrackerApp.swift */; };
 		897A230A2C6BD43600DEA96A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 897A23092C6BD43600DEA96A /* Assets.xcassets */; };
 		897A230D2C6BD43600DEA96A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 897A230C2C6BD43600DEA96A /* Preview Assets.xcassets */; };
-		897A23182C6BD43700DEA96A /* Activity_TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897A23172C6BD43700DEA96A /* Activity_TrackerTests.swift */; };
-		897A23222C6BD43700DEA96A /* Activity_TrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897A23212C6BD43700DEA96A /* Activity_TrackerUITests.swift */; };
-		897A23242C6BD43700DEA96A /* Activity_TrackerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897A23232C6BD43700DEA96A /* Activity_TrackerUITestsLaunchTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,10 +40,7 @@
 		897A230C2C6BD43600DEA96A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		897A230E2C6BD43600DEA96A /* Activity_Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Activity_Tracker.entitlements; sourceTree = "<group>"; };
 		897A23132C6BD43700DEA96A /* Activity TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Activity TrackerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		897A23172C6BD43700DEA96A /* Activity_TrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity_TrackerTests.swift; sourceTree = "<group>"; };
 		897A231D2C6BD43700DEA96A /* Activity TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Activity TrackerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		897A23212C6BD43700DEA96A /* Activity_TrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity_TrackerUITests.swift; sourceTree = "<group>"; };
-		897A23232C6BD43700DEA96A /* Activity_TrackerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity_TrackerUITestsLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,8 +80,6 @@
 			isa = PBXGroup;
 			children = (
 				897A23022C6BD43500DEA96A /* Activity Tracker */,
-				897A23162C6BD43700DEA96A /* Activity TrackerTests */,
-				897A23202C6BD43700DEA96A /* Activity TrackerUITests */,
 				897A23012C6BD43500DEA96A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -123,23 +115,6 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		897A23162C6BD43700DEA96A /* Activity TrackerTests */ = {
-			isa = PBXGroup;
-			children = (
-				897A23172C6BD43700DEA96A /* Activity_TrackerTests.swift */,
-			);
-			path = "Activity TrackerTests";
-			sourceTree = "<group>";
-		};
-		897A23202C6BD43700DEA96A /* Activity TrackerUITests */ = {
-			isa = PBXGroup;
-			children = (
-				897A23212C6BD43700DEA96A /* Activity_TrackerUITests.swift */,
-				897A23232C6BD43700DEA96A /* Activity_TrackerUITestsLaunchTests.swift */,
-			);
-			path = "Activity TrackerUITests";
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -154,6 +129,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				899AF1B22C6CBD6500DB22C6 /* PBXTargetDependency */,
 			);
 			name = "Activity Tracker";
 			productName = "Activity Tracker";
@@ -228,6 +204,9 @@
 				Base,
 			);
 			mainGroup = 897A22F72C6BD43400DEA96A;
+			packageReferences = (
+				899AF1B02C6CB66B00DB22C6 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+			);
 			productRefGroup = 897A23012C6BD43500DEA96A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -280,7 +259,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				897A23182C6BD43700DEA96A /* Activity_TrackerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,8 +266,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				897A23242C6BD43700DEA96A /* Activity_TrackerUITestsLaunchTests.swift in Sources */,
-				897A23222C6BD43700DEA96A /* Activity_TrackerUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,6 +281,10 @@
 			isa = PBXTargetDependency;
 			target = 897A22FF2C6BD43500DEA96A /* Activity Tracker */;
 			targetProxy = 897A231E2C6BD43700DEA96A /* PBXContainerItemProxy */;
+		};
+		899AF1B22C6CBD6500DB22C6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 899AF1B12C6CBD6500DB22C6 /* SwiftLintBuildToolPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -595,6 +575,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		899AF1B02C6CB66B00DB22C6 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.56.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		899AF1B12C6CBD6500DB22C6 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 899AF1B02C6CB66B00DB22C6 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 897A22F82C6BD43400DEA96A /* Project object */;
 }

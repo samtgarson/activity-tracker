@@ -13,3 +13,7 @@ pre-commit:
       root: api
       run: npx prettier --write {staged_files} --ignore-unknown
       stage_fixed: true
+    swift_lint:
+      root: macos
+      run: swiftlint --fix --format {staged_files} && swiftlint {staged_files}
+      stage_fixed: true

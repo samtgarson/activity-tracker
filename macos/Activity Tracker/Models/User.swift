@@ -10,14 +10,21 @@ import SwiftData
 
 @Model
 class User {
-  var id: String
-  var createdAt: String
-  var givenName: String
-  var familyName: String
-  var displayName: String
-  var picture: String?
+    var id: String
+    var createdAt: String
+    var givenName: String
+    var familyName: String
+    var displayName: String
+    var picture: String?
 
-    init(id: String, createdAt: String, givenName: String, familyName: String, displayName: String, picture: String? = nil) {
+    init(
+        id: String,
+        createdAt: String,
+        givenName: String,
+        familyName: String,
+        displayName: String,
+        picture: String? = nil
+    ) {
         self.id = id
         self.createdAt = createdAt
         self.givenName = givenName

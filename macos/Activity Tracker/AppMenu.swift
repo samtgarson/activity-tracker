@@ -10,7 +10,7 @@ import SwiftUI
 struct AppMenu: View {
     var body: some View {
         Text("No events today")
-            
+
         Divider()
 
         Button("Quit Activity Tracker completely") { NSApplication.shared.terminate(nil) }

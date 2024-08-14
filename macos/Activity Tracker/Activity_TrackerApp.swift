@@ -9,10 +9,10 @@ import SwiftUI
 import SwiftData
 
 @main
-struct Activity_TrackerApp: App {
+struct ActivityTrackerApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            User.self,
+            User.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
