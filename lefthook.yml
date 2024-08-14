@@ -15,5 +15,5 @@ pre-commit:
       stage_fixed: true
     swift_lint:
       root: macos
-      run: swiftlint --fix --format {staged_files} && swiftlint {staged_files}
+      run: swiftlint --fix --format {staged_files} && swiftlint --strict {staged_files}
       stage_fixed: true

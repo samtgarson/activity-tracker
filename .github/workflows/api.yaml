@@ -1,11 +1,11 @@
-name: API checks
+name: Checks
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  test:
+  api:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,3 +26,16 @@ jobs:
       run: npx tsc --noEmit
     - name: Run tests
       run: npm run test
+  macos:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: macos
+    steps:
+      - uses: actions/checkout@v1
+      - name: GitHub Action for SwiftLint
+        uses: stanfordbdhg/action-swiftlint@v4
+        with:
+          args: --strict
+        env:
+          WORKING_DIRECTORY: macos

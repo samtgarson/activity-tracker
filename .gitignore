@@ -35,3 +35,5 @@ lerna-debug.log*
 coverage
 
 test.db
+
+UserInterfaceState.xcuserstate
