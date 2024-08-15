@@ -11,6 +11,7 @@
     "generate-api": "tsx bin/generate-open-api.ts"
   },
   "type": "module",
+  "main": "src/index.ts",
   "prettier": {
     "semi": false,
     "plugins": [
