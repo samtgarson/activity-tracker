@@ -1,4 +1,5 @@
 import { z } from "@hono/zod-openapi"
+import { Provider } from "./types"
 
 export const eventSchema = z
   .object({
@@ -24,3 +25,24 @@ export const calendarSchema = z
     accountId: z.string(),
   })
   .openapi("Calendar")
+
+export const userSchema = z
+  .object({
+    id: z.string(),
+    createdAt: z.date(),
+    givenName: z.string(),
+    familyName: z.string(),
+    displayName: z.string(),
+    picture: z.string().url().nullable(),
+  })
+  .openapi("User")
+
+export const accountSchema = z
+  .object({
+    id: z.string(),
+    provider: z.nativeEnum(Provider),
+    createdAt: z.date(),
+    calendarId: z.string().nullable(),
+    active: z.boolean(),
+  })
+  .openapi("Account")

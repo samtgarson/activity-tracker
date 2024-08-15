@@ -48,7 +48,7 @@ vi.mock("src/services/auth/refresh-access-token", async () => ({
 describe("GET /login/google", () => {
   describe("with valid provider", async () => {
     it("returns a redirect", async () => {
-      const res = await AuthRouter.request("/login/google")
+      const res = await AuthRouter.request("/auth/login/google")
       expect(res.status).toBe(302)
       expect(res.headers.get("location")).toBe("google-auth-url")
     })
@@ -56,7 +56,7 @@ describe("GET /login/google", () => {
 
   describe("with invalid provider", async () => {
     it("returns a 400", async () => {
-      const res = await AuthRouter.request("/login/invalid")
+      const res = await AuthRouter.request("/auth/login/invalid")
       expect(res.status).toBe(400)
     })
   })
@@ -70,7 +70,7 @@ describe("GET /login/google", () => {
         code: "server_error" as const,
         data: null as never,
       })
-      const res = await AuthRouter.request("/login/google")
+      const res = await AuthRouter.request("/auth/login/google")
       expect(res.status).toBe(500)
     })
   })
@@ -79,21 +79,23 @@ describe("GET /login/google", () => {
 describe("GET /callback/google", () => {
   describe("without valid query params", () => {
     it("returns a 400", async () => {
-      const res = await AuthRouter.request("/callback/google?invalid=param")
+      const res = await AuthRouter.request(
+        "/auth/callback/google?invalid=param",
+      )
       expect(res.status).toBe(400)
     })
   })
 
   describe("with invalid provider", async () => {
     it("returns a 400", async () => {
-      const res = await AuthRouter.request("/callback/invalid")
+      const res = await AuthRouter.request("/auth/callback/invalid")
       expect(res.status).toBe(400)
     })
   })
 
   describe("with valid query params", async () => {
     const args = [
-      "/callback/google?code=code&state=state",
+      "/auth/callback/google?code=code&state=state",
       undefined,
       mockContext,
     ] as const
@@ -139,8 +141,9 @@ describe("GET /callback/google", () => {
 describe("POST /refresh", () => {
   describe("when JSON body is invalid", () => {
     it("returns a 400", async () => {
-      const res = await AuthRouter.request("/refresh", {
+      const res = await AuthRouter.request("/auth/refresh", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ invalid: "body" }),
       })
       expect(res.status).toBe(400)
@@ -150,13 +153,13 @@ describe("POST /refresh", () => {
   describe("when JSON body is valid", () => {
     describe("when the service succeeds", () => {
       it("returns a 200", async () => {
-        const res = await AuthRouter.request("/refresh", {
+        const res = await AuthRouter.request("/auth/refresh", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ refreshToken: "refresh" }),
         })
 
-        expect(res.status).toBe(200)
+        expect(res.status).toBe(201)
         expect(await res.json()).toEqual({ accessToken: "access-token" })
       })
     })
@@ -174,7 +177,7 @@ describe("POST /refresh", () => {
     })
 
     it("returns error", async () => {
-      const res = await AuthRouter.request("/refresh", {
+      const res = await AuthRouter.request("/auth/refresh", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refreshToken: "refresh" }),

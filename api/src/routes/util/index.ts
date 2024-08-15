@@ -5,7 +5,18 @@ import { Config, Variables } from "src/types/config"
 export type Ctx = { Bindings: Config; Variables: Variables }
 
 export function newHono() {
-  return new OpenAPIHono<Ctx>()
+  return new OpenAPIHono<Ctx>({
+    defaultHook: (result, c) => {
+      if (result.success) return
+
+      return c.json(
+        {
+          errors: result.error.format()._errors,
+        },
+        400,
+      )
+    },
+  })
 }
 
 export type HonoContext = Context<Ctx>

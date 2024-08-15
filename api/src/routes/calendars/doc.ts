@@ -4,6 +4,8 @@ import { fiveHundredSchema } from "../util"
 
 export const indexRoute = createApiRoute({
   method: "get",
+  tags: ["Calendars"],
+  operationId: "listCalendars",
   path: "/calendars",
   responses: {
     200: {
@@ -27,6 +29,8 @@ export const indexRoute = createApiRoute({
 
 export const createRoute = createApiRoute({
   method: "post",
+  tags: ["Calendars"],
+  operationId: "createCalendar",
   path: "/accounts/{accountId}/calendars",
   request: {
     params: z.object({ accountId: z.string().min(1) }),
@@ -68,6 +72,8 @@ export const createRoute = createApiRoute({
 
 export const showRoute = createApiRoute({
   method: "get",
+  tags: ["Calendars"],
+  operationId: "getCalendar",
   path: "/accounts/{accountId}/calendars/{calendarId}",
   request: {
     params: z.object({
@@ -107,6 +113,8 @@ export const showRoute = createApiRoute({
 
 export const chooseRoute = createApiRoute({
   method: "post",
+  tags: ["Calendars"],
+  operationId: "chooseCalendar",
   path: "/accounts/{accountId}/calendars/{calendarId}/choose",
   request: {
     params: z.object({

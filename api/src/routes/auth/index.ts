@@ -6,6 +6,7 @@ import { AuthHandleCallback } from "src/services/auth/handle-callback"
 import { AuthRefreshAccessToken } from "src/services/auth/refresh-access-token"
 import { z } from "zod"
 import { newHono } from "../util"
+import { loginRoute, refreshRoute } from "./doc"
 
 export const AuthRouter = newHono()
 
@@ -14,7 +15,7 @@ const providerSchema = zValidator(
   z.object({ provider: z.nativeEnum(Provider) }),
 )
 
-AuthRouter.get("/login/:provider", providerSchema, async (c) => {
+AuthRouter.openapi(loginRoute, async function (c) {
   const provider = c.req.valid("param").provider
   const svc = new AuthGetRedirect(c, provider)
   const result = await svc.call()
@@ -27,7 +28,7 @@ AuthRouter.get("/login/:provider", providerSchema, async (c) => {
 })
 
 AuthRouter.get(
-  "/callback/:provider",
+  "/auth/callback/:provider",
   providerSchema,
   zValidator("query", oAuthCallbackParamsSchema),
   async (c) => {
@@ -44,17 +45,13 @@ AuthRouter.get(
   },
 )
 
-AuthRouter.post(
-  "/refresh",
-  zValidator("json", z.object({ refreshToken: z.string() })),
-  async (c) => {
-    const svc = new AuthRefreshAccessToken(c)
-    const result = await svc.call(c.req.valid("json").refreshToken)
+AuthRouter.openapi(refreshRoute, async function (c) {
+  const svc = new AuthRefreshAccessToken(c)
+  const result = await svc.call(c.req.valid("json").refreshToken)
 
-    if (!result.success) {
-      return c.json({ error: result.code, data: result.data }, 500)
-    }
+  if (!result.success) {
+    return c.json({ error: result.code, data: result.data }, 500)
+  }
 
-    return c.json(result.data)
-  },
-)
+  return c.json(result.data, 201)
+})

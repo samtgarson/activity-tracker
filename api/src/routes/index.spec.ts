@@ -29,7 +29,7 @@ vi.mock("src/services/auth/refresh-provider-token", async () => ({
 describe("GET /", () => {
   it("should return a message", async () => {
     const response = await app.request("/")
-    expect(await response.json()).toEqual({ message: "beep boop" })
+    expect(await response.json()).toEqual({ beep: "boop" })
   })
 })
 
@@ -95,14 +95,14 @@ describe("GET /me", () => {
         ).call.mockImplementation(async (a) =>
           a === accounts[1]
             ? {
-                success: false,
-                code: "server_error",
-                data: null as never,
-              }
+              success: false,
+              code: "server_error",
+              data: null as never,
+            }
             : {
-                success: true,
-                data: a,
-              },
+              success: true,
+              data: a,
+            },
         )
       })
 

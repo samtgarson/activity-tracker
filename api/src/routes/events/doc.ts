@@ -11,6 +11,8 @@ const querySchema = z.object({
 
 export const route = createRoute({
   method: "get",
+  tags: ["Events"],
+  operationId: "listEvents",
   path: "/events",
   request: {
     query: querySchema,
