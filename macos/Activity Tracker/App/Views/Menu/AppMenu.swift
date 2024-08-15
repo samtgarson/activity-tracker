@@ -13,7 +13,10 @@ struct AppMenu: View {
 
         Divider()
 
+        SettingsLink(label: { Text("Settings...") })
+            .keyboardShortcut(",")
         Button("Quit Activity Tracker completely") { NSApplication.shared.terminate(nil) }
+            .keyboardShortcut("q")
     }
 }
 

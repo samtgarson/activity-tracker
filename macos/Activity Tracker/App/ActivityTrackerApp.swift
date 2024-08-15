@@ -26,6 +26,11 @@ struct ActivityTrackerApp: App {
     var body: some Scene {
         MenuBarExtra("ActivityTracker", systemImage: "hammer") {
             AppMenu()
-        }.modelContainer(sharedModelContainer)
+        }
+        .modelContainer(sharedModelContainer)
+
+        Settings {
+            SettingsView()
+        }
     }
 }
