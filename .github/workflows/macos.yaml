@@ -1,0 +1,23 @@
+name: macOS
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - .github/workflows/api.yaml
+      - macos/**
+
+jobs:
+  macos:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: macos
+    steps:
+      - uses: actions/checkout@v1
+      - name: GitHub Action for SwiftLint
+        uses: stanfordbdhg/action-swiftlint@v4
+        with:
+          args: --strict
+        env:
+          WORKING_DIRECTORY: macos
