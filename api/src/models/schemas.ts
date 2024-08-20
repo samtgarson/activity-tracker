@@ -26,6 +26,18 @@ export const calendarSchema = z
   })
   .openapi("Calendar")
 
+export const providerSchema = z.nativeEnum(Provider).openapi("Provider")
+
+export const accountSchema = z
+  .object({
+    id: z.string(),
+    provider: providerSchema,
+    createdAt: z.date(),
+    calendarId: z.string().nullable(),
+    active: z.boolean(),
+  })
+  .openapi("Account")
+
 export const userSchema = z
   .object({
     id: z.string(),
@@ -34,15 +46,6 @@ export const userSchema = z
     familyName: z.string(),
     displayName: z.string(),
     picture: z.string().url().nullable(),
+    accounts: z.array(accountSchema),
   })
   .openapi("User")
-
-export const accountSchema = z
-  .object({
-    id: z.string(),
-    provider: z.nativeEnum(Provider),
-    createdAt: z.date(),
-    calendarId: z.string().nullable(),
-    active: z.boolean(),
-  })
-  .openapi("Account")

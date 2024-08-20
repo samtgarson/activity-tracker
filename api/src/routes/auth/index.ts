@@ -1,6 +1,6 @@
 import { zValidator } from "@hono/zod-validator"
 import { oAuthCallbackParamsSchema } from "src/gateways/contracts/oauth"
-import { Provider } from "src/models/types"
+import { providerSchema } from "src/models/schemas"
 import { AuthGetRedirect } from "src/services/auth/get-redirect"
 import { AuthHandleCallback } from "src/services/auth/handle-callback"
 import { AuthRefreshAccessToken } from "src/services/auth/refresh-access-token"
@@ -10,15 +10,13 @@ import { loginRoute, refreshRoute } from "./doc"
 
 export const AuthRouter = newHono()
 
-const providerSchema = zValidator(
-  "param",
-  z.object({ provider: z.nativeEnum(Provider) }),
-)
-
 AuthRouter.openapi(loginRoute, async function (c) {
   const provider = c.req.valid("param").provider
+  const postRedirect = c.req.valid("query").external
+    ? "activity-tracker://auth"
+    : undefined
   const svc = new AuthGetRedirect(c, provider)
-  const result = await svc.call()
+  const result = await svc.call(postRedirect)
 
   if (result.success) {
     return c.redirect(result.data)
@@ -29,7 +27,7 @@ AuthRouter.openapi(loginRoute, async function (c) {
 
 AuthRouter.get(
   "/auth/callback/:provider",
-  providerSchema,
+  zValidator("param", z.object({ provider: providerSchema })),
   zValidator("query", oAuthCallbackParamsSchema),
   async (c) => {
     const provider = c.req.valid("param").provider
@@ -39,6 +37,17 @@ AuthRouter.get(
 
     if (!result.success) {
       return c.json({ error: result.code, data: result.data }, 500)
+    }
+
+    if (result.data.redirect) {
+      const redirect = new URL(result.data.redirect)
+      redirect.search = new URLSearchParams({
+        accessToken: result.data.accessToken,
+        refreshToken: result.data.refreshToken.token,
+        refreshTokenExpiresAt: result.data.refreshToken.expiresAt.toISOString(),
+      }).toString()
+
+      return c.redirect(redirect.toString())
     }
 
     return c.json(result.data)

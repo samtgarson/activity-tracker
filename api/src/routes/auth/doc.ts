@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi"
-import { Provider } from "src/models/types"
+import { providerSchema } from "src/models/schemas"
 import { fiveHundredSchema } from "../util"
 
 export const loginRoute = createRoute({
@@ -9,7 +9,10 @@ export const loginRoute = createRoute({
   path: "/auth/login/:provider",
   request: {
     params: z.object({
-      provider: z.nativeEnum(Provider),
+      provider: providerSchema,
+    }),
+    query: z.object({
+      external: z.coerce.boolean().optional(),
     }),
   },
   responses: {

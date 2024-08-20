@@ -3,7 +3,7 @@ import { serializeAccount } from "src/serializers/account-serializer"
 import { serializeUser } from "src/serializers/user-serializer"
 import { AuthRouter } from "./auth"
 import { CalendarsRouter } from "./calendars"
-import { meRoute, pingRoute } from "./doc"
+import { docConfig, meRoute, pingRoute } from "./doc"
 import { EventsRouter } from "./events"
 import { newHono } from "./util"
 import { authenticate } from "./util/auth-middleware"
@@ -19,12 +19,11 @@ app.get(
     url: "/doc",
   }),
 )
-app.doc("/doc", {
-  info: {
-    title: "Activity Tracker API",
-    version: "v0.01",
-  },
-  openapi: "3.1.0",
+app.doc("/doc", docConfig)
+
+app.openAPIRegistry.registerComponent("securitySchemes", "bearerAuth", {
+  type: "http",
+  scheme: "bearer",
 })
 
 app.route("/", AuthRouter)
