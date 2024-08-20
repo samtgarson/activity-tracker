@@ -2,15 +2,16 @@
 //  GeneralSettings.swift
 //  Activity Tracker
 //
-//  Created by Samuel Garson on 14/08/2024.
+//  Created by Sam Garson on 14/08/2024.
 //
 
 import SwiftUI
 
-struct GeneralSettings: View {
+struct AccountSettings: View {
 
     var body: some View {
-        VStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/) {
+        VStack(alignment: .center) {
+            LoginButton(onSuccess: { token in debugPrint(token) }, onError: { error in debugPrint("Error!", error) })
         }
     }
 

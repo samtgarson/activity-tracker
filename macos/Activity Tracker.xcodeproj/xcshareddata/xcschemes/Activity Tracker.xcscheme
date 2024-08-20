@@ -52,6 +52,17 @@
                ReferencedContainer = "container:Activity Tracker.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "89461BCE2C6E1D65001B0D95"
+               BuildableName = "ActivityTrackerAPIClientTests.xctest"
+               BlueprintName = "ActivityTrackerAPIClientTests"
+               ReferencedContainer = "container:Activity Tracker.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

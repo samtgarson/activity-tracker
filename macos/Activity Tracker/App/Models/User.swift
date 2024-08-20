@@ -2,7 +2,7 @@
 //  User.swift
 //  Activity Tracker
 //
-//  Created by Samuel Garson on 13/08/2024.
+//  Created by Sam Garson on 13/08/2024.
 //
 
 import Foundation

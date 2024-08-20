@@ -9,59 +9,102 @@
 /* Begin PBXBuildFile section */
 		89313C842C6BD6F500426B8C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89313C832C6BD6F500426B8C /* User.swift */; };
 		89313C862C6BD82F00426B8C /* AppMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89313C852C6BD82F00426B8C /* AppMenu.swift */; };
-		897A23042C6BD43500DEA96A /* Activity_TrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897A23032C6BD43500DEA96A /* Activity_TrackerApp.swift */; };
+		89461BC02C6D65DA001B0D95 /* BlurredBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461BBF2C6D65DA001B0D95 /* BlurredBackground.swift */; };
+		89461BD82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 89461BC82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		89461BDB2C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89461BC62C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework */; };
+		89461BDC2C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 89461BC62C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		89461BE92C6E9FBA001B0D95 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461BE82C6E9FBA001B0D95 /* Config.swift */; };
+		89461BEB2C6F5778001B0D95 /* openapi.json in Resources */ = {isa = PBXBuildFile; fileRef = 89461BEA2C6F5778001B0D95 /* openapi.json */; };
+		89461BED2C714540001B0D95 /* openapi-generator-config.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 89461BEC2C714540001B0D95 /* openapi-generator-config.yaml */; };
+		89461BF12C7145EF001B0D95 /* OpenAPIRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 89461BF02C7145EF001B0D95 /* OpenAPIRuntime */; };
+		89461BF42C714681001B0D95 /* OpenAPIURLSession in Frameworks */ = {isa = PBXBuildFile; productRef = 89461BF32C714681001B0D95 /* OpenAPIURLSession */; };
+		89461BFB2C714972001B0D95 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 89461BFA2C714972001B0D95 /* .swiftlint.yml */; };
+		89461BFC2C714972001B0D95 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 89461BFA2C714972001B0D95 /* .swiftlint.yml */; };
+		89461BFE2C714AD0001B0D95 /* ActivityTrackerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461BFD2C714AD0001B0D95 /* ActivityTrackerClient.swift */; };
+		89461C0B2C7296F8001B0D95 /* AuthMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461C0A2C7296F8001B0D95 /* AuthMiddleware.swift */; };
+		89461C132C73A5EE001B0D95 /* BetterSafariView in Frameworks */ = {isa = PBXBuildFile; productRef = 89461C122C73A5EE001B0D95 /* BetterSafariView */; };
+		89461C172C73C574001B0D95 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461C162C73C574001B0D95 /* LoginButton.swift */; };
+		89461C1A2C73E813001B0D95 /* KeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461C192C73E813001B0D95 /* KeychainStorage.swift */; };
+		89461C1D2C73E847001B0D95 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 89461C1C2C73E847001B0D95 /* KeychainAccess */; };
+		89461C202C73EB75001B0D95 /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461C1F2C73EB75001B0D95 /* AuthToken.swift */; };
+		89461C222C74C65D001B0D95 /* Account Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461C212C74C65D001B0D95 /* Account Settings.swift */; };
+		897A23042C6BD43500DEA96A /* ActivityTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897A23032C6BD43500DEA96A /* ActivityTrackerApp.swift */; };
 		897A230A2C6BD43600DEA96A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 897A23092C6BD43600DEA96A /* Assets.xcassets */; };
 		897A230D2C6BD43600DEA96A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 897A230C2C6BD43600DEA96A /* Preview Assets.xcassets */; };
+		89DF69BE2C6D409D00AAFCA5 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DF69BD2C6D409D00AAFCA5 /* Settings.swift */; };
+		89DF69C22C6D422E00AAFCA5 /* GeneralSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DF69C12C6D422E00AAFCA5 /* GeneralSettings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		897A23142C6BD43700DEA96A /* PBXContainerItemProxy */ = {
+		89461BD92C6E1D65001B0D95 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 897A22F82C6BD43400DEA96A /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 897A22FF2C6BD43500DEA96A;
-			remoteInfo = "Activity Tracker";
-		};
-		897A231E2C6BD43700DEA96A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 897A22F82C6BD43400DEA96A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 897A22FF2C6BD43500DEA96A;
-			remoteInfo = "Activity Tracker";
+			remoteGlobalIDString = 89461BC52C6E1D65001B0D95;
+			remoteInfo = ActivityTrackerAPIClient;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		89461BE02C6E1D65001B0D95 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				89461BDC2C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		89313C832C6BD6F500426B8C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		89313C852C6BD82F00426B8C /* AppMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMenu.swift; sourceTree = "<group>"; };
+		89461BBF2C6D65DA001B0D95 /* BlurredBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredBackground.swift; sourceTree = "<group>"; };
+		89461BC62C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ActivityTrackerAPIClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		89461BC82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActivityTrackerAPIClient.h; sourceTree = "<group>"; };
+		89461BE52C6E9D49001B0D95 /* DevelopmentSettings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = DevelopmentSettings.xcconfig; sourceTree = "<group>"; };
+		89461BE62C6E9D79001B0D95 /* ProductionSettings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ProductionSettings.xcconfig; sourceTree = "<group>"; };
+		89461BE72C6E9F2D001B0D95 /* Activity-Tracker-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Activity-Tracker-Info.plist"; sourceTree = SOURCE_ROOT; };
+		89461BE82C6E9FBA001B0D95 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		89461BEA2C6F5778001B0D95 /* openapi.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = openapi.json; sourceTree = "<group>"; };
+		89461BEC2C714540001B0D95 /* openapi-generator-config.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "openapi-generator-config.yaml"; sourceTree = "<group>"; };
+		89461BFA2C714972001B0D95 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		89461BFD2C714AD0001B0D95 /* ActivityTrackerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTrackerClient.swift; sourceTree = "<group>"; };
+		89461C0A2C7296F8001B0D95 /* AuthMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthMiddleware.swift; sourceTree = "<group>"; };
+		89461C0E2C739530001B0D95 /* Activity TrackerDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Activity TrackerDebug.entitlements"; sourceTree = "<group>"; };
+		89461C162C73C574001B0D95 /* LoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
+		89461C192C73E813001B0D95 /* KeychainStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorage.swift; sourceTree = "<group>"; };
+		89461C1F2C73EB75001B0D95 /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
+		89461C212C74C65D001B0D95 /* Account Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Account Settings.swift"; sourceTree = "<group>"; };
 		897A23002C6BD43500DEA96A /* Activity Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Activity Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		897A23032C6BD43500DEA96A /* Activity_TrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity_TrackerApp.swift; sourceTree = "<group>"; };
+		897A23032C6BD43500DEA96A /* ActivityTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTrackerApp.swift; sourceTree = "<group>"; };
 		897A23092C6BD43600DEA96A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		897A230C2C6BD43600DEA96A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		897A230E2C6BD43600DEA96A /* Activity_Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Activity_Tracker.entitlements; sourceTree = "<group>"; };
-		897A23132C6BD43700DEA96A /* Activity TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Activity TrackerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		897A231D2C6BD43700DEA96A /* Activity TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Activity TrackerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		89DF69BD2C6D409D00AAFCA5 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		89DF69C12C6D422E00AAFCA5 /* GeneralSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		89461BC32C6E1D65001B0D95 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89461BF42C714681001B0D95 /* OpenAPIURLSession in Frameworks */,
+				89461BF12C7145EF001B0D95 /* OpenAPIRuntime in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		897A22FD2C6BD43500DEA96A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		897A23102C6BD43700DEA96A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		897A231A2C6BD43700DEA96A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				89461BDB2C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework in Frameworks */,
+				89461C132C73A5EE001B0D95 /* BetterSafariView in Frameworks */,
+				89461C1D2C73E847001B0D95 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,14 +115,63 @@
 			isa = PBXGroup;
 			children = (
 				89313C832C6BD6F500426B8C /* User.swift */,
+				89461C1F2C73EB75001B0D95 /* AuthToken.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		89461BBE2C6D65C8001B0D95 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				89461BBF2C6D65DA001B0D95 /* BlurredBackground.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		89461BC72C6E1D65001B0D95 /* ActivityTrackerAPIClient */ = {
+			isa = PBXGroup;
+			children = (
+				89461BEA2C6F5778001B0D95 /* openapi.json */,
+				89461BC82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h */,
+				89461BEC2C714540001B0D95 /* openapi-generator-config.yaml */,
+				89461BFD2C714AD0001B0D95 /* ActivityTrackerClient.swift */,
+				89461C0A2C7296F8001B0D95 /* AuthMiddleware.swift */,
+			);
+			path = ActivityTrackerAPIClient;
+			sourceTree = "<group>";
+		};
+		89461BE42C6E9D19001B0D95 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				89461BE52C6E9D49001B0D95 /* DevelopmentSettings.xcconfig */,
+				89461BE62C6E9D79001B0D95 /* ProductionSettings.xcconfig */,
+				89461BE82C6E9FBA001B0D95 /* Config.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		89461C142C73C564001B0D95 /* GeneralSettings */ = {
+			isa = PBXGroup;
+			children = (
+				89461C162C73C574001B0D95 /* LoginButton.swift */,
+			);
+			path = GeneralSettings;
+			sourceTree = "<group>";
+		};
+		89461C182C73E804001B0D95 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				89461C192C73E813001B0D95 /* KeychainStorage.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		897A22F72C6BD43400DEA96A = {
 			isa = PBXGroup;
 			children = (
+				89461BFA2C714972001B0D95 /* .swiftlint.yml */,
 				897A23022C6BD43500DEA96A /* Activity Tracker */,
+				89461BC72C6E1D65001B0D95 /* ActivityTrackerAPIClient */,
 				897A23012C6BD43500DEA96A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,8 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				897A23002C6BD43500DEA96A /* Activity Tracker.app */,
-				897A23132C6BD43700DEA96A /* Activity TrackerTests.xctest */,
-				897A231D2C6BD43700DEA96A /* Activity TrackerUITests.xctest */,
+				89461BC62C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -97,12 +188,13 @@
 		897A23022C6BD43500DEA96A /* Activity Tracker */ = {
 			isa = PBXGroup;
 			children = (
-				89313C822C6BD6D100426B8C /* Models */,
-				897A23032C6BD43500DEA96A /* Activity_TrackerApp.swift */,
+				89461C0E2C739530001B0D95 /* Activity TrackerDebug.entitlements */,
+				89461BE72C6E9F2D001B0D95 /* Activity-Tracker-Info.plist */,
+				89461BE42C6E9D19001B0D95 /* Config */,
+				89AAD5DB2C6D5905003F285B /* App */,
 				897A23092C6BD43600DEA96A /* Assets.xcassets */,
 				897A230E2C6BD43600DEA96A /* Activity_Tracker.entitlements */,
 				897A230B2C6BD43600DEA96A /* Preview Content */,
-				89313C852C6BD82F00426B8C /* AppMenu.swift */,
 			);
 			path = "Activity Tracker";
 			sourceTree = "<group>";
@@ -115,9 +207,84 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		89AAD5DB2C6D5905003F285B /* App */ = {
+			isa = PBXGroup;
+			children = (
+				89461C182C73E804001B0D95 /* Utilities */,
+				89DF69BF2C6D41B400AAFCA5 /* Views */,
+				89313C822C6BD6D100426B8C /* Models */,
+				897A23032C6BD43500DEA96A /* ActivityTrackerApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		89AAD5DC2C6D591E003F285B /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				89313C852C6BD82F00426B8C /* AppMenu.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		89DF69BF2C6D41B400AAFCA5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				89461BBE2C6D65C8001B0D95 /* Utilities */,
+				89AAD5DC2C6D591E003F285B /* Menu */,
+				89DF69C02C6D41BF00AAFCA5 /* Settings */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		89DF69C02C6D41BF00AAFCA5 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				89461C142C73C564001B0D95 /* GeneralSettings */,
+				89DF69BD2C6D409D00AAFCA5 /* Settings.swift */,
+				89461C212C74C65D001B0D95 /* Account Settings.swift */,
+				89DF69C12C6D422E00AAFCA5 /* GeneralSettings.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		89461BC12C6E1D65001B0D95 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89461BD82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		89461BC52C6E1D65001B0D95 /* ActivityTrackerAPIClient */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 89461BDD2C6E1D65001B0D95 /* Build configuration list for PBXNativeTarget "ActivityTrackerAPIClient" */;
+			buildPhases = (
+				89461BC12C6E1D65001B0D95 /* Headers */,
+				89461BC22C6E1D65001B0D95 /* Sources */,
+				89461BC32C6E1D65001B0D95 /* Frameworks */,
+				89461BC42C6E1D65001B0D95 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				89461BF62C7146B1001B0D95 /* PBXTargetDependency */,
+				89461BF82C7146B1001B0D95 /* PBXTargetDependency */,
+			);
+			name = ActivityTrackerAPIClient;
+			packageProductDependencies = (
+				89461BF02C7145EF001B0D95 /* OpenAPIRuntime */,
+				89461BF32C714681001B0D95 /* OpenAPIURLSession */,
+			);
+			productName = ActivityTrackerAPIClient;
+			productReference = 89461BC62C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		897A22FF2C6BD43500DEA96A /* Activity Tracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 897A23272C6BD43700DEA96A /* Build configuration list for PBXNativeTarget "Activity Tracker" */;
@@ -125,52 +292,22 @@
 				897A22FC2C6BD43500DEA96A /* Sources */,
 				897A22FD2C6BD43500DEA96A /* Frameworks */,
 				897A22FE2C6BD43500DEA96A /* Resources */,
+				89461BE02C6E1D65001B0D95 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				899AF1B22C6CBD6500DB22C6 /* PBXTargetDependency */,
+				89461BDA2C6E1D65001B0D95 /* PBXTargetDependency */,
 			);
 			name = "Activity Tracker";
+			packageProductDependencies = (
+				89461C122C73A5EE001B0D95 /* BetterSafariView */,
+				89461C1C2C73E847001B0D95 /* KeychainAccess */,
+			);
 			productName = "Activity Tracker";
 			productReference = 897A23002C6BD43500DEA96A /* Activity Tracker.app */;
 			productType = "com.apple.product-type.application";
-		};
-		897A23122C6BD43700DEA96A /* Activity TrackerTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 897A232A2C6BD43700DEA96A /* Build configuration list for PBXNativeTarget "Activity TrackerTests" */;
-			buildPhases = (
-				897A230F2C6BD43700DEA96A /* Sources */,
-				897A23102C6BD43700DEA96A /* Frameworks */,
-				897A23112C6BD43700DEA96A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				897A23152C6BD43700DEA96A /* PBXTargetDependency */,
-			);
-			name = "Activity TrackerTests";
-			productName = "Activity TrackerTests";
-			productReference = 897A23132C6BD43700DEA96A /* Activity TrackerTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		897A231C2C6BD43700DEA96A /* Activity TrackerUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 897A232D2C6BD43700DEA96A /* Build configuration list for PBXNativeTarget "Activity TrackerUITests" */;
-			buildPhases = (
-				897A23192C6BD43700DEA96A /* Sources */,
-				897A231A2C6BD43700DEA96A /* Frameworks */,
-				897A231B2C6BD43700DEA96A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				897A231F2C6BD43700DEA96A /* PBXTargetDependency */,
-			);
-			name = "Activity TrackerUITests";
-			productName = "Activity TrackerUITests";
-			productReference = 897A231D2C6BD43700DEA96A /* Activity TrackerUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -182,16 +319,11 @@
 				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
+					89461BC52C6E1D65001B0D95 = {
+						CreatedOnToolsVersion = 15.4;
+					};
 					897A22FF2C6BD43500DEA96A = {
 						CreatedOnToolsVersion = 15.4;
-					};
-					897A23122C6BD43700DEA96A = {
-						CreatedOnToolsVersion = 15.4;
-						TestTargetID = 897A22FF2C6BD43500DEA96A;
-					};
-					897A231C2C6BD43700DEA96A = {
-						CreatedOnToolsVersion = 15.4;
-						TestTargetID = 897A22FF2C6BD43500DEA96A;
 					};
 				};
 			};
@@ -206,81 +338,88 @@
 			mainGroup = 897A22F72C6BD43400DEA96A;
 			packageReferences = (
 				899AF1B02C6CB66B00DB22C6 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+				89461BEE2C7145BD001B0D95 /* XCRemoteSwiftPackageReference "swift-openapi-generator" */,
+				89461BEF2C7145EF001B0D95 /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */,
+				89461BF22C714681001B0D95 /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */,
+				89461C112C73A5EE001B0D95 /* XCRemoteSwiftPackageReference "BetterSafariView" */,
+				89461C1B2C73E847001B0D95 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			productRefGroup = 897A23012C6BD43500DEA96A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				897A22FF2C6BD43500DEA96A /* Activity Tracker */,
-				897A23122C6BD43700DEA96A /* Activity TrackerTests */,
-				897A231C2C6BD43700DEA96A /* Activity TrackerUITests */,
+				89461BC52C6E1D65001B0D95 /* ActivityTrackerAPIClient */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		89461BC42C6E1D65001B0D95 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89461BFC2C714972001B0D95 /* .swiftlint.yml in Resources */,
+				89461BEB2C6F5778001B0D95 /* openapi.json in Resources */,
+				89461BED2C714540001B0D95 /* openapi-generator-config.yaml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		897A22FE2C6BD43500DEA96A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89461BFB2C714972001B0D95 /* .swiftlint.yml in Resources */,
 				897A230D2C6BD43600DEA96A /* Preview Assets.xcassets in Resources */,
 				897A230A2C6BD43600DEA96A /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		897A23112C6BD43700DEA96A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		897A231B2C6BD43700DEA96A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		89461BC22C6E1D65001B0D95 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				89461BFE2C714AD0001B0D95 /* ActivityTrackerClient.swift in Sources */,
+				89461C0B2C7296F8001B0D95 /* AuthMiddleware.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		897A22FC2C6BD43500DEA96A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89461BC02C6D65DA001B0D95 /* BlurredBackground.swift in Sources */,
+				89461C172C73C574001B0D95 /* LoginButton.swift in Sources */,
 				89313C862C6BD82F00426B8C /* AppMenu.swift in Sources */,
+				89461C202C73EB75001B0D95 /* AuthToken.swift in Sources */,
 				89313C842C6BD6F500426B8C /* User.swift in Sources */,
-				897A23042C6BD43500DEA96A /* Activity_TrackerApp.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		897A230F2C6BD43700DEA96A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		897A23192C6BD43700DEA96A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				89461BE92C6E9FBA001B0D95 /* Config.swift in Sources */,
+				89461C222C74C65D001B0D95 /* Account Settings.swift in Sources */,
+				89DF69BE2C6D409D00AAFCA5 /* Settings.swift in Sources */,
+				897A23042C6BD43500DEA96A /* ActivityTrackerApp.swift in Sources */,
+				89DF69C22C6D422E00AAFCA5 /* GeneralSettings.swift in Sources */,
+				89461C1A2C73E813001B0D95 /* KeychainStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		897A23152C6BD43700DEA96A /* PBXTargetDependency */ = {
+		89461BDA2C6E1D65001B0D95 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 897A22FF2C6BD43500DEA96A /* Activity Tracker */;
-			targetProxy = 897A23142C6BD43700DEA96A /* PBXContainerItemProxy */;
+			target = 89461BC52C6E1D65001B0D95 /* ActivityTrackerAPIClient */;
+			targetProxy = 89461BD92C6E1D65001B0D95 /* PBXContainerItemProxy */;
 		};
-		897A231F2C6BD43700DEA96A /* PBXTargetDependency */ = {
+		89461BF62C7146B1001B0D95 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 897A22FF2C6BD43500DEA96A /* Activity Tracker */;
-			targetProxy = 897A231E2C6BD43700DEA96A /* PBXContainerItemProxy */;
+			productRef = 89461BF52C7146B1001B0D95 /* SwiftLintBuildToolPlugin */;
+		};
+		89461BF82C7146B1001B0D95 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 89461BF72C7146B1001B0D95 /* OpenAPIGenerator */;
 		};
 		899AF1B22C6CBD6500DB22C6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -289,6 +428,76 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		89461BDE2C6E1D65001B0D95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = SZR99J9ZFT;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.samtgarson.ActivityTrackerAPIClient;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		89461BDF2C6E1D65001B0D95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = SZR99J9ZFT;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = com.samtgarson.ActivityTrackerAPIClient;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		897A23252C6BD43700DEA96A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -409,10 +618,12 @@
 		};
 		897A23282C6BD43700DEA96A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 89461BE52C6E9D49001B0D95 /* DevelopmentSettings.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Activity Tracker/Activity_Tracker.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Activity Tracker/Activity TrackerDebug.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -421,14 +632,16 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Activity-Tracker-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.samtgarson.Activity-Tracker";
+				PRODUCT_BUNDLE_IDENTIFIER = com.samtgarson.ActivityTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -437,7 +650,9 @@
 		};
 		897A23292C6BD43700DEA96A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 89461BE62C6E9D79001B0D95 /* ProductionSettings.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Activity Tracker/Activity_Tracker.entitlements";
@@ -449,12 +664,14 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Activity-Tracker-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.samtgarson.Activity-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -463,81 +680,18 @@
 			};
 			name = Release;
 		};
-		897A232B2C6BD43700DEA96A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SZR99J9ZFT;
-				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.samtgarson.Activity-TrackerTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Activity Tracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Activity Tracker";
-			};
-			name = Debug;
-		};
-		897A232C2C6BD43700DEA96A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SZR99J9ZFT;
-				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.samtgarson.Activity-TrackerTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Activity Tracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Activity Tracker";
-			};
-			name = Release;
-		};
-		897A232E2C6BD43700DEA96A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SZR99J9ZFT;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.samtgarson.Activity-TrackerUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = "Activity Tracker";
-			};
-			name = Debug;
-		};
-		897A232F2C6BD43700DEA96A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SZR99J9ZFT;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.samtgarson.Activity-TrackerUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = "Activity Tracker";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		89461BDD2C6E1D65001B0D95 /* Build configuration list for PBXNativeTarget "ActivityTrackerAPIClient" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89461BDE2C6E1D65001B0D95 /* Debug */,
+				89461BDF2C6E1D65001B0D95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		897A22FB2C6BD43500DEA96A /* Build configuration list for PBXProject "Activity Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -556,27 +710,49 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		897A232A2C6BD43700DEA96A /* Build configuration list for PBXNativeTarget "Activity TrackerTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				897A232B2C6BD43700DEA96A /* Debug */,
-				897A232C2C6BD43700DEA96A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		897A232D2C6BD43700DEA96A /* Build configuration list for PBXNativeTarget "Activity TrackerUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				897A232E2C6BD43700DEA96A /* Debug */,
-				897A232F2C6BD43700DEA96A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		89461BEE2C7145BD001B0D95 /* XCRemoteSwiftPackageReference "swift-openapi-generator" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-openapi-generator";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
+		89461BEF2C7145EF001B0D95 /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-openapi-runtime";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.0;
+			};
+		};
+		89461BF22C714681001B0D95 /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-openapi-urlsession";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
+		89461C112C73A5EE001B0D95 /* XCRemoteSwiftPackageReference "BetterSafariView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stleamist/BetterSafariView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.2;
+			};
+		};
+		89461C1B2C73E847001B0D95 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		899AF1B02C6CB66B00DB22C6 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
@@ -588,6 +764,36 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		89461BF02C7145EF001B0D95 /* OpenAPIRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89461BEF2C7145EF001B0D95 /* XCRemoteSwiftPackageReference "swift-openapi-runtime" */;
+			productName = OpenAPIRuntime;
+		};
+		89461BF32C714681001B0D95 /* OpenAPIURLSession */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89461BF22C714681001B0D95 /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */;
+			productName = OpenAPIURLSession;
+		};
+		89461BF52C7146B1001B0D95 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 899AF1B02C6CB66B00DB22C6 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		89461BF72C7146B1001B0D95 /* OpenAPIGenerator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89461BEE2C7145BD001B0D95 /* XCRemoteSwiftPackageReference "swift-openapi-generator" */;
+			productName = "plugin:OpenAPIGenerator";
+		};
+		89461C122C73A5EE001B0D95 /* BetterSafariView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89461C112C73A5EE001B0D95 /* XCRemoteSwiftPackageReference "BetterSafariView" */;
+			productName = BetterSafariView;
+		};
+		89461C1C2C73E847001B0D95 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89461C1B2C73E847001B0D95 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
 		899AF1B12C6CBD6500DB22C6 /* SwiftLintBuildToolPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 899AF1B02C6CB66B00DB22C6 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;

@@ -2,7 +2,7 @@
 //  BlurredBackground.swift
 //  Activity Tracker
 //
-//  Created by Samuel Garson on 14/08/2024.
+//  Created by Sam Garson on 14/08/2024.
 //
 
 import Foundation

@@ -2,10 +2,11 @@
 //  AppMenu.swift
 //  Activity Tracker
 //
-//  Created by Samuel Garson on 13/08/2024.
+//  Created by Sam Garson on 13/08/2024.
 //
 
 import SwiftUI
+import ActivityTrackerAPIClient
 
 struct AppMenu: View {
     var body: some View {

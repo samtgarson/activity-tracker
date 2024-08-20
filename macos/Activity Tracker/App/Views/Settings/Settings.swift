@@ -13,9 +13,9 @@ struct SettingsView: View {
     var body: some View {
         TabView {
             ForEach(tabs, id: \.title) { tab in
-                tab.view.tabItem {
-                    Label(tab.title, systemImage: tab.icon)
-                }
+                tab.view
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .tabItem { Label(tab.title, systemImage: tab.icon) }
             }
         }
         .background(BlurredBackground().ignoresSafeArea())
@@ -48,14 +48,13 @@ enum SettingsTab: Equatable, Hashable {
         }
     }
 
+    @ViewBuilder
     var view: some View {
         switch self {
         case .general:
-            return Text("General Tab")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            GeneralSettings()
         case .account:
-            return Text("Account Tab")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            AccountSettings()
         }
     }
 }
