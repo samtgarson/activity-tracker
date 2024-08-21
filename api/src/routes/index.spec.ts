@@ -1,7 +1,6 @@
 import { buildAccount } from "spec/factories/account-factory"
 import { buildUser } from "spec/factories/user-factory"
 import { mockContext } from "spec/util"
-import { serializeAccount } from "src/serializers/account-serializer"
 import { serializeUser } from "src/serializers/user-serializer"
 import { AuthDecodeToken } from "src/services/auth/decode-token"
 import { RefreshProviderToken } from "src/services/auth/refresh-provider-token"
@@ -130,12 +129,7 @@ describe("GET /me", () => {
 
         expect(response.status).toBe(200)
         expect(await response.json()).toEqual(
-          JSON.parse(
-            JSON.stringify({
-              ...serializeUser(user),
-              accounts: accounts.map(serializeAccount),
-            }),
-          ),
+          JSON.parse(JSON.stringify(serializeUser(user, accounts))),
         )
       })
     })

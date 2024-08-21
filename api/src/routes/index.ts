@@ -1,5 +1,4 @@
 import { swaggerUI } from "@hono/swagger-ui"
-import { serializeAccount } from "src/serializers/account-serializer"
 import { serializeUser } from "src/serializers/user-serializer"
 import { AuthRouter } from "./auth"
 import { CalendarsRouter } from "./calendars"
@@ -31,10 +30,7 @@ app.use("/*", authenticate)
 
 app.openapi(meRoute, async function (c) {
   const { user, accounts } = c.var.ctx
-  return c.json({
-    ...serializeUser(user),
-    accounts: accounts.map(serializeAccount),
-  })
+  return c.json(serializeUser(user, accounts))
 })
 
 app.route("/", CalendarsRouter)

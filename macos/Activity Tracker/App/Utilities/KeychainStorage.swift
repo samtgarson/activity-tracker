@@ -25,8 +25,11 @@ class KeychainStorage {
         return try? client.get(field.rawValue)
     }
 
-
     func set(_ field: KeychainField, value: String) {
         try? client.set(value, key: field.rawValue)
+    }
+
+    func clearAll() {
+        try? client.removeAll()
     }
 }

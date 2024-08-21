@@ -10,13 +10,23 @@ import BetterSafariView
 import ActivityTrackerAPIClient
 
 struct LoginButton: View {
+    @EnvironmentObject var appState: AppState
     @State private var startingWebAuthSession = false
-    let onSuccess: (_ token: AuthToken) -> Void
-    let onError: (_ error: String) -> Void
+    @State private var loading = false
+    @State private var error: String?
 
     var body: some View {
-        Button(action: startSession) {
-            Text("Log In")
+        VStack(spacing: 10) {
+            Button(action: startSession) {
+                if loading {
+                    Text("Loading...")
+                } else {
+                    Text("Log In")
+                }
+            }
+            if let error = error {
+                Text(error)
+            }
         }.webAuthenticationSession(isPresented: $startingWebAuthSession) {
             WebAuthenticationSession(
                 url: url(for: .google),
@@ -43,9 +53,10 @@ struct LoginButton: View {
 
     private func handleCallback(callbackURL: URL?, error: (any Error)?) {
         if let error = error {
-            onError(error.localizedDescription)
+            self.error = error.localizedDescription
         } else if let url = callbackURL, let token = parseCallbackUrl(url.absoluteString) {
-            onSuccess(token)
+            loading = true
+            Task { await appState.login(token: token) }
         } else {
             debugPrint("Neither callbackUrl or error")
         }
@@ -70,5 +81,5 @@ struct LoginButton: View {
 }
 
 #Preview {
-    LoginButton(onSuccess: { token in debugPrint(token) }, onError: { error in debugPrint("Error!", error) })
+    LoginButton().environmentObject(AppState())
 }

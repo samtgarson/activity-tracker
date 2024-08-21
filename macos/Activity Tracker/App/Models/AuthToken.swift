@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import JWTDecode
+import ActivityTrackerAPIClient
 
 class AuthToken {
     var access: String
@@ -24,7 +26,13 @@ class AuthToken {
         let expiry = KeychainStorage.instance.get(.refreshTokenExpiry)
         guard let access = access, let refresh = refresh, let expiry = expiry else { return nil }
 
-        return AuthToken(access: access, refresh: refresh, expiry: expiry)
+        let token = AuthToken(access: access, refresh: refresh, expiry: expiry)
+
+        return token
+    }
+
+    var apiClient: ActivityTrackerClient {
+        return ActivityTrackerClient(apiUrl: Config.apiUrl, token: access)
     }
 
     func save() {
@@ -35,10 +43,12 @@ class AuthToken {
         }
     }
 
-    private func parseDate(_ dateStr: String?) -> Date? {
-        guard let dateStr = dateStr else { return nil }
-        let dateFormatter = ISO8601DateFormatter()
-        dateFormatter.formatOptions.insert(.withFractionalSeconds)
-        return dateFormatter.date(from: dateStr)
+    func clear () {
+        KeychainStorage.instance.clearAll()
+    }
+
+    var accessTokenExpired: Bool {
+        guard let jwt = try? decode(jwt: access) else { return false }
+        return jwt.expired
     }
 }

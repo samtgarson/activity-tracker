@@ -10,10 +10,8 @@ import SwiftData
 
 @main
 struct ActivityTrackerApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            User.self
-        ])
+    let sharedModelContainer: ModelContainer = {
+        let schema = Schema([])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
@@ -23,6 +21,8 @@ struct ActivityTrackerApp: App {
         }
     }()
 
+    @StateObject var appState = AppState()
+
     var body: some Scene {
         MenuBarExtra("ActivityTracker", systemImage: "hammer") {
             AppMenu()
@@ -30,7 +30,7 @@ struct ActivityTrackerApp: App {
         .modelContainer(sharedModelContainer)
 
         Settings {
-            SettingsView()
+            SettingsView().environmentObject(appState)
         }
     }
 }

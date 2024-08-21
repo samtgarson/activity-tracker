@@ -1,5 +1,5 @@
 {
-  "originHash" : "e450acf6dd334b56fa2837b1b4aadffc56d2198d63897fec26995b9b25e53a93",
+  "originHash" : "fd4da87c8a12a051ca163b298fdae062082f999eb822d276df580c70b528448a",
   "pins" : [
     {
       "identity" : "bettersafariview",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "884533749e55949b2566030948c6fdbe2873ed0c",
         "version" : "2.4.2"
+      }
+    },
+    {
+      "identity" : "jwtdecode.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/auth0/JWTDecode.swift",
+      "state" : {
+        "revision" : "58af7278797871e460d79496621b3e5366b865b2",
+        "version" : "3.1.0"
       }
     },
     {

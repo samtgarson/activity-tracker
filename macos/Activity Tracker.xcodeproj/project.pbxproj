@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		89313C842C6BD6F500426B8C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89313C832C6BD6F500426B8C /* User.swift */; };
+		89313C842C6BD6F500426B8C /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89313C832C6BD6F500426B8C /* CurrentUser.swift */; };
 		89313C862C6BD82F00426B8C /* AppMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89313C852C6BD82F00426B8C /* AppMenu.swift */; };
 		89461BC02C6D65DA001B0D95 /* BlurredBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461BBF2C6D65DA001B0D95 /* BlurredBackground.swift */; };
 		89461BD82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 89461BC82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -28,6 +28,10 @@
 		89461C1D2C73E847001B0D95 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 89461C1C2C73E847001B0D95 /* KeychainAccess */; };
 		89461C202C73EB75001B0D95 /* AuthToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461C1F2C73EB75001B0D95 /* AuthToken.swift */; };
 		89461C222C74C65D001B0D95 /* Account Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461C212C74C65D001B0D95 /* Account Settings.swift */; };
+		89461C252C74DB3A001B0D95 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461C242C74DB3A001B0D95 /* AppState.swift */; };
+		89461C302C753C49001B0D95 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = 89461C2F2C753C49001B0D95 /* JWTDecode */; };
+		89461C352C767F2C001B0D95 /* PreviewAppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461C342C767F2C001B0D95 /* PreviewAppState.swift */; };
+		89461C382C767FF8001B0D95 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461C372C767FF8001B0D95 /* Date.swift */; };
 		897A23042C6BD43500DEA96A /* ActivityTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897A23032C6BD43500DEA96A /* ActivityTrackerApp.swift */; };
 		897A230A2C6BD43600DEA96A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 897A23092C6BD43600DEA96A /* Assets.xcassets */; };
 		897A230D2C6BD43600DEA96A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 897A230C2C6BD43600DEA96A /* Preview Assets.xcassets */; };
@@ -60,7 +64,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		89313C832C6BD6F500426B8C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		89313C832C6BD6F500426B8C /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 		89313C852C6BD82F00426B8C /* AppMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMenu.swift; sourceTree = "<group>"; };
 		89461BBF2C6D65DA001B0D95 /* BlurredBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredBackground.swift; sourceTree = "<group>"; };
 		89461BC62C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ActivityTrackerAPIClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +83,9 @@
 		89461C192C73E813001B0D95 /* KeychainStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorage.swift; sourceTree = "<group>"; };
 		89461C1F2C73EB75001B0D95 /* AuthToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthToken.swift; sourceTree = "<group>"; };
 		89461C212C74C65D001B0D95 /* Account Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Account Settings.swift"; sourceTree = "<group>"; };
+		89461C242C74DB3A001B0D95 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		89461C342C767F2C001B0D95 /* PreviewAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAppState.swift; sourceTree = "<group>"; };
+		89461C372C767FF8001B0D95 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		897A23002C6BD43500DEA96A /* Activity Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Activity Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		897A23032C6BD43500DEA96A /* ActivityTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTrackerApp.swift; sourceTree = "<group>"; };
 		897A23092C6BD43600DEA96A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -104,6 +111,7 @@
 			files = (
 				89461BDB2C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework in Frameworks */,
 				89461C132C73A5EE001B0D95 /* BetterSafariView in Frameworks */,
+				89461C302C753C49001B0D95 /* JWTDecode in Frameworks */,
 				89461C1D2C73E847001B0D95 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -114,8 +122,9 @@
 		89313C822C6BD6D100426B8C /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				89313C832C6BD6F500426B8C /* User.swift */,
+				89313C832C6BD6F500426B8C /* CurrentUser.swift */,
 				89461C1F2C73EB75001B0D95 /* AuthToken.swift */,
+				89461C242C74DB3A001B0D95 /* AppState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -162,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				89461C192C73E813001B0D95 /* KeychainStorage.swift */,
+				89461C372C767FF8001B0D95 /* Date.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -203,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				897A230C2C6BD43600DEA96A /* Preview Assets.xcassets */,
+				89461C342C767F2C001B0D95 /* PreviewAppState.swift */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -304,6 +315,7 @@
 			packageProductDependencies = (
 				89461C122C73A5EE001B0D95 /* BetterSafariView */,
 				89461C1C2C73E847001B0D95 /* KeychainAccess */,
+				89461C2F2C753C49001B0D95 /* JWTDecode */,
 			);
 			productName = "Activity Tracker";
 			productReference = 897A23002C6BD43500DEA96A /* Activity Tracker.app */;
@@ -343,6 +355,7 @@
 				89461BF22C714681001B0D95 /* XCRemoteSwiftPackageReference "swift-openapi-urlsession" */,
 				89461C112C73A5EE001B0D95 /* XCRemoteSwiftPackageReference "BetterSafariView" */,
 				89461C1B2C73E847001B0D95 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				89461C2E2C753C49001B0D95 /* XCRemoteSwiftPackageReference "JWTDecode" */,
 			);
 			productRefGroup = 897A23012C6BD43500DEA96A /* Products */;
 			projectDirPath = "";
@@ -394,12 +407,15 @@
 				89461BC02C6D65DA001B0D95 /* BlurredBackground.swift in Sources */,
 				89461C172C73C574001B0D95 /* LoginButton.swift in Sources */,
 				89313C862C6BD82F00426B8C /* AppMenu.swift in Sources */,
+				89461C252C74DB3A001B0D95 /* AppState.swift in Sources */,
 				89461C202C73EB75001B0D95 /* AuthToken.swift in Sources */,
-				89313C842C6BD6F500426B8C /* User.swift in Sources */,
+				89313C842C6BD6F500426B8C /* CurrentUser.swift in Sources */,
 				89461BE92C6E9FBA001B0D95 /* Config.swift in Sources */,
 				89461C222C74C65D001B0D95 /* Account Settings.swift in Sources */,
 				89DF69BE2C6D409D00AAFCA5 /* Settings.swift in Sources */,
+				89461C382C767FF8001B0D95 /* Date.swift in Sources */,
 				897A23042C6BD43500DEA96A /* ActivityTrackerApp.swift in Sources */,
+				89461C352C767F2C001B0D95 /* PreviewAppState.swift in Sources */,
 				89DF69C22C6D422E00AAFCA5 /* GeneralSettings.swift in Sources */,
 				89461C1A2C73E813001B0D95 /* KeychainStorage.swift in Sources */,
 			);
@@ -753,6 +769,14 @@
 				kind = branch;
 			};
 		};
+		89461C2E2C753C49001B0D95 /* XCRemoteSwiftPackageReference "JWTDecode" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/auth0/JWTDecode.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.0;
+			};
+		};
 		899AF1B02C6CB66B00DB22C6 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
@@ -793,6 +817,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 89461C1B2C73E847001B0D95 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		89461C2F2C753C49001B0D95 /* JWTDecode */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89461C2E2C753C49001B0D95 /* XCRemoteSwiftPackageReference "JWTDecode" */;
+			productName = JWTDecode;
 		};
 		899AF1B12C6CBD6500DB22C6 /* SwiftLintBuildToolPlugin */ = {
 			isa = XCSwiftPackageProductDependency;

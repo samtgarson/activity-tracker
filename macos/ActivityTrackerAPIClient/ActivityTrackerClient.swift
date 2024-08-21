@@ -39,13 +39,8 @@ extension ActivityTrackerClient {
     /// - Throws: An error if the network request fails or if the response is unexpected.
     public func ping() async throws -> Bool {
         let response = try await self.client.ping()
-        switch response {
-        case .ok(let okResponse):
-            return try okResponse.body.json.beep.rawValue == "boop"
-        case .undocumented(statusCode: let statusCode, _):
-            debugPrint(statusCode)
-            return false
-        }
+        let beep = try? response.ok.body.json.beep.rawValue
+        return beep == "boop"
     }
 
     /// Retrieves information about the currently authenticated user.
@@ -59,4 +54,12 @@ extension ActivityTrackerClient {
 }
 
 extension ActivityTrackerClient {
+    /// Uses a refresh token to fetch a new access token
+    ///
+    /// - Returns: The access token as a String
+    /// - Throws: An error if the network request fails or if the response cannot be parsed.
+    public func getAccessToken(with token: String) async throws -> String? {
+        let response = try await self.client.refreshAccessToken(.init(body: .json(.init(refreshToken: token))))
+        return try response.created.body.json.accessToken
+    }
 }

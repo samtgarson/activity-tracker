@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-    private var tabs: [SettingsTab] = [.general, .account]
+    private let tabs: [SettingsTab] = [.general, .account]
 
     var body: some View {
         TabView {
@@ -24,6 +24,8 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
+        .frame(width: 500, height: 500)
+
 }
 
 enum SettingsTab: Equatable, Hashable {
