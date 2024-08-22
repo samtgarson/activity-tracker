@@ -12,6 +12,7 @@ import OpenAPIURLSession
 public class ActivityTrackerClient {
     public typealias User = Components.Schemas.User
     public typealias Provider = Components.Schemas.Provider
+    public typealias Account = Components.Schemas.Account
 
     /// The underlying HTTP client used for making API requests.
     private var client: Client

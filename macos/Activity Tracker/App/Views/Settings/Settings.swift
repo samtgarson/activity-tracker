@@ -8,29 +8,71 @@
 import SwiftUI
 
 struct SettingsView: View {
-    private let tabs: [SettingsTab] = [.general, .account]
+    @EnvironmentObject var appState: AppState
+    private let topTabs: [SettingsTab] = [.general, .calendars]
+    private let bottomTabs: [SettingsTab] = [.account]
+    @State var selectedTab: SettingsTab = .general
 
     var body: some View {
-        TabView {
-            ForEach(tabs, id: \.title) { tab in
-                tab.view
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .tabItem { Label(tab.title, systemImage: tab.icon) }
-            }
+        NavigationSplitView {
+            List(topTabs, selection: $selectedTab) { tabItem($0) }
+                .frame(maxHeight: .infinity)
+                .disabled(topTabsDisabled)
+                .opacity(topTabsDisabled ? 0.5 : 1)
+            Spacer()
+            List(bottomTabs, selection: $selectedTab) { tabItem($0) }
+                .frame(height: 40)
+                .scrollDisabled(true)
+        } detail: {
+            selectedTab.view
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .background(BlurredBackground().ignoresSafeArea())
+//        .background(BlurredBackground().ignoresSafeArea())
+        .toolbar {
+            Text("")
+        }
+        .task {
+            let window = NSApplication.shared.windows.first(where: \.canBecomeMain)
+            window?.toolbarStyle = .unified
+            window?.toolbar?.displayMode = .iconOnly
+        }
+        .navigationTitle("Settings")
+        .onAppear { if topTabsDisabled { selectedTab = .account } }
+    }
+
+    private var topTabsDisabled: Bool {
+        return !appState.authenticated
+    }
+
+    private func tabItem(_ tab: SettingsTab) -> some View {
+        return HStack {
+            ZStack {
+                RoundedRectangle(cornerRadius: 5)
+                    .frame(width: 23, height: 23)
+                    .shadow(radius: 0.5)
+                    .foregroundColor(tab.color)
+                Image(systemName: tab.icon)
+                    .foregroundColor(.white)
+                    .shadow(radius: 4)
+            }
+            Text(tab.title)
+        }
     }
 }
 
 #Preview {
     SettingsView()
-        .frame(width: 500, height: 500)
+        .frame(width: 700, height: 500)
+        .environmentObject(PreviewAppState.authed())
 
 }
 
-enum SettingsTab: Equatable, Hashable {
+enum SettingsTab: Equatable, Hashable, Identifiable {
+    var id: Self { return self }
+
     case general
     case account
+    case calendars
 
     var title: String {
         switch self {
@@ -38,6 +80,8 @@ enum SettingsTab: Equatable, Hashable {
             return "General"
         case .account:
             return "Account"
+        case .calendars:
+            return "Calendars"
         }
     }
 
@@ -47,6 +91,19 @@ enum SettingsTab: Equatable, Hashable {
             return "gearshape"
         case .account:
             return "person.crop.circle"
+        case .calendars:
+            return "calendar"
+        }
+    }
+
+    var color: Color {
+        switch self {
+        case .general:
+            return .gray
+        case .account:
+            return .pink
+        case .calendars:
+            return .teal
         }
     }
 
@@ -57,6 +114,8 @@ enum SettingsTab: Equatable, Hashable {
             GeneralSettings()
         case .account:
             AccountSettings()
+        case .calendars:
+            CalendarSettings()
         }
     }
 }

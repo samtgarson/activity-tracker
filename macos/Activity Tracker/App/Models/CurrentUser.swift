@@ -17,6 +17,7 @@ struct CurrentUser: Codable {
     var familyName: String
     var displayName: String
     var picture: String?
+    var accounts: [Account]
 
     static func from(data: ActivityTrackerClient.User) -> CurrentUser {
         return CurrentUser(
@@ -25,29 +26,24 @@ struct CurrentUser: Codable {
             givenName: data.givenName,
             familyName: data.familyName,
             displayName: data.displayName,
-            picture: data.picture
+            picture: data.picture,
+            accounts: data.accounts.map { Account.from(data: $0) }
         )
     }
 
-    static func loadStored() -> CurrentUser? {
-        let savedUser = UserDefaults.standard.object(forKey: storageKey) as? Data
-        guard let savedUser = savedUser else { return nil }
+    struct Account: Codable {
+        var id: String
+        var provider: ActivityTrackerClient.Provider
+        var calendarId: String?
+        var active: Bool
 
-        let decoder = JSONDecoder()
-        let loadedUser = try? decoder.decode(CurrentUser.self, from: savedUser)
-        guard let loadedUser = loadedUser else { return nil }
-
-        return loadedUser
-    }
-
-    static func clearStored() {
-        UserDefaults.standard.removeObject(forKey: storageKey)
-    }
-
-    func save() {
-        let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(self) {
-            UserDefaults.standard.setValue(encoded, forKey: storageKey)
+        static func from(data: ActivityTrackerClient.Account) -> Account {
+            return Account(
+                id: data.id,
+                provider: data.provider,
+                calendarId: data.calendarId,
+                active: data.active
+            )
         }
     }
 }

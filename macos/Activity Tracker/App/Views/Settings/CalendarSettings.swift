@@ -8,12 +8,10 @@
 import SwiftUI
 import LaunchAtLogin
 
-struct GeneralSettings: View {
-
+struct CalendarSettings: View {
     var body: some View {
         VStack(alignment: .center) {
             Form {
-                LaunchAtLogin.Toggle()
             }
             .formStyle(.grouped)
             .frame(maxWidth: 350)

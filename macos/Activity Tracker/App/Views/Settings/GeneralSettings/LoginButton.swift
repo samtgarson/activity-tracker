@@ -47,8 +47,7 @@ struct LoginButton: View {
             .appending(queryItems: [.init(
                 name: "external",
                 value: "true"
-            )]
-            )
+            )])
     }
 
     private func handleCallback(callbackURL: URL?, error: (any Error)?) {

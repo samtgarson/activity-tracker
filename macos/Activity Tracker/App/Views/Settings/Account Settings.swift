@@ -57,7 +57,7 @@ struct AccountSettings: View {
 }
 
 #Preview {
-    GeneralSettings()
+    AccountSettings()
         .frame(width: 500, height: 500)
-        .environmentObject(previewAppState)
+        .environmentObject(PreviewAppState.unauthed())
 }

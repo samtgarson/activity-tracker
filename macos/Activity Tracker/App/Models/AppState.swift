@@ -25,9 +25,18 @@ class AppState: ObservableObject {
         }
     }
 
+    var authenticated: Bool {
+        switch status {
+        case .authenticated:
+            return true
+        default:
+            return false
+        }
+    }
+
     func login(token: AuthToken) async {
         do {
-            let user = try await loadUser(token: token.access)
+            let user = try await loadUser(token: token)
 
             let state = AuthenticatedState(token: token, user: user)
 
@@ -55,10 +64,8 @@ class AppState: ObservableObject {
         await login(token: token)
     }
 
-    private func loadUser(token: String) async throws -> CurrentUser {
-        let client = ActivityTrackerClient(apiUrl: Config.apiUrl, token: token)
-        let data = try await client.getCurrentUser()
-
+    private func loadUser(token: AuthToken) async throws -> CurrentUser {
+        let data = try await token.apiClient.getCurrentUser()
         return CurrentUser.from(data: data)
     }
 
@@ -74,13 +81,7 @@ class AppState: ObservableObject {
     struct AuthenticatedState {
         let token: AuthToken
         let user: CurrentUser
-        let api: ActivityTrackerClient
 
-        init(token: AuthToken, user: CurrentUser) {
-            self.token = token
-            self.user = user
-
-            self.api = token.apiClient
-        }
+        var api: ActivityTrackerClient { token.apiClient }
     }
 }

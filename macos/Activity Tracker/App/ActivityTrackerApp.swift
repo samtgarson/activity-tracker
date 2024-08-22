@@ -24,7 +24,7 @@ struct ActivityTrackerApp: App {
     @StateObject var appState = AppState()
 
     var body: some Scene {
-        MenuBarExtra("ActivityTracker", systemImage: "hammer") {
+        MenuBarExtra("ActivityTracker", systemImage: "arrow.up.to.line.compact") {
             AppMenu()
         }
         .modelContainer(sharedModelContainer)
