@@ -78,11 +78,11 @@ export const googleEventListSchema = z
 
 const googlePeopleMetadataSchema = z.object({
   metadata: z.object({
-    primary: z.boolean(),
+    primary: z.boolean().optional(),
   }),
 })
 
-function findPrimary<T extends { metadata: { primary: boolean } }>(
+function findPrimary<T extends z.infer<typeof googlePeopleMetadataSchema>>(
   items: T[],
 ): T {
   const found = items.find((item) => item.metadata.primary)

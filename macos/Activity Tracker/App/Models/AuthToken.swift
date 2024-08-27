@@ -9,7 +9,7 @@ import Foundation
 import JWTDecode
 import ActivityTrackerAPIClient
 
-class AuthToken {
+class AuthToken: Identifiable {
     var access: String
     var refresh: String
     var expiry: Date?
@@ -50,5 +50,13 @@ class AuthToken {
     var accessTokenExpired: Bool {
         guard let jwt = try? decode(jwt: access) else { return false }
         return jwt.expired
+    }
+
+    func refreshTokens() async throws {
+        guard accessTokenExpired else { return }
+        guard let newToken = try await apiClient.getAccessToken(with: refresh) else { return }
+
+        self.access = newToken
+        save()
     }
 }

@@ -2,6 +2,5 @@
 
 doc="$(cd api && npm run generate-api --silent)"
 echo $doc > macos/ActivityTrackerAPIClient/openapi.json
-echo $doc > macos/openapi.json
 echo "✅ Success"
 

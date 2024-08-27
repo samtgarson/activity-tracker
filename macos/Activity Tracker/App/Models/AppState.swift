@@ -9,9 +9,10 @@ import Foundation
 import ActivityTrackerAPIClient
 import SwiftUI
 
+@MainActor
 class AppState: ObservableObject {
     enum AppStatus {
-        case authenticated(AuthenticatedState)
+        case authenticated(AuthToken, CurrentUser)
         case unauthenticated
     }
 
@@ -21,7 +22,7 @@ class AppState: ObservableObject {
         self.status = status
 
         Task {
-            try? await load()
+            try? await setup()
         }
     }
 
@@ -34,54 +35,62 @@ class AppState: ObservableObject {
         }
     }
 
+    var currentUser: CurrentUser? {
+        guard case .authenticated(_, let user) = status else {
+            return nil
+        }
+
+        return user
+    }
+
+    var token: AuthToken? {
+        guard case .authenticated(let token, _) = status else {
+            return nil
+        }
+
+        return token
+    }
+
+    /// Receives an AuthToken and authenticates with it
     func login(token: AuthToken) async {
         do {
             let user = try await loadUser(token: token)
-
-            let state = AuthenticatedState(token: token, user: user)
-
-            await MainActor.run {
-                status = .authenticated(state)
-            }
+            self.status = .authenticated(token, user)
         } catch {
             debugPrint("ERROR: \(error)")
         }
     }
 
     func logout() {
-        guard case .authenticated(let state) = status else {
-            return
-        }
+        guard case .authenticated(let token, _) = status else { return }
 
-        state.token.clear()
+        Database.instance.reset()
+        token.clear()
         status = .unauthenticated
     }
 
-    func load() async throws {
+    /// Loads stored token from Keychain and sets up the App State instance
+    func setup() async throws {
         guard var token = AuthToken.load() else { return }
 
-        token = try await refreshAccessToken(from: token)
+        try await token.refreshTokens()
         await login(token: token)
     }
 
+    var api: ActivityTrackerClient? { token?.apiClient }
+
     private func loadUser(token: AuthToken) async throws -> CurrentUser {
         let data = try await token.apiClient.getCurrentUser()
-        return CurrentUser.from(data: data)
-    }
+        let user = CurrentUser(from: data)
 
-    private func refreshAccessToken(from token: AuthToken) async throws -> AuthToken {
-        guard token.accessTokenExpired else { return token }
-        guard let newToken = try await token.apiClient.getAccessToken(with: token.refresh) else { return token }
+        if let existingUser = currentUser, existingUser != user {
+            debugPrint("Received user mismatch during authentication. Logging out.")
+            logout()
+        }
 
-        token.access = newToken
-        token.save()
-        return token
-    }
+        let accounts = data.accounts.map { Account(from: $0) }
+        try? Account.create(accounts)
 
-    struct AuthenticatedState {
-        let token: AuthToken
-        let user: CurrentUser
-
-        var api: ActivityTrackerClient { token.apiClient }
+        return user
     }
 }

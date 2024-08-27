@@ -17,17 +17,15 @@ struct SettingsView: View {
         NavigationSplitView {
             List(topTabs, selection: $selectedTab) { tabItem($0) }
                 .frame(maxHeight: .infinity)
-                .disabled(topTabsDisabled)
-                .opacity(topTabsDisabled ? 0.5 : 1)
+                .disabled(!appState.authenticated)
+                .opacity(appState.authenticated ? 1 : 0.5)
             Spacer()
             List(bottomTabs, selection: $selectedTab) { tabItem($0) }
                 .frame(height: 40)
                 .scrollDisabled(true)
         } detail: {
-            selectedTab.view
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            selectedView
         }
-//        .background(BlurredBackground().ignoresSafeArea())
         .toolbar {
             Text("")
         }
@@ -37,11 +35,18 @@ struct SettingsView: View {
             window?.toolbar?.displayMode = .iconOnly
         }
         .navigationTitle("Settings")
-        .onAppear { if topTabsDisabled { selectedTab = .account } }
+        .onAppear { if !appState.authenticated { selectedTab = .account } }
     }
 
-    private var topTabsDisabled: Bool {
-        return !appState.authenticated
+    @ViewBuilder
+    private var selectedView: some View {
+        let view = selectedTab.view
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        if let user = appState.currentUser {
+            view.environmentObject(user)
+        } else {
+            view
+        }
     }
 
     private func tabItem(_ tab: SettingsTab) -> some View {
@@ -103,7 +108,7 @@ enum SettingsTab: Equatable, Hashable, Identifiable {
         case .account:
             return .pink
         case .calendars:
-            return .teal
+            return .gray
         }
     }
 

@@ -1,4 +1,4 @@
-import { OAuthGateway } from "src/gateways/oauth-gateway"
+import { OAuthGateway, OAuthStateParams } from "src/gateways/oauth-gateway"
 import { Provider } from "src/models/types"
 import { Service, ServiceInput } from "../base"
 
@@ -12,17 +12,14 @@ export class AuthGetRedirect extends Service {
   ) {
     super(ctx)
   }
-  async call(postRedirect?: string) {
+  async call(postRedirect?: string, userId?: string) {
     try {
-      const redirect = await this.getRedirect(postRedirect)
+      const state: OAuthStateParams = { redirect: postRedirect, userId }
+      const redirect = await this.gateway.createAuthUrl(state)
       return this.success(redirect.toString())
     } catch (e) {
       console.error(e)
       return this.failure()
     }
-  }
-
-  private async getRedirect(postRedirect?: string) {
-    return await this.gateway.createAuthUrl(postRedirect)
   }
 }

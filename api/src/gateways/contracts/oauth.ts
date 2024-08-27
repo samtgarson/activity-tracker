@@ -27,6 +27,7 @@ export const oAuthCallbackParamsSchema = z.object({
 export const oAuthStateSchema = z.object({
   origin: z.literal("activity-tracker"),
   redirect: z.string().optional(),
+  userId: z.string().optional(),
 })
 
 export type OAuthToken = z.infer<typeof createTokenSchema>

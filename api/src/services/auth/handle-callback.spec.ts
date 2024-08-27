@@ -208,6 +208,97 @@ describe("with Google provier", () => {
         })
       })
 
+      describe("when the caller is already authenticated", () => {
+        const userId = "user-id"
+
+        beforeEach(() => {
+          vi.mocked(deps.verifyJwt).mockResolvedValue({
+            userId,
+            origin: "activity-tracker",
+          })
+        })
+
+        describe("when no existing account is found", () => {
+          it("creates a new account for the authenticated user", async () => {
+            await service.call(args)
+
+            const { email, id, ...profileDataWithoutEmail } = profileData
+            expect(prismaMock.user.update).toHaveBeenCalledWith({
+              where: { id: userId },
+              data: {
+                ...profileDataWithoutEmail,
+                accounts: {
+                  create: {
+                    id: "random",
+                    provider: Provider.Google,
+                    remoteId: profileData.id,
+                    email,
+                    ...authData,
+                  },
+                },
+              },
+              include: { accounts: true },
+            })
+          })
+        })
+
+        describe("when an existing account is found", () => {
+          describe("and the account belongs to a different user", () => {
+            beforeEach(() => {
+              prismaMock.account.findUnique.mockResolvedValue({
+                provider: Provider.Google,
+                // @ts-expect-error how to type this for includes
+                user: { id: "other-user" },
+              })
+            })
+
+            it("returns an error", async () => {
+              const res = await service.call(args)
+              expect(res).toEqual({
+                success: false,
+                code: "existing_account",
+                data: null,
+              })
+            })
+          })
+
+          describe("and the account belongs to the authenticated user", () => {
+            beforeEach(() => {
+              prismaMock.account.findUnique.mockResolvedValue({
+                id: "account id",
+                provider: Provider.Google,
+                // @ts-expect-error how to type this for includes
+                user: { id: userId },
+              })
+            })
+
+            it("updates the existing account", async () => {
+              await service.call(args)
+
+              const { email, id, ...profileDataWithoutEmail } = profileData
+              expect(prismaMock.user.update).toHaveBeenCalledWith({
+                where: { id: userId },
+                data: {
+                  ...profileDataWithoutEmail,
+                  accounts: {
+                    update: {
+                      where: { id: "account id" },
+                      data: {
+                        provider: Provider.Google,
+                        remoteId: profileData.id,
+                        email,
+                        ...authData,
+                      },
+                    },
+                  },
+                },
+                include: { accounts: true },
+              })
+            })
+          })
+        })
+      })
+
       describe("when profile fetch errors", () => {
         beforeEach(() => {
           vi.mocked(deps.fetchProfile.call).mockResolvedValue({

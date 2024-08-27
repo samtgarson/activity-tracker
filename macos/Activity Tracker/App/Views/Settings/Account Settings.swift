@@ -13,9 +13,9 @@ struct AccountSettings: View {
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
             switch appState.status {
-            case .authenticated(let state):
+            case .authenticated(_, let user):
                 avatar
-                Text(state.user.displayName).bold().font(.title2)
+                Text(user.displayName).bold().font(.title2)
                 Button { appState.logout() } label: {
                     Text("Log Out")
                 }
@@ -36,8 +36,8 @@ struct AccountSettings: View {
     private var pictureSize: CGFloat = 120
 
     private var picture: URL? {
-        guard case .authenticated(let state) = appState.status,
-              let picture = state.user.picture else {
+        guard case .authenticated(_, let user) = appState.status,
+              let picture = user.picture else {
             return nil
         }
 

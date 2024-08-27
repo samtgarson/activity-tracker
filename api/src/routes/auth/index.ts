@@ -16,7 +16,7 @@ AuthRouter.openapi(loginRoute, async function (c) {
     ? "activity-tracker://auth"
     : undefined
   const svc = new AuthGetRedirect(c, provider)
-  const result = await svc.call(postRedirect)
+  const result = await svc.call(postRedirect, c.var.ctx?.user?.id)
 
   if (result.success) {
     return c.redirect(result.data)

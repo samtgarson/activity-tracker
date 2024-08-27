@@ -10,8 +10,13 @@ export async function authenticate(
   next: () => Promise<void>,
 ) {
   const authSvc = new AuthDecodeToken(c)
-  const authResult = await authSvc.call(c.req.header("Authorization"))
-  if (!authResult.success) return c.json({ error: "Not authorized" }, 401)
+  const token =
+    c.req.header("Authorization") ||
+    (c.req.query("token") ? `Bearer ${c.req.query("token")}` : undefined)
+
+  const authResult = await authSvc.call(token)
+  if (!authResult.success) return await next()
+
   const { accounts, ...user } = authResult.data
   c.set("ctx", new ServiceContext(c.env, new URL(c.req.url), user, accounts))
 
@@ -24,5 +29,15 @@ export async function authenticate(
     return c.json({ error: "Failed to refresh token for active account" }, 500)
 
   c.var.ctx.accounts = refreshResult.data
+  await next()
+}
+
+export async function requireAuthentication(
+  c: Context<Ctx, "/*">,
+  next: () => Promise<void>,
+) {
+  const user = c.var.ctx?.user
+  if (!user) return c.json({ error: "Not authorized" }, 401)
+
   await next()
 }

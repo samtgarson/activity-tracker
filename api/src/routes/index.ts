@@ -5,7 +5,7 @@ import { CalendarsRouter } from "./calendars"
 import { docConfig, meRoute, pingRoute } from "./doc"
 import { EventsRouter } from "./events"
 import { newHono } from "./util"
-import { authenticate } from "./util/auth-middleware"
+import { authenticate, requireAuthentication } from "./util/auth-middleware"
 
 const app = newHono()
 
@@ -25,8 +25,9 @@ app.openAPIRegistry.registerComponent("securitySchemes", "bearerAuth", {
   scheme: "bearer",
 })
 
-app.route("/", AuthRouter)
 app.use("/*", authenticate)
+app.route("/", AuthRouter)
+app.use("/*", requireAuthentication)
 
 app.openapi(meRoute, async function (c) {
   const { user, accounts } = c.var.ctx

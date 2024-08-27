@@ -6,8 +6,12 @@ import { z } from "zod"
 export function serializeAccount(
   account: Account,
 ): z.infer<typeof accountSchema> {
-  return {
-    id: account.email,
-    ...pick(account, ["provider", "calendarId", "active", "createdAt"]),
-  }
+  return pick(account, [
+    "id",
+    "provider",
+    "calendarId",
+    "active",
+    "createdAt",
+    "email",
+  ])
 }

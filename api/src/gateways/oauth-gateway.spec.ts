@@ -63,7 +63,7 @@ describe("createUrl", () => {
 
   describe("when redirect is provided", () => {
     it("should sign the correct state", async () => {
-      await gateway.createAuthUrl("http://redirect.com")
+      await gateway.createAuthUrl({ redirect: "http://redirect.com" })
       expect(sign).toHaveBeenCalledWith(
         {
           origin: "activity-tracker",
@@ -71,6 +71,23 @@ describe("createUrl", () => {
         },
         mockContext.env.JWT_SECRET,
       )
+    })
+
+    describe("and userId is provided", () => {
+      it("should sign the correct state", async () => {
+        await gateway.createAuthUrl({
+          redirect: "http://redirect.com",
+          userId: "userId",
+        })
+        expect(sign).toHaveBeenCalledWith(
+          {
+            origin: "activity-tracker",
+            redirect: "http://redirect.com",
+            userId: "userId",
+          },
+          mockContext.env.JWT_SECRET,
+        )
+      })
     })
   })
 })

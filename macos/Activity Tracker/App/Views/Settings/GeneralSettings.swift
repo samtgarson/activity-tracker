@@ -13,10 +13,9 @@ struct GeneralSettings: View {
     var body: some View {
         VStack(alignment: .center) {
             Form {
-                LaunchAtLogin.Toggle()
+                LaunchAtLogin.Toggle().padding()
             }
             .formStyle(.grouped)
-            .frame(maxWidth: 350)
         }
     }
 

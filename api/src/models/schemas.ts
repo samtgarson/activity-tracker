@@ -35,6 +35,7 @@ export const accountSchema = z
     createdAt: z.date(),
     calendarId: z.string().nullable(),
     active: z.boolean(),
+    email: z.string().email(),
   })
   .openapi("Account")
 

@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		89313C842C6BD6F500426B8C /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89313C832C6BD6F500426B8C /* CurrentUser.swift */; };
 		89313C862C6BD82F00426B8C /* AppMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89313C852C6BD82F00426B8C /* AppMenu.swift */; };
+		893C96AE2C7B540F008CDAB6 /* ProviderLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96AD2C7B540F008CDAB6 /* ProviderLogo.swift */; };
+		893C96B12C7B64B6008CDAB6 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96B02C7B64B6008CDAB6 /* Account.swift */; };
+		893C96BC2C7BD97B008CDAB6 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96BB2C7BD97B008CDAB6 /* Database.swift */; };
+		893C96C02C7DE914008CDAB6 /* IDEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96BF2C7DE914008CDAB6 /* IDEquatable.swift */; };
+		893C96C52C7E450C008CDAB6 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96C42C7E450C008CDAB6 /* Provider.swift */; };
 		89461BC02C6D65DA001B0D95 /* BlurredBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461BBF2C6D65DA001B0D95 /* BlurredBackground.swift */; };
 		89461BD82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 89461BC82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		89461BDB2C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89461BC62C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework */; };
@@ -68,6 +73,11 @@
 /* Begin PBXFileReference section */
 		89313C832C6BD6F500426B8C /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 		89313C852C6BD82F00426B8C /* AppMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMenu.swift; sourceTree = "<group>"; };
+		893C96AD2C7B540F008CDAB6 /* ProviderLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderLogo.swift; sourceTree = "<group>"; };
+		893C96B02C7B64B6008CDAB6 /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		893C96BB2C7BD97B008CDAB6 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		893C96BF2C7DE914008CDAB6 /* IDEquatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDEquatable.swift; sourceTree = "<group>"; };
+		893C96C42C7E450C008CDAB6 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		89461BBF2C6D65DA001B0D95 /* BlurredBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredBackground.swift; sourceTree = "<group>"; };
 		89461BC62C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ActivityTrackerAPIClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		89461BC82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActivityTrackerAPIClient.h; sourceTree = "<group>"; };
@@ -126,17 +136,38 @@
 		89313C822C6BD6D100426B8C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				893C96BE2C7DE901008CDAB6 /* Utilities */,
 				89313C832C6BD6F500426B8C /* CurrentUser.swift */,
 				89461C1F2C73EB75001B0D95 /* AuthToken.swift */,
 				89461C242C74DB3A001B0D95 /* AppState.swift */,
+				893C96B02C7B64B6008CDAB6 /* Account.swift */,
+				893C96BB2C7BD97B008CDAB6 /* Database.swift */,
+				893C96C42C7E450C008CDAB6 /* Provider.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		893C96B32C7B9576008CDAB6 /* Calendar Settings */ = {
+			isa = PBXGroup;
+			children = (
+				89461C402C77828C001B0D95 /* CalendarSettings.swift */,
+			);
+			path = "Calendar Settings";
+			sourceTree = "<group>";
+		};
+		893C96BE2C7DE901008CDAB6 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				893C96BF2C7DE914008CDAB6 /* IDEquatable.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		89461BBE2C6D65C8001B0D95 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
 				89461BBF2C6D65DA001B0D95 /* BlurredBackground.swift */,
+				893C96AD2C7B540F008CDAB6 /* ProviderLogo.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -163,12 +194,12 @@
 			path = Config;
 			sourceTree = "<group>";
 		};
-		89461C142C73C564001B0D95 /* GeneralSettings */ = {
+		89461C142C73C564001B0D95 /* AccountSettings */ = {
 			isa = PBXGroup;
 			children = (
 				89461C162C73C574001B0D95 /* LoginButton.swift */,
 			);
-			path = GeneralSettings;
+			path = AccountSettings;
 			sourceTree = "<group>";
 		};
 		89461C182C73E804001B0D95 /* Utilities */ = {
@@ -254,10 +285,10 @@
 		89DF69C02C6D41BF00AAFCA5 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				89461C142C73C564001B0D95 /* GeneralSettings */,
+				893C96B32C7B9576008CDAB6 /* Calendar Settings */,
+				89461C142C73C564001B0D95 /* AccountSettings */,
 				89DF69BD2C6D409D00AAFCA5 /* Settings.swift */,
 				89461C212C74C65D001B0D95 /* Account Settings.swift */,
-				89461C402C77828C001B0D95 /* CalendarSettings.swift */,
 				89DF69C12C6D422E00AAFCA5 /* GeneralSettings.swift */,
 			);
 			path = Settings;
@@ -414,16 +445,21 @@
 				89461BC02C6D65DA001B0D95 /* BlurredBackground.swift in Sources */,
 				89461C172C73C574001B0D95 /* LoginButton.swift in Sources */,
 				89313C862C6BD82F00426B8C /* AppMenu.swift in Sources */,
+				893C96BC2C7BD97B008CDAB6 /* Database.swift in Sources */,
 				89461C252C74DB3A001B0D95 /* AppState.swift in Sources */,
 				89461C202C73EB75001B0D95 /* AuthToken.swift in Sources */,
 				89461C412C77828C001B0D95 /* CalendarSettings.swift in Sources */,
 				89313C842C6BD6F500426B8C /* CurrentUser.swift in Sources */,
+				893C96C52C7E450C008CDAB6 /* Provider.swift in Sources */,
 				89461BE92C6E9FBA001B0D95 /* Config.swift in Sources */,
 				89461C222C74C65D001B0D95 /* Account Settings.swift in Sources */,
+				893C96AE2C7B540F008CDAB6 /* ProviderLogo.swift in Sources */,
 				89DF69BE2C6D409D00AAFCA5 /* Settings.swift in Sources */,
+				893C96B12C7B64B6008CDAB6 /* Account.swift in Sources */,
 				89461C382C767FF8001B0D95 /* Date.swift in Sources */,
 				897A23042C6BD43500DEA96A /* ActivityTrackerApp.swift in Sources */,
 				89461C352C767F2C001B0D95 /* PreviewAppState.swift in Sources */,
+				893C96C02C7DE914008CDAB6 /* IDEquatable.swift in Sources */,
 				89DF69C22C6D422E00AAFCA5 /* GeneralSettings.swift in Sources */,
 				89461C1A2C73E813001B0D95 /* KeychainStorage.swift in Sources */,
 			);

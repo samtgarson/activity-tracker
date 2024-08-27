@@ -10,27 +10,20 @@ import SwiftData
 
 @main
 struct ActivityTrackerApp: App {
-    let sharedModelContainer: ModelContainer = {
-        let schema = Schema([])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
     @StateObject var appState = AppState()
 
     var body: some Scene {
-        MenuBarExtra("ActivityTracker", systemImage: "arrow.up.to.line.compact") {
+        MenuBarExtra {
             AppMenu()
+        } label: {
+            Image(systemName: "calendar.badge.clock")
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(Database.instance.container)
 
         Settings {
-            SettingsView().environmentObject(appState)
+            SettingsView()
+                .environmentObject(appState)
+                .modelContainer(Database.instance.container)
         }
     }
 }

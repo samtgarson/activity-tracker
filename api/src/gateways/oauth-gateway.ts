@@ -2,8 +2,13 @@ import { sign } from "hono/jwt"
 import { Provider } from "src/models/types"
 import { ServiceInput } from "src/services/base"
 import { createUrl, mergeParams } from "src/services/util/url"
+import { z } from "zod"
 import { BaseGateway } from "./base-gateway"
-import { createTokenSchema, refreshTokenSchema } from "./contracts/oauth"
+import {
+  createTokenSchema,
+  oAuthStateSchema,
+  refreshTokenSchema,
+} from "./contracts/oauth"
 
 type OAuthGatewayConfig = {
   authUrl: string
@@ -18,6 +23,8 @@ export type ConfigProvider = (
   provider: Provider,
 ) => OAuthGatewayConfig
 
+export type OAuthStateParams = Omit<z.infer<typeof oAuthStateSchema>, "origin">
+
 export class OAuthGateway extends BaseGateway {
   constructor(
     ctx: ServiceInput,
@@ -28,12 +35,12 @@ export class OAuthGateway extends BaseGateway {
     super(ctx, fetch)
   }
 
-  async createAuthUrl(redirectUri?: string) {
+  async createAuthUrl(state?: OAuthStateParams) {
     return createUrl(this.config.authUrl, {
       client_id: this.config.clientId,
       redirect_uri: this.redirectUrl,
       response_type: "code",
-      state: await this.signState(redirectUri),
+      state: await this.signState(state),
       ...this.config.authParams,
     })
   }
@@ -67,9 +74,9 @@ export class OAuthGateway extends BaseGateway {
     })
   }
 
-  private signState(redirect?: string) {
+  private signState(state?: OAuthStateParams) {
     return sign(
-      { origin: "activity-tracker", redirect },
+      { origin: "activity-tracker", ...state },
       this.ctx.env.JWT_SECRET,
     )
   }

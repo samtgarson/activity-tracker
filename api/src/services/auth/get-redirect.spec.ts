@@ -24,12 +24,23 @@ describe("With Google provider", () => {
   })
 
   describe("with post-redirect", () => {
+    const postRedirect = "http://localhost:8787/auth/login/google"
     it("calls the gateway with the correct param", async () => {
-      const postRedirect = "http://localhost:8787/auth/login/google"
       await service.call(postRedirect)
-      expect(redirectUrlProvider.createAuthUrl).toHaveBeenCalledWith(
-        postRedirect,
-      )
+      expect(redirectUrlProvider.createAuthUrl).toHaveBeenCalledWith({
+        redirect: postRedirect,
+      })
+    })
+
+    describe("with userId", () => {
+      const userId = "123"
+      it("calls the gateway with the correct param", async () => {
+        await service.call(postRedirect, userId)
+        expect(redirectUrlProvider.createAuthUrl).toHaveBeenCalledWith({
+          redirect: postRedirect,
+          userId,
+        })
+      })
     })
   })
 

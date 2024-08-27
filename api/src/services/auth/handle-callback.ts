@@ -19,6 +19,7 @@ export type HandleCallbackDependencies = {
 
 type AuthHandleCallbackErrorMap = {
   new_account: null
+  existing_account: null
   code_exchange_failed: null
   fetch_profile_failed: null
 }
@@ -39,16 +40,15 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
   }
 
   async call({ state, code }: z.infer<typeof oAuthCallbackParamsSchema>) {
-    const { redirect } = await this.validateState(state)
-
+    const { redirect, userId } = await this.validateState(state)
     const auth = await this.exchangeCode(code)
     if (!auth.success) return this.failure("code_exchange_failed", null)
 
     const profile = await this.fetchProfile(auth.data.accessToken)
     if (!profile.success) return this.failure("fetch_profile_failed", null)
 
-    const user = await this.saveUser(auth.data, profile.data)
-    if (!user) return this.failure("new_account", null)
+    const user = await this.saveUser(userId, auth.data, profile.data)
+    if (typeof user === "string") return this.failure(user, null)
 
     const { accessToken, refreshToken } = await this.generateTokens(user)
     return this.success({ redirect, accessToken, refreshToken })
@@ -67,18 +67,26 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
     return this.deps.fetchProfile.call(this.provider, accessToken)
   }
 
-  private async saveUser(auth: OAuthToken, profile: ProfileAttributes) {
+  private async saveUser(
+    userId: string | undefined,
+    auth: OAuthToken,
+    profile: ProfileAttributes,
+  ) {
     const account = await this.db.account.findUnique({
       where: { email: profile.email },
       include: { user: true },
     })
-    if (!account) return this.createNewUser(auth, profile)
-    if ((account.provider as Provider) !== this.provider) return null
+    if (!account) {
+      if (userId) return this.addNewAccount(userId, profile, auth)
+      return this.createNewUser(profile, auth)
+    }
+    if ((account.provider as Provider) !== this.provider) return "new_account"
+    if (userId && account.user.id !== userId) return "existing_account"
 
     return this.updateUser(account.user.id, account.id, profile, auth)
   }
 
-  private async createNewUser(auth: OAuthToken, profile: ProfileAttributes) {
+  private async createNewUser(profile: ProfileAttributes, auth: OAuthToken) {
     return this.db.user.create({
       data: {
         ...this.userAttributes(profile),
@@ -109,6 +117,26 @@ export class AuthHandleCallback extends Service<AuthHandleCallbackErrorMap> {
           update: {
             where: { id: accountId },
             data: this.accountAttributes(auth, profile),
+          },
+        },
+      },
+      include: { accounts: true },
+    })
+  }
+
+  private async addNewAccount(
+    id: string,
+    profile: ProfileAttributes,
+    auth: OAuthToken,
+  ) {
+    return this.db.user.update({
+      where: { id },
+      data: {
+        ...this.userAttributes(profile),
+        accounts: {
+          create: {
+            id: crypto.randomUUID(),
+            ...this.accountAttributes(auth, profile),
           },
         },
       },

@@ -24,7 +24,6 @@ model Account {
   active       Boolean   @default(false)
   email        String    @unique
 
-  @@unique(fields: [userId, provider])
   @@map("accounts")
 }
 

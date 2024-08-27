@@ -8,42 +8,36 @@
 import Foundation
 import ActivityTrackerAPIClient
 
-private let storageKey = "CurrentUser"
-
-struct CurrentUser: Codable {
-    var id: String
+class CurrentUser: Codable, ObservableObject, IDEquatable {
+    var id: UUID
     var createdAt: Date
     var givenName: String
     var familyName: String
     var displayName: String
     var picture: String?
-    var accounts: [Account]
 
-    static func from(data: ActivityTrackerClient.User) -> CurrentUser {
-        return CurrentUser(
-            id: data.id,
-            createdAt: parseDate(data.createdAt) ?? Date.now,
-            givenName: data.givenName,
-            familyName: data.familyName,
-            displayName: data.displayName,
-            picture: data.picture,
-            accounts: data.accounts.map { Account.from(data: $0) }
-        )
+    init(
+        id: UUID,
+        createdAt: Date,
+        givenName: String,
+        familyName: String,
+        displayName: String,
+        picture: String? = nil
+    ) {
+        self.id = id
+        self.createdAt = createdAt
+        self.givenName = givenName
+        self.familyName = familyName
+        self.displayName = displayName
+        self.picture = picture
     }
 
-    struct Account: Codable {
-        var id: String
-        var provider: ActivityTrackerClient.Provider
-        var calendarId: String?
-        var active: Bool
-
-        static func from(data: ActivityTrackerClient.Account) -> Account {
-            return Account(
-                id: data.id,
-                provider: data.provider,
-                calendarId: data.calendarId,
-                active: data.active
-            )
-        }
+    init(from data: ActivityTrackerClient.User) {
+        self.id = UUID(uuidString: data.id)!
+        self.createdAt = parseDate(data.createdAt) ?? Date.now
+        self.givenName = data.givenName
+        self.familyName = data.familyName
+        self.displayName = data.displayName
+        self.picture = data.picture
     }
 }
