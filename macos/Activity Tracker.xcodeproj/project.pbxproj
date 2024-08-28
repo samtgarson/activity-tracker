@@ -14,6 +14,10 @@
 		893C96BC2C7BD97B008CDAB6 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96BB2C7BD97B008CDAB6 /* Database.swift */; };
 		893C96C02C7DE914008CDAB6 /* IDEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96BF2C7DE914008CDAB6 /* IDEquatable.swift */; };
 		893C96C52C7E450C008CDAB6 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96C42C7E450C008CDAB6 /* Provider.swift */; };
+		893C96CA2C7E761F008CDAB6 /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96C92C7E761F008CDAB6 /* PrimaryButton.swift */; };
+		893C96D22C7F51A9008CDAB6 /* ButtonLoadingModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96D12C7F51A9008CDAB6 /* ButtonLoadingModifier.swift */; };
+		893C96D42C7F5230008CDAB6 /* AsyncButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96D32C7F5230008CDAB6 /* AsyncButtonExtension.swift */; };
+		893C96D82C7F78C3008CDAB6 /* Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96D72C7F78C3008CDAB6 /* Size.swift */; };
 		89461BC02C6D65DA001B0D95 /* BlurredBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461BBF2C6D65DA001B0D95 /* BlurredBackground.swift */; };
 		89461BD82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 89461BC82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		89461BDB2C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89461BC62C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework */; };
@@ -78,6 +82,10 @@
 		893C96BB2C7BD97B008CDAB6 /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		893C96BF2C7DE914008CDAB6 /* IDEquatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDEquatable.swift; sourceTree = "<group>"; };
 		893C96C42C7E450C008CDAB6 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		893C96C92C7E761F008CDAB6 /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
+		893C96D12C7F51A9008CDAB6 /* ButtonLoadingModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLoadingModifier.swift; sourceTree = "<group>"; };
+		893C96D32C7F5230008CDAB6 /* AsyncButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncButtonExtension.swift; sourceTree = "<group>"; };
+		893C96D72C7F78C3008CDAB6 /* Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Size.swift; sourceTree = "<group>"; };
 		89461BBF2C6D65DA001B0D95 /* BlurredBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredBackground.swift; sourceTree = "<group>"; };
 		89461BC62C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ActivityTrackerAPIClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		89461BC82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActivityTrackerAPIClient.h; sourceTree = "<group>"; };
@@ -161,6 +169,25 @@
 				893C96BF2C7DE914008CDAB6 /* IDEquatable.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		893C96C82C7E75FF008CDAB6 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				893C96CC2C7F518D008CDAB6 /* Buttons */,
+				893C96D72C7F78C3008CDAB6 /* Size.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		893C96CC2C7F518D008CDAB6 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				893C96C92C7E761F008CDAB6 /* PrimaryButton.swift */,
+				893C96D12C7F51A9008CDAB6 /* ButtonLoadingModifier.swift */,
+				893C96D32C7F5230008CDAB6 /* AsyncButtonExtension.swift */,
+			);
+			path = Buttons;
 			sourceTree = "<group>";
 		};
 		89461BBE2C6D65C8001B0D95 /* Utilities */ = {
@@ -256,6 +283,7 @@
 		89AAD5DB2C6D5905003F285B /* App */ = {
 			isa = PBXGroup;
 			children = (
+				893C96C82C7E75FF008CDAB6 /* UI */,
 				89461C182C73E804001B0D95 /* Utilities */,
 				89DF69BF2C6D41B400AAFCA5 /* Views */,
 				89313C822C6BD6D100426B8C /* Models */,
@@ -442,10 +470,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				893C96CA2C7E761F008CDAB6 /* PrimaryButton.swift in Sources */,
 				89461BC02C6D65DA001B0D95 /* BlurredBackground.swift in Sources */,
 				89461C172C73C574001B0D95 /* LoginButton.swift in Sources */,
 				89313C862C6BD82F00426B8C /* AppMenu.swift in Sources */,
 				893C96BC2C7BD97B008CDAB6 /* Database.swift in Sources */,
+				893C96D22C7F51A9008CDAB6 /* ButtonLoadingModifier.swift in Sources */,
+				893C96D42C7F5230008CDAB6 /* AsyncButtonExtension.swift in Sources */,
 				89461C252C74DB3A001B0D95 /* AppState.swift in Sources */,
 				89461C202C73EB75001B0D95 /* AuthToken.swift in Sources */,
 				89461C412C77828C001B0D95 /* CalendarSettings.swift in Sources */,
@@ -455,6 +486,7 @@
 				89461C222C74C65D001B0D95 /* Account Settings.swift in Sources */,
 				893C96AE2C7B540F008CDAB6 /* ProviderLogo.swift in Sources */,
 				89DF69BE2C6D409D00AAFCA5 /* Settings.swift in Sources */,
+				893C96D82C7F78C3008CDAB6 /* Size.swift in Sources */,
 				893C96B12C7B64B6008CDAB6 /* Account.swift in Sources */,
 				89461C382C767FF8001B0D95 /* Date.swift in Sources */,
 				897A23042C6BD43500DEA96A /* ActivityTrackerApp.swift in Sources */,

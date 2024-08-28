@@ -25,9 +25,9 @@ struct LoginButton<Content: View>: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Button(action: startSession, label: {
-                if loading { ProgressView() } else { content() }
-            })
+            Button(action: startSession, label: { content() })
+                .isLoading(loading)
+                .buttonStyle(.primary)
         }.webAuthenticationSession(item: $buttonState) { item in
             WebAuthenticationSession(
                 url: item.url(for: .google),
@@ -86,8 +86,8 @@ struct LoginButton<Content: View>: View {
 
 #Preview {
     LoginButton()
-    .frame(width: 400, height: 200)
-    .environmentObject(PreviewAppState.authed())
+        .frame(width: 400, height: 200)
+        .environmentObject(PreviewAppState.authed())
 }
 
 private struct LoginButtonState: Identifiable {

@@ -26,9 +26,6 @@ struct SettingsView: View {
         } detail: {
             selectedView
         }
-        .toolbar {
-            Text("")
-        }
         .task {
             let window = NSApplication.shared.windows.first(where: \.canBecomeMain)
             window?.toolbarStyle = .unified

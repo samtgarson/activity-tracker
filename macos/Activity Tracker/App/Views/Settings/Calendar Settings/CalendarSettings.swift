@@ -18,22 +18,12 @@ struct CalendarSettings: View {
         Form {
             Section {
                 connectCalendarSection
-            }.padding(.all, 10)
+            }.padding(.xs)
             ForEach(Provider.allCases, id: \.rawValue) { provider in
                 if let accounts = groupedAccounts[provider] {
                     Section(content: {
                         ForEach(accounts) { account in
-                            HStack(spacing: 10) {
-                                ProviderLogo(provider: account.provider, size: 25)
-                                Text(account.email)
-                                if account.active {
-                                    Text("Primary Account").foregroundStyle(.gray)
-                                }
-                                Spacer().frame(maxWidth: .infinity)
-                                Button(role: .destructive, action: {}) {
-                                    Image(systemName: "trash")
-                                }.buttonStyle(.borderless)
-                            }.frame(maxWidth: .infinity).padding(.all, 10)
+                            AccountRow(account: account)
                         }
                     }, header: {
                         Text(provider.title)
@@ -49,7 +39,7 @@ struct CalendarSettings: View {
     }
 
     private var connectCalendarSection: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: .xs) {
             ZStack {
                 Circle().fill(.clear).stroke(.gray.opacity(0.25)).frame(width: 25, height: 25)
                 Image(systemName: "plus")
@@ -67,10 +57,47 @@ struct CalendarSettings: View {
         let accounts = data.accounts.map { Account(from: $0) }
         try? Account.create(accounts)
     }
+
+    private struct AccountRow: View {
+        var account: Account
+        @State private var loading: Bool = false
+
+        var body: some View {
+            HStack(spacing: .xs) {
+                ProviderLogo(provider: account.provider, size: .sm)
+                Text(account.email)
+                if account.active {
+                    Text("Primary Account").foregroundStyle(.gray)
+                }
+                Spacer().frame(maxWidth: .infinity)
+                Button(role: .destructive, action: {
+                    await disconnect(account: account)
+                }, label: {
+                    if loading {
+                        ProgressView().controlSize(.small)
+                    } else {
+                        Image(systemName: "trash")
+                    }
+                }).buttonStyle(.borderless)
+            }.frame(maxWidth: .infinity).padding(.xs)
+        }
+
+        private func disconnect(account: Account) async {
+            loading = true
+            try? await Task.sleep(nanoseconds: 1000 * 1000 * 1000)
+            loading = false
+        }
+    }
 }
 
 #Preview {
     CalendarSettings()
         .frame(width: 700, height: 500)
         .environmentObject(PreviewAppState.authed().currentUser!)
+        .modelContainer(Database
+                            .testInstance(with: [
+                                Account(id: UUID(), provider: .google, active: false, email: "sam@samgarson.com"),
+                                Account(id: UUID(), provider: .google, active: true, email: "samtgarson@gmail.com")
+                            ])
+                            .container)
 }

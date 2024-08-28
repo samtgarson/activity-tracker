@@ -11,16 +11,16 @@ struct AccountSettings: View {
     @EnvironmentObject var appState: AppState
 
     var body: some View {
-        VStack(alignment: .center, spacing: 20) {
+        VStack(alignment: .center, spacing: .sm) {
             switch appState.status {
             case .authenticated(_, let user):
                 avatar
                 Text(user.displayName).bold().font(.title2)
                 Button { appState.logout() } label: {
                     Text("Log Out")
-                }
+                }.buttonStyle(.primary)
             case .unauthenticated:
-                VStack(alignment: .center, spacing: 10) {
+                VStack(alignment: .center, spacing: .xs) {
                     Text("Get Started").font(.title).bold()
                     Text("""
                         Log in and connect your calendar \

@@ -9,8 +9,17 @@ import Foundation
 import SwiftData
 
 /// A wrapper around SwiftData ModelContainer
+@MainActor
 final class Database {
     static let instance = Database()
+    static func testInstance() -> Database {
+        Database(useInMemoryStore: true)
+    }
+    static func testInstance(with models: [any PersistentModel]) -> Database {
+        let database = testInstance(), context = database.container.mainContext
+        models.forEach { model in context.insert(model) }
+        return database
+    }
 
     static let models: [any PersistentModel.Type] = [
         Account.self
