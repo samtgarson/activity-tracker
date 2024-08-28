@@ -37,13 +37,8 @@ struct SettingsView: View {
 
     @ViewBuilder
     private var selectedView: some View {
-        let view = selectedTab.view
+        selectedTab.view
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-        if let user = appState.currentUser {
-            view.environmentObject(user)
-        } else {
-            view
-        }
     }
 
     private func tabItem(_ tab: SettingsTab) -> some View {

@@ -21,6 +21,6 @@ export function newHono() {
 
 export type HonoContext = Context<Ctx>
 
-export const fiveHundredSchema = z.object({
+export const errorSchema = z.object({
   error: z.string(),
 })

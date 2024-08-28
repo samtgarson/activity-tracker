@@ -14,15 +14,15 @@ CalendarsRouter.openapi(indexRoute, async (c) => {
   const result = await organize(
     c.var.ctx.accounts,
     (acc) => svc.call(acc),
-    ({ email }) => email,
+    ({ id }) => id,
   )
 
   if (!result.success) {
     return c.json({ error: result.code }, 500)
   }
 
-  const flattened = Object.entries(result.data).flatMap(([email, calendars]) =>
-    calendars.map((c) => serializeCalendar(c, { email })),
+  const flattened = Object.entries(result.data).flatMap(([id, calendars]) =>
+    calendars.map((c) => serializeCalendar(c, { id })),
   )
   return c.json(flattened, 200)
 })

@@ -1,5 +1,6 @@
 import { swaggerUI } from "@hono/swagger-ui"
 import { serializeUser } from "src/serializers/user-serializer"
+import { AccountsRouter } from "./accounts"
 import { AuthRouter } from "./auth"
 import { CalendarsRouter } from "./calendars"
 import { docConfig, meRoute, pingRoute } from "./doc"
@@ -36,5 +37,6 @@ app.openapi(meRoute, async function (c) {
 
 app.route("/", CalendarsRouter)
 app.route("/", EventsRouter)
+app.route("/", AccountsRouter)
 
 export { app }

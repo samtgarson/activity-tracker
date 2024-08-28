@@ -45,7 +45,7 @@ vi.mock("src/services/calendars/creator", async () => ({
 }))
 
 const account = mockContext.accounts[0]
-const accountId = account.email
+const accountId = account.id
 const router = withAuth(CalendarsRouter)
 
 describe("GET /calendars", () => {

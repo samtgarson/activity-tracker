@@ -16,7 +16,7 @@ pre-commit:
     swift_lint:
       root: macos
       glob: "**/*.swift"
-      run: swiftlint --fix --format {staged_files} && swiftlint --strict {staged_files}
+      run: swiftlint --fix --format {staged_files}
       stage_fixed: true
     generate_api:
       run: bin/generate-api

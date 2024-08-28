@@ -52,9 +52,7 @@ extension ActivityTrackerClient {
         let response = try await self.client.getCurrentUser()
         return try response.ok.body.json
     }
-}
 
-extension ActivityTrackerClient {
     /// Uses a refresh token to fetch a new access token
     ///
     /// - Returns: The access token as a String
@@ -62,5 +60,14 @@ extension ActivityTrackerClient {
     public func getAccessToken(with token: String) async throws -> String? {
         let response = try await self.client.refreshAccessToken(.init(body: .json(.init(refreshToken: token))))
         return try response.created.body.json.accessToken
+    }
+}
+
+extension ActivityTrackerClient {
+    /// Disconnects an account with the given ID
+    ///
+    /// - Throws: An error if the network request fails or the account cannot be found
+    public func disconnectAccount(id: UUID) async throws {
+        _ = try await self.client.disconnectAccount(.init(path: .init(id: id.uuidString)))
     }
 }

@@ -11,7 +11,6 @@ import SwiftData
 import ActivityTrackerAPIClient
 
 struct CalendarSettings: View {
-    @EnvironmentObject var currentUser: CurrentUser
     @Query var accounts: [Account]
 
     var body: some View {
@@ -41,7 +40,7 @@ struct CalendarSettings: View {
     private var connectCalendarSection: some View {
         HStack(spacing: .xs) {
             ZStack {
-                Circle().fill(.clear).stroke(.gray.opacity(0.25)).frame(width: 25, height: 25)
+                Circle().fill(.clear).stroke(.gray.opacity(0.25)).frame(width: .sm, height: .sm)
                 Image(systemName: "plus")
             }
             Text("Connect new calendar")
@@ -60,7 +59,12 @@ struct CalendarSettings: View {
 
     private struct AccountRow: View {
         var account: Account
-        @State private var loading: Bool = false
+        @ObservedObject var state: CalendarSettingsRowViewModel
+
+        init(account: Account) {
+            self.account = account
+            self.state = CalendarSettingsRowViewModel(account: account)
+        }
 
         var body: some View {
             HStack(spacing: .xs) {
@@ -70,22 +74,30 @@ struct CalendarSettings: View {
                     Text("Primary Account").foregroundStyle(.gray)
                 }
                 Spacer().frame(maxWidth: .infinity)
-                Button(role: .destructive, action: {
-                    await disconnect(account: account)
-                }, label: {
-                    if loading {
-                        ProgressView().controlSize(.small)
-                    } else {
-                        Image(systemName: "trash")
-                    }
-                }).buttonStyle(.borderless)
-            }.frame(maxWidth: .infinity).padding(.xs)
-        }
-
-        private func disconnect(account: Account) async {
-            loading = true
-            try? await Task.sleep(nanoseconds: 1000 * 1000 * 1000)
-            loading = false
+                if !account.active {
+                    Button(role: .destructive, action: state.disconnect, label: {
+                        if state.loading {
+                            ProgressView().controlSize(.small)
+                        } else {
+                            Image(systemName: "trash")
+                        }
+                    }).buttonStyle(.borderless)
+                }
+            }
+            .frame(maxWidth: .infinity).padding(.xs)
+            .alert("Unable to disconnect", isPresented: $state.showError) {
+                Button("OK", role: .cancel) { }
+            }
+            .confirmationDialog(
+                "Disconnect \(account.email)?",
+                isPresented: $state.showConfirmation
+            ) {
+                Button(action: state.disconnect, label: {
+                    Text("Yes, disconnect")
+                })
+            } message: {
+                Text("You can reconnect it later.")
+            }
         }
     }
 }
@@ -93,7 +105,7 @@ struct CalendarSettings: View {
 #Preview {
     CalendarSettings()
         .frame(width: 700, height: 500)
-        .environmentObject(PreviewAppState.authed().currentUser!)
+        .environmentObject(PreviewAppState.authed())
         .modelContainer(Database
                             .testInstance(with: [
                                 Account(id: UUID(), provider: .google, active: false, email: "sam@samgarson.com"),

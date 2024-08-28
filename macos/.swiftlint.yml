@@ -1,2 +1,4 @@
+strict: true
+
 excluded:
 - OpenAPIGenerator/GeneratedSources/*

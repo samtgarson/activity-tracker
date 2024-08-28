@@ -12,15 +12,15 @@ EventsRouter.openapi(route, async (c) => {
   const result = await organize(
     c.var.ctx.accounts,
     (acc) => svc.call(acc, c.req.valid("query")),
-    ({ email }) => email,
+    ({ id }) => id,
   )
 
   if (!result.success) {
     return c.json({ error: result.code }, 500)
   }
 
-  const flattened = Object.entries(result.data).flatMap(([email, events]) =>
-    events.map((e) => serializeEvent(e, { email })),
+  const flattened = Object.entries(result.data).flatMap(([id, events]) =>
+    events.map((e) => serializeEvent(e, { id })),
   )
   return c.json(
     sort(flattened, (e) => e.start.getTime()),

@@ -23,9 +23,9 @@ export class ServiceContext {
     return this.accounts.find((a) => a.active)
   }
 
-  findAccount(email: string) {
-    if (email === "active") return this.activeAccount
-    return this.accounts.find((a) => a.email === email)
+  findAccount(id: string) {
+    if (id === "active") return this.activeAccount
+    return this.accounts.find((a) => a.id === id)
   }
 }
 

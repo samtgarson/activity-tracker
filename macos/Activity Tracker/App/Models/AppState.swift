@@ -71,7 +71,10 @@ class AppState: ObservableObject {
 
     /// Loads stored token from Keychain and sets up the App State instance
     func setup() async throws {
-        guard var token = AuthToken.load() else { return }
+        guard let token = AuthToken.load() else {
+            Database.instance.reset()
+            return
+        }
 
         try await token.refreshTokens()
         await login(token: token)

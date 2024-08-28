@@ -4,7 +4,7 @@ import { z } from "zod"
 
 export function serializeCalendar(
   calendar: Calendar,
-  account: { email: string },
+  account: { id: string },
 ): z.infer<typeof calendarSchema> {
-  return { ...calendar, accountId: account.email }
+  return { ...calendar, accountId: account.id }
 }

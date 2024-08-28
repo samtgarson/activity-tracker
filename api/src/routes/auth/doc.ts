@@ -1,6 +1,6 @@
 import { createRoute, z } from "@hono/zod-openapi"
 import { providerSchema } from "src/models/schemas"
-import { fiveHundredSchema } from "../util"
+import { errorSchema } from "../util"
 
 export const loginRoute = createRoute({
   method: "get",
@@ -24,7 +24,7 @@ export const loginRoute = createRoute({
       description: "Internal server error",
       content: {
         "application/json": {
-          schema: fiveHundredSchema,
+          schema: errorSchema,
         },
       },
     },
@@ -58,7 +58,7 @@ export const refreshRoute = createRoute({
       description: "Internal server error",
       content: {
         "application/json": {
-          schema: fiveHundredSchema,
+          schema: errorSchema,
         },
       },
     },

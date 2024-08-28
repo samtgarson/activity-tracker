@@ -18,6 +18,7 @@
 		893C96D22C7F51A9008CDAB6 /* ButtonLoadingModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96D12C7F51A9008CDAB6 /* ButtonLoadingModifier.swift */; };
 		893C96D42C7F5230008CDAB6 /* AsyncButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96D32C7F5230008CDAB6 /* AsyncButtonExtension.swift */; };
 		893C96D82C7F78C3008CDAB6 /* Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96D72C7F78C3008CDAB6 /* Size.swift */; };
+		893C96DE2C7FB9D2008CDAB6 /* CalendarSettingsRowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893C96DD2C7FB9D2008CDAB6 /* CalendarSettingsRowViewModel.swift */; };
 		89461BC02C6D65DA001B0D95 /* BlurredBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461BBF2C6D65DA001B0D95 /* BlurredBackground.swift */; };
 		89461BD82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 89461BC82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		89461BDB2C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89461BC62C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework */; };
@@ -86,6 +87,7 @@
 		893C96D12C7F51A9008CDAB6 /* ButtonLoadingModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonLoadingModifier.swift; sourceTree = "<group>"; };
 		893C96D32C7F5230008CDAB6 /* AsyncButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncButtonExtension.swift; sourceTree = "<group>"; };
 		893C96D72C7F78C3008CDAB6 /* Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Size.swift; sourceTree = "<group>"; };
+		893C96DD2C7FB9D2008CDAB6 /* CalendarSettingsRowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettingsRowViewModel.swift; sourceTree = "<group>"; };
 		89461BBF2C6D65DA001B0D95 /* BlurredBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredBackground.swift; sourceTree = "<group>"; };
 		89461BC62C6E1D65001B0D95 /* ActivityTrackerAPIClient.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ActivityTrackerAPIClient.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		89461BC82C6E1D65001B0D95 /* ActivityTrackerAPIClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActivityTrackerAPIClient.h; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				89461C402C77828C001B0D95 /* CalendarSettings.swift */,
+				893C96DD2C7FB9D2008CDAB6 /* CalendarSettingsRowViewModel.swift */,
 			);
 			path = "Calendar Settings";
 			sourceTree = "<group>";
@@ -224,6 +227,7 @@
 		89461C142C73C564001B0D95 /* AccountSettings */ = {
 			isa = PBXGroup;
 			children = (
+				89461C212C74C65D001B0D95 /* Account Settings.swift */,
 				89461C162C73C574001B0D95 /* LoginButton.swift */,
 			);
 			path = AccountSettings;
@@ -316,7 +320,6 @@
 				893C96B32C7B9576008CDAB6 /* Calendar Settings */,
 				89461C142C73C564001B0D95 /* AccountSettings */,
 				89DF69BD2C6D409D00AAFCA5 /* Settings.swift */,
-				89461C212C74C65D001B0D95 /* Account Settings.swift */,
 				89DF69C12C6D422E00AAFCA5 /* GeneralSettings.swift */,
 			);
 			path = Settings;
@@ -482,6 +485,7 @@
 				89461C412C77828C001B0D95 /* CalendarSettings.swift in Sources */,
 				89313C842C6BD6F500426B8C /* CurrentUser.swift in Sources */,
 				893C96C52C7E450C008CDAB6 /* Provider.swift in Sources */,
+				893C96DE2C7FB9D2008CDAB6 /* CalendarSettingsRowViewModel.swift in Sources */,
 				89461BE92C6E9FBA001B0D95 /* Config.swift in Sources */,
 				89461C222C74C65D001B0D95 /* Account Settings.swift in Sources */,
 				893C96AE2C7B540F008CDAB6 /* ProviderLogo.swift in Sources */,

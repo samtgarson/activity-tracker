@@ -2,7 +2,7 @@ import { createRoute } from "@hono/zod-openapi"
 import { apiDate } from "src/gateways/contracts"
 import { eventSchema } from "src/models/schemas"
 import { z } from "zod"
-import { fiveHundredSchema } from "../util"
+import { errorSchema } from "../util"
 
 const querySchema = z.object({
   from: apiDate.optional(),
@@ -30,7 +30,7 @@ export const route = createRoute({
       description: "Internal server error",
       content: {
         "application/json": {
-          schema: fiveHundredSchema,
+          schema: errorSchema,
         },
       },
     },
