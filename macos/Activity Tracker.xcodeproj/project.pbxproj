@@ -44,6 +44,9 @@
 		89461C382C767FF8001B0D95 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461C372C767FF8001B0D95 /* Date.swift */; };
 		89461C3D2C773B75001B0D95 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 89461C3C2C773B75001B0D95 /* LaunchAtLogin */; };
 		89461C412C77828C001B0D95 /* CalendarSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89461C402C77828C001B0D95 /* CalendarSettings.swift */; };
+		89796AAE2C84A51400C92149 /* FloatingPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89796AAD2C84A51400C92149 /* FloatingPanel.swift */; };
+		89796AB02C84A77600C92149 /* ViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89796AAF2C84A77600C92149 /* ViewModifier.swift */; };
+		89796AB42C84C76800C92149 /* UIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89796AB32C84C76700C92149 /* UIState.swift */; };
 		897A23042C6BD43500DEA96A /* ActivityTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897A23032C6BD43500DEA96A /* ActivityTrackerApp.swift */; };
 		897A230A2C6BD43600DEA96A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 897A23092C6BD43600DEA96A /* Assets.xcassets */; };
 		897A230D2C6BD43600DEA96A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 897A230C2C6BD43600DEA96A /* Preview Assets.xcassets */; };
@@ -109,6 +112,9 @@
 		89461C342C767F2C001B0D95 /* PreviewAppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewAppState.swift; sourceTree = "<group>"; };
 		89461C372C767FF8001B0D95 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		89461C402C77828C001B0D95 /* CalendarSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarSettings.swift; sourceTree = "<group>"; };
+		89796AAD2C84A51400C92149 /* FloatingPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPanel.swift; sourceTree = "<group>"; };
+		89796AAF2C84A77600C92149 /* ViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifier.swift; sourceTree = "<group>"; };
+		89796AB32C84C76700C92149 /* UIState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIState.swift; sourceTree = "<group>"; };
 		897A23002C6BD43500DEA96A /* Activity Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Activity Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		897A23032C6BD43500DEA96A /* ActivityTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTrackerApp.swift; sourceTree = "<group>"; };
 		897A23092C6BD43600DEA96A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -153,6 +159,7 @@
 				893C96B02C7B64B6008CDAB6 /* Account.swift */,
 				893C96BB2C7BD97B008CDAB6 /* Database.swift */,
 				893C96C42C7E450C008CDAB6 /* Provider.swift */,
+				89796AB32C84C76700C92149 /* UIState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -177,6 +184,7 @@
 		893C96C82C7E75FF008CDAB6 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				89796AAC2C84A45900C92149 /* FloatingPanel */,
 				893C96CC2C7F518D008CDAB6 /* Buttons */,
 				893C96D72C7F78C3008CDAB6 /* Size.swift */,
 			);
@@ -240,6 +248,15 @@
 				89461C372C767FF8001B0D95 /* Date.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		89796AAC2C84A45900C92149 /* FloatingPanel */ = {
+			isa = PBXGroup;
+			children = (
+				89796AAD2C84A51400C92149 /* FloatingPanel.swift */,
+				89796AAF2C84A77600C92149 /* ViewModifier.swift */,
+			);
+			path = FloatingPanel;
 			sourceTree = "<group>";
 		};
 		897A22F72C6BD43400DEA96A = {
@@ -483,6 +500,7 @@
 				89461C252C74DB3A001B0D95 /* AppState.swift in Sources */,
 				89461C202C73EB75001B0D95 /* AuthToken.swift in Sources */,
 				89461C412C77828C001B0D95 /* CalendarSettings.swift in Sources */,
+				89796AB02C84A77600C92149 /* ViewModifier.swift in Sources */,
 				89313C842C6BD6F500426B8C /* CurrentUser.swift in Sources */,
 				893C96C52C7E450C008CDAB6 /* Provider.swift in Sources */,
 				893C96DE2C7FB9D2008CDAB6 /* CalendarSettingsRowViewModel.swift in Sources */,
@@ -491,8 +509,10 @@
 				893C96AE2C7B540F008CDAB6 /* ProviderLogo.swift in Sources */,
 				89DF69BE2C6D409D00AAFCA5 /* Settings.swift in Sources */,
 				893C96D82C7F78C3008CDAB6 /* Size.swift in Sources */,
+				89796AB42C84C76800C92149 /* UIState.swift in Sources */,
 				893C96B12C7B64B6008CDAB6 /* Account.swift in Sources */,
 				89461C382C767FF8001B0D95 /* Date.swift in Sources */,
+				89796AAE2C84A51400C92149 /* FloatingPanel.swift in Sources */,
 				897A23042C6BD43500DEA96A /* ActivityTrackerApp.swift in Sources */,
 				89461C352C767F2C001B0D95 /* PreviewAppState.swift in Sources */,
 				893C96C02C7DE914008CDAB6 /* IDEquatable.swift in Sources */,
@@ -528,6 +548,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -550,6 +572,7 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.samtgarson.ActivityTrackerAPIClient;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = NO;

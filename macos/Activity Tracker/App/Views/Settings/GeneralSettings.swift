@@ -14,6 +14,8 @@ struct GeneralSettings: View {
         VStack(alignment: .center) {
             Form {
                 LaunchAtLogin.Toggle().padding(.xs)
+                Button("Quit Activity Tracker completely") { NSApplication.shared.terminate(nil) }
+                    .buttonStyle(.primary)
             }
             .formStyle(.grouped)
         }

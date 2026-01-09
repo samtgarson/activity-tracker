@@ -18,6 +18,12 @@ export const apiDate = z
   .date()
   .transform((d) => dayjs(d))
 
+export const apiArray = <T extends z.ZodTypeAny>(schema: T) =>
+  z
+    .string()
+    .transform((d) => d.split(","))
+    .pipe(schema.array())
+
 export const flexibleDate = z
   .string()
   .transform((d) => dayjs(d))
